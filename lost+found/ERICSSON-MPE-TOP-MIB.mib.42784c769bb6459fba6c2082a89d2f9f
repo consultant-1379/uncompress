@@ -1,0 +1,28 @@
+ERICSSON-MPE-TOP-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS 
+     ericsson
+          FROM ERICSSON-TOP-MIB
+
+     MODULE-IDENTITY
+          FROM SNMPv2-SMI ;
+
+mpe MODULE-IDENTITY
+       LAST-UPDATED "200310280000Z"
+       ORGANIZATION "Ericsson AB"
+       CONTACT-INFO
+         "        Ericsson AB
+                  
+          Postal: Ericsson AB
+                  Kistagangen 26
+                  SE - 164 80 Stockholm
+                  Sweden
+
+             Tel: +46 8 7571500
+             Fax:  
+
+          E-Mail: support@ericsson.com"
+       DESCRIPTION
+         "The MIB module describing MPE network service applications"
+       ::= { ericsson 126 }
+END

@@ -1,0 +1,193 @@
+ERICSSON-MPE-ALARM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, NOTIFICATION-TYPE
+          FROM SNMPv2-SMI    
+
+     MODULE-COMPLIANCE, OBJECT-GROUP, NOTIFICATION-GROUP
+          FROM SNMPv2-CONF
+          
+     IANAItuProbableCause, IANAItuEventType
+          FROM IANA-ITU-ALARM-TC-MIB
+          
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+          
+     TEXTUAL-CONVENTION, DateAndTime 
+          FROM SNMPv2-TC
+
+     SnmpAdminString       
+          FROM SNMP-FRAMEWORK-MIB             
+          
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;    
+    
+mpeAlarmModule MODULE-IDENTITY
+   LAST-UPDATED    "200311241237Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "The MIB module describing the MPE alarms."
+::= { mpeModules 16 }
+                                             
+mpeAlarmObjects  OBJECT IDENTIFIER ::= { mpeAlarmModule 1 }
+
+mpeAlarmNotifications  OBJECT IDENTIFIER ::= { mpeAlarmModule 0 }
+
+mpeAlarmConformance  OBJECT IDENTIFIER ::= { mpeAlarmModule 3 }
+
+mpeAlarmGroups  OBJECT IDENTIFIER ::= { mpeAlarmConformance 1 }
+
+mpeAlarmCompliances  OBJECT IDENTIFIER ::= { mpeAlarmConformance 2 }
+                                                    
+-- Textual Conventions 	    
+
+ResourceId ::= TEXTUAL-CONVENTION
+   STATUS          current
+   DESCRIPTION     "A unique identifier for this resource.
+   
+                    The type of the resource can be determined by looking
+                    at the OID that describes the resource.
+                    
+                    Resources must be identified in a consistent manner.
+                    For example, if this resource is an interface, this
+                    object MUST point to an ifIndex."
+   SYNTAX           OBJECT IDENTIFIER
+   
+-- Alarm Objects
+
+mpeAlarmDateAndTime OBJECT-TYPE
+   SYNTAX          DateAndTime
+   MAX-ACCESS      accessible-for-notify
+   STATUS          current
+   DESCRIPTION     "The local date and time when the alarm occurred."
+::= { mpeAlarmObjects 1 }
+
+mpeAlarmResource OBJECT-TYPE
+   SYNTAX          ResourceId
+   MAX-ACCESS      accessible-for-notify
+   STATUS          current
+   DESCRIPTION     "This object identifies the resource under alarm."
+::= { mpeAlarmObjects 2 } 
+        
+mpeAlarmPerceivedSeverity OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS	   accessible-for-notify
+   STATUS          current
+   DESCRIPTION     "ITU perceived severity values as per [M.3100] and
+                    [X.733]."
+::= { mpeAlarmObjects 3 }
+   
+mpeAlarmEventType OBJECT-TYPE
+   SYNTAX		   IANAItuEventType
+   MAX-ACCESS      accessible-for-notify
+   STATUS          current
+   DESCRIPTION     "Represents the event type values for the alarms as per
+                    [M.3100], [X.733] and [X.736]"
+::= { mpeAlarmObjects 4 }
+
+mpeAlarmProbableCause OBJECT-TYPE
+   SYNTAX          IANAItuProbableCause
+   MAX-ACCESS	   accessible-for-notify
+   STATUS          current
+   DESCRIPTION     "ITU probable cause values as per [M.3100],
+                    [X.733] and [X.736]."
+::= { mpeAlarmObjects 5 }
+       
+mpeAlarmDescription OBJECT-TYPE
+   SYNTAX          SnmpAdminString
+   MAX-ACCESS      accessible-for-notify
+   STATUS          current
+   DESCRIPTION     "This object provides a textual description of the alarm.
+                    This information SHOULD provide information allowing 
+                    the operator to locate the resource for which this 
+                    alarm is being generated.
+                    This information is not intended for consumption by
+                    automated tools."
+::= { mpeAlarmObjects 6 }
+
+mpeAlarmAdditionalInfo OBJECT-TYPE
+   SYNTAX          SnmpAdminString
+   MAX-ACCESS      accessible-for-notify
+   STATUS          current
+   DESCRIPTION     "This object provides additional information about the
+                    cause of the alarm.
+                    This information SHOULD provide information allowing 
+                    the operator to solve the problem that caused the alarm.
+                    This information is not intended for consumption by
+                    automated tools."
+::= { mpeAlarmObjects 7 }
+
+-- Notifications
+
+mpeAlarmSet NOTIFICATION-TYPE
+   OBJECTS         { mpeAlarmDateAndTime,
+                     mpeAlarmResource,
+                     mpeAlarmPerceivedSeverity,
+                     mpeAlarmEventType, 
+                     mpeAlarmProbableCause,
+                     mpeAlarmDescription,
+                     mpeAlarmAdditionalInfo }
+   STATUS          current
+   DESCRIPTION     "The alarm that is identified by the content of the
+                    following object has been set:
+                    - mpeAlarmResource"
+::= { mpeAlarmNotifications 1 }
+
+mpeAlarmCleared NOTIFICATION-TYPE
+   OBJECTS         { mpeAlarmDateAndTime,
+                     mpeAlarmResource,
+                     mpeAlarmPerceivedSeverity,
+                     mpeAlarmEventType, 
+                     mpeAlarmProbableCause,
+                     mpeAlarmDescription,
+                     mpeAlarmAdditionalInfo }
+   STATUS          current
+   DESCRIPTION     "The alarm that is identified by the content of the
+                    following object has been cleared:
+                    - mpeAlarmResource"
+::= { mpeAlarmNotifications 2 }
+     
+-- Compliance Statements
+
+mpeAlarmCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for fault management."
+   MODULE          -- this module
+   MANDATORY-GROUPS { mpeAlarmConfGroup, mpeAlarmNotifConfGroup}
+::= { mpeAlarmCompliances 1 }
+
+-- Units of Conformance
+
+mpeAlarmConfGroup OBJECT-GROUP
+   OBJECTS { mpeAlarmDateAndTime,
+             mpeAlarmResource,
+             mpeAlarmPerceivedSeverity,
+             mpeAlarmEventType, 
+             mpeAlarmProbableCause,
+             mpeAlarmDescription,
+             mpeAlarmAdditionalInfo}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing fault management
+                    information."
+::= { mpeAlarmGroups 1 }
+
+mpeAlarmNotifConfGroup NOTIFICATION-GROUP
+   NOTIFICATIONS { mpeAlarmSet,
+                   mpeAlarmCleared }
+   STATUS          current
+   DESCRIPTION     "A collection of notifications providing fault management
+                    information."
+::= { mpeAlarmGroups 2 }
+
+END
+                                                    

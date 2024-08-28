@@ -1,0 +1,256 @@
+ERICSSON-MPE-VOC-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Counter32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeVocPmModule MODULE-IDENTITY
+   LAST-UPDATED    "201804151612Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "Counters and states used by the Voc functionality."
+::= { mpeModules 43 }
+
+vocPmObjects  OBJECT IDENTIFIER ::= { mpeVocPmModule 1 }
+
+vocReqCnt  OBJECT IDENTIFIER ::= { vocPmObjects 1 }
+
+vocRespCnt  OBJECT IDENTIFIER ::= { vocPmObjects 2 }
+
+vocEvent  OBJECT IDENTIFIER ::= { vocPmObjects 3 }
+
+vocTrafficCnt  OBJECT IDENTIFIER ::= { vocPmObjects 4 }
+
+vocSup  OBJECT IDENTIFIER ::= { vocPmObjects 5 }
+
+vocPmConformance  OBJECT IDENTIFIER ::= { mpeVocPmModule 3 }
+
+vocPmGroups  OBJECT IDENTIFIER ::= { vocPmConformance 1 }
+
+vocPmCompliances  OBJECT IDENTIFIER ::= { vocPmConformance 2 }
+
+vocUcReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "For INTERNAL use only. Number of requests to the UC 
+                    to retrieve an original video.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { vocReqCnt 1 }
+
+vocUcQueryReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "For INTERNAL use only. Number of requests made by the 
+                    VOC to the Cache Engine for the video popularity 
+                    list.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { vocReqCnt 2 }
+
+vocIcapReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "For INTERNAL use only. Number of ICAP RESPMOD 
+                    transcoding requests, sent from the VOC to the VOM.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { vocReqCnt 3 }
+
+vocRetrieveResp  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "For INTERNAL use only. Number of HTTP responses 
+                    received for the original video.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { vocRespCnt 1 }
+
+vocQueryResp  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "For INTERNAL use only. Number of HTTP responses 
+                    received from the Cache Engine query request.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { vocRespCnt 2 }
+
+vocIcapResp  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "For INTERNAL use only. Number of ICAP responses 
+                    received from the VOM.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { vocRespCnt 3 }
+
+vocRetResp2xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "For INTERNAL use only. Number of responses to VOC 
+                    video retrieval requests of any 2xx status code.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { vocRespCnt 4 }
+
+vocQueryResp2xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "For INTERNAL use only. Number of responses to Cache 
+                    Engine query requests of any 2xx status code.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { vocRespCnt 5 }
+
+vocIcapResp2xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "For INTERNAL use only. Number of responses to VOM 
+                    transcoding requests of any 2xx status code.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { vocRespCnt 6 }
+
+vocRetRespNon2xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "For INTERNAL use only. Number of responses to VOC 
+                    video retrieval requests of any non-2xx status code.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { vocRespCnt 7 }
+
+vocQueryRespnon2xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "For INTERNAL use only. Number of responses to Cache 
+                    Engine query requests of any 2xx status code.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { vocRespCnt 8 }
+
+vocIcapRespNon2xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "For INTERNAL use only. Number of responses to VOM 
+                    transcoding requests of any non-2xx status code.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { vocRespCnt 9 }
+
+vocEventUcSocket  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "VOC process cannot open configured Cache Engine 
+                    Server Port."
+::= { vocEvent 2 }
+
+vocEventVomSockets  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The VOM module has not started properly."
+::= { vocEvent 3 }
+
+vomOfflineKBytesIn  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Offline transcoding incoming kbytes.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { vocTrafficCnt 1 }
+
+vomOfflineKBytesOut  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Offline transcoding outgoing kbytes.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { vocTrafficCnt 2 }
+
+vocSupAsConfErr  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Error when reading configuration data. The cause of 
+                    the error is given in the dynamic text."
+::= { vocSup 1 }
+
+vocSupAsProcDefunct  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The supervised process appears to be non-responsive."
+::= { vocSup 2 }
+
+-- Compliance Statements
+
+vocCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for video optimization 
+                    controller."
+   MODULE          -- this module
+   MANDATORY-GROUPS {vocConfGroup}
+::= { vocPmCompliances 1 }
+
+-- Units of Conformance
+
+vocConfGroup OBJECT-GROUP
+   OBJECTS { vocUcReq,
+             vocUcQueryReq,
+             vocIcapReq,
+             vocRetrieveResp,
+             vocQueryResp,
+             vocIcapResp,
+             vocRetResp2xx,
+             vocQueryResp2xx,
+             vocIcapResp2xx,
+             vocRetRespNon2xx,
+             vocQueryRespnon2xx,
+             vocIcapRespNon2xx,
+             vocEventUcSocket,
+             vocEventVomSockets,
+             vomOfflineKBytesIn,
+             vomOfflineKBytesOut,
+             vocSupAsConfErr,
+             vocSupAsProcDefunct}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a video optimization 
+                    controller."
+::= { vocPmGroups 1 }
+END

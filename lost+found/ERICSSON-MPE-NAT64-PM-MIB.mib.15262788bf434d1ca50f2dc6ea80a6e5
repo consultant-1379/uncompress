@@ -1,0 +1,549 @@
+ERICSSON-MPE-NAT64-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Gauge32 , Counter32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeNat64PmModule MODULE-IDENTITY
+   LAST-UPDATED    "201804151612Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "Parameters for NAT 64."
+::= { mpeModules 27 }
+
+nat64PmObjects  OBJECT IDENTIFIER ::= { mpeNat64PmModule 1 }
+
+nat64CS  OBJECT IDENTIFIER ::= { nat64PmObjects 1 }
+
+nat64CM  OBJECT IDENTIFIER ::= { nat64PmObjects 2 }
+
+nat64FS  OBJECT IDENTIFIER ::= { nat64PmObjects 3 }
+
+nat64FM  OBJECT IDENTIFIER ::= { nat64PmObjects 4 }
+
+pfes  OBJECT IDENTIFIER ::= { nat64PmObjects 5 }
+
+nat64PmConformance  OBJECT IDENTIFIER ::= { mpeNat64PmModule 3 }
+
+nat64PmGroups  OBJECT IDENTIFIER ::= { nat64PmConformance 1 }
+
+nat64PmCompliances  OBJECT IDENTIFIER ::= { nat64PmConformance 2 }
+
+nat64CSessionsCreated  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Sessions Created
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { nat64CS 2 }
+
+nat64CSessionsRemoved  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Sessions Removed
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { nat64CS 3 }
+
+nat64CBIBsCreated  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. BIBs Created
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { nat64CS 4 }
+
+nat64CBIBsRemoved  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. BIBs Removed
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { nat64CS 5 }
+
+nat64CSessionsFailed  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Sessions Failed
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { nat64CS 6 }
+
+nat64CSessionsNotAllowed  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Sessions Not Allowed
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { nat64CS 7 }
+
+nat64CFNoFreeAddresses  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. No free addresses
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { nat64CS 8 }
+
+nat64CNoFreePort  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. No free Port
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { nat64CS 9 }
+
+nat64CFInternalError  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Internal Error
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { nat64CS 10 }
+
+nat64CEntryIsNotExclusive  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Entry is not exclusive
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { nat64CS 11 }
+
+nat64CMappingRequests  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Mapping Requests
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { nat64CS 12 }
+
+nat64CMappingRequestsFail  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Mapping Requests Fail
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { nat64CS 13 }
+
+nat64CInvalidArguments  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Invalid Arguments
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { nat64CS 14 }
+
+nat64CInvalidLifetime  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Invalid Lifetime
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { nat64CS 15 }
+
+nat64CRNoFreeAddresses  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. R No free addresses
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { nat64CS 16 }
+
+nat64CRInternalErr  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. R Internal Error
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { nat64CS 17 }
+
+nat64Error  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "NAT64 has an internal error"
+::= { nat64CS 18 }
+
+nat64CMCurrentMemUsageOfSessions  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Current mem usage of sessions"
+::= { nat64CM 1 }
+
+nat64CMPeakMemUsageOfSessions  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Peak mem usage of sessions"
+::= { nat64CM 2 }
+
+nat64CMCurrentMemUsageOfBIBs  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Current mem usage of sessions"
+::= { nat64CM 3 }
+
+nat64CMPeakMemUsageOfBIBs  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Peak mem usage of BIBs"
+::= { nat64CM 4 }
+
+nat64CMCurrentMemUsageOfIPElemns  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Current mem usage of IP elemns"
+::= { nat64CM 5 }
+
+nat64CMPeakMemUsageOfIPElemns  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Peak mem usage of IP elemns"
+::= { nat64CM 6 }
+
+nat64CMCurrentMemUsageOfRefCnt  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Current mem usage of ref cnt"
+::= { nat64CM 7 }
+
+nat64CMPeakMemUsageOfRefCnt  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Peak mem usage of IP ref cnt"
+::= { nat64CM 8 }
+
+nat64CMCurrentMemUsageOfRequest  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Current mem usage of of request"
+::= { nat64CM 9 }
+
+nat64CMPeakMemUsageOfRequest  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Peak mem usage of IP request"
+::= { nat64CM 10 }
+
+nat64FSIncomingPackets  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Incomming packets
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { nat64FS 1 }
+
+nat64FSOutgoingPackets  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Outgoing packets
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { nat64FS 2 }
+
+nat64FSPacketsDropped  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Packets dropped
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { nat64FS 3 }
+
+nat64FSICMPv4PacketsGenerated  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. ICMPv4 packets generated
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { nat64FS 4 }
+
+nat64FSICMPv6PacketsGenerated  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. ICMPv6 packets generated
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { nat64FS 5 }
+
+nat64FSIPv4FragmentsGenerated  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. IPv4 fragments generated
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { nat64FS 6 }
+
+nat64FSIPv6FragmentsGenerated  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. IPv6 fragments generated
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { nat64FS 7 }
+
+nat64FSSessionsCreated  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Sessions created
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { nat64FS 8 }
+
+nat64FSSessionsRemoved  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Sessions created
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { nat64FS 9 }
+
+nat64FSICMPv4RateLimitDrops  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. ICMPv4 rate limit drops
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { nat64FS 10 }
+
+nat64FSICMPv6RateLimitDrops  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. ICMPv6 rate limit drops
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { nat64FS 11 }
+
+nat64FMCurrentMemUsageOfSessions  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Current mem usage of sessions"
+::= { nat64FM 1 }
+
+nat64FMPeakMemUsageOfSessions  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Peak mem usage of sessions"
+::= { nat64FM 2 }
+
+nat64FMCurrMemUseFragCnt  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Current memory usage of frag cnt"
+::= { nat64FM 3 }
+
+nat64FMPeakMemUseFragCnt  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Peak memory usage of frag cnt"
+::= { nat64FM 4 }
+
+nat64FMCurrMemUseReq  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Current memory usage of requests"
+::= { nat64FM 5 }
+
+nat64FMPeakMemUseReq  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Peak memory usage of requests"
+::= { nat64FM 6 }
+
+nat64FMCurrMemUseIntStr  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Current memory usage of int structs"
+::= { nat64FM 7 }
+
+nat64FMPeakMemUseIntStr  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Peak memory usage of int struct"
+::= { nat64FM 8 }
+
+pfesSentIP4PacketsCnt  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Sent IP4 packets cnt
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { pfes 1 }
+
+pfesDroppedOutIP4PacketsCnt  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Dropped outbound IP4 packets cnt
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { pfes 2 }
+
+pfesIP4OutBytes  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. IP4 out bytes
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { pfes 3 }
+
+pfesSentIP6PacketsCnt  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Sent IP6 packets cnt
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { pfes 4 }
+
+pfesDroppedOutIP6PacketsCnt  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. Dropped outbound IP6 packets cnt
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { pfes 5 }
+
+pfesIP6OutBytes  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DEPRECATED. IP6 out bytes
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { pfes 6 }
+
+-- Compliance Statements
+
+nat64Compliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for nat64."
+   MODULE          -- this module
+   MANDATORY-GROUPS {nat64ConfGroup}
+::= { nat64PmCompliances 1 }
+
+-- Units of Conformance
+
+nat64ConfGroup OBJECT-GROUP
+   OBJECTS { nat64CSessionsCreated,
+             nat64CSessionsRemoved,
+             nat64CBIBsCreated,
+             nat64CBIBsRemoved,
+             nat64CSessionsFailed,
+             nat64CSessionsNotAllowed,
+             nat64CFNoFreeAddresses,
+             nat64CNoFreePort,
+             nat64CFInternalError,
+             nat64CEntryIsNotExclusive,
+             nat64CMappingRequests,
+             nat64CMappingRequestsFail,
+             nat64CInvalidArguments,
+             nat64CInvalidLifetime,
+             nat64CRNoFreeAddresses,
+             nat64CRInternalErr,
+             nat64Error,
+             nat64CMCurrentMemUsageOfSessions,
+             nat64CMPeakMemUsageOfSessions,
+             nat64CMCurrentMemUsageOfBIBs,
+             nat64CMPeakMemUsageOfBIBs,
+             nat64CMCurrentMemUsageOfIPElemns,
+             nat64CMPeakMemUsageOfIPElemns,
+             nat64CMCurrentMemUsageOfRefCnt,
+             nat64CMPeakMemUsageOfRefCnt,
+             nat64CMCurrentMemUsageOfRequest,
+             nat64CMPeakMemUsageOfRequest,
+             nat64FSIncomingPackets,
+             nat64FSOutgoingPackets,
+             nat64FSPacketsDropped,
+             nat64FSICMPv4PacketsGenerated,
+             nat64FSICMPv6PacketsGenerated,
+             nat64FSIPv4FragmentsGenerated,
+             nat64FSIPv6FragmentsGenerated,
+             nat64FSSessionsCreated,
+             nat64FSSessionsRemoved,
+             nat64FSICMPv4RateLimitDrops,
+             nat64FSICMPv6RateLimitDrops,
+             nat64FMCurrentMemUsageOfSessions,
+             nat64FMPeakMemUsageOfSessions,
+             nat64FMCurrMemUseFragCnt,
+             nat64FMPeakMemUseFragCnt,
+             nat64FMCurrMemUseReq,
+             nat64FMPeakMemUseReq,
+             nat64FMCurrMemUseIntStr,
+             nat64FMPeakMemUseIntStr,
+             pfesSentIP4PacketsCnt,
+             pfesDroppedOutIP4PacketsCnt,
+             pfesIP4OutBytes,
+             pfesSentIP6PacketsCnt,
+             pfesDroppedOutIP6PacketsCnt,
+             pfesIP6OutBytes}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a nat64."
+::= { nat64PmGroups 1 }
+END

@@ -1,0 +1,54 @@
+ERICSSON-MPE-REGISTRY-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-IDENTITY
+          FROM SNMPv2-SMI
+     mpe
+          FROM ERICSSON-MPE-TOP-MIB ;
+    
+    mpeRegistryMib  MODULE-IDENTITY
+       LAST-UPDATED "200409201000Z"
+       ORGANIZATION "Ericsson AB"
+       CONTACT-INFO
+         "        Ericsson AB
+                  
+                  Postal: Ericsson AB
+                  Kistagangen 26
+                  SE - 164 80 Stockholm
+                  Sweden
+
+             Tel: +46 8 7571500
+             Fax:  
+
+          E-Mail: support@ericsson.com"
+       DESCRIPTION
+         "The MIB module describing network service applications"
+       ::= { mpe 1 }    
+       
+       
+      mpeProducts OBJECT-IDENTITY 
+      STATUS current
+      DESCRIPTION "..."
+      ::= {mpe 2} 
+      
+      mpeSystem OBJECT-IDENTITY 
+      STATUS current
+      DESCRIPTION "..."
+      ::= {mpeProducts 1}
+      
+      pushEngine OBJECT-IDENTITY 
+      STATUS current
+      DESCRIPTION "..."
+      ::= {mpeProducts 2}
+      
+      ppg OBJECT-IDENTITY 
+      STATUS current
+      DESCRIPTION "..."
+      ::= {mpeProducts 3}
+        
+      mpeModules OBJECT-IDENTITY 
+      STATUS current
+      DESCRIPTION "..."
+      ::= {mpe 3}
+
+END

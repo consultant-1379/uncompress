@@ -1,0 +1,802 @@
+ERICSSON-MPE-AGGREGATION-PROXY-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Gauge32 , Counter32 , Unsigned32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     applIndex
+          FROM NETWORK-SERVICES-MIB
+
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeAggregationProxyPmModule MODULE-IDENTITY
+   LAST-UPDATED    "201804151612Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "Counters and states used by the Aggregation Proxy 
+                    functionality."
+::= { mpeModules 32 }
+
+aggregationProxyPmObjects  OBJECT IDENTIFIER ::= { mpeAggregationProxyPmModule 1 }
+
+xRqCnt  OBJECT IDENTIFIER ::= { aggregationProxyPmObjects 1 }
+
+xRpCnt  OBJECT IDENTIFIER ::= { aggregationProxyPmObjects 2 }
+
+cnpCnt  OBJECT IDENTIFIER ::= { aggregationProxyPmObjects 3 }
+
+apEvt  OBJECT IDENTIFIER ::= { aggregationProxyPmObjects 4 }
+
+apSubCnt  OBJECT IDENTIFIER ::= { aggregationProxyPmObjects 5 }
+
+apLicSubCntEvt  OBJECT IDENTIFIER ::= { aggregationProxyPmObjects 6 }
+
+mediaCnt  OBJECT IDENTIFIER ::= { aggregationProxyPmObjects 7 }
+
+aggregationProxyPmConformance  OBJECT IDENTIFIER ::= { mpeAggregationProxyPmModule 3 }
+
+aggregationProxyPmGroups  OBJECT IDENTIFIER ::= { aggregationProxyPmConformance 1 }
+
+aggregationProxyPmCompliances  OBJECT IDENTIFIER ::= { aggregationProxyPmConformance 2 }
+
+xRqCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF XRqCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the
+                    Aggregation Proxy
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless,
+                    3=Connection-Oriented, 4=Connectionless, 5=W-HTTP, 
+                    30=RTSP)."
+::= { xRqCnt 1 } 
+
+xRqCntEntry OBJECT-TYPE
+   SYNTAX          XRqCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "XCAP Request Counters for Aggregation Proxy process."
+   INDEX { applIndex }
+::= { xRqCntTable  1 }
+
+XRqCntEntry  ::= SEQUENCE
+{
+   xRqCntXcapPutReq          Counter32,
+   xRqCntXcapDelReq          Counter32,
+   xRqCntXcapGetReq          Counter32,
+   xRqCntXcapCapReq          Counter32,
+   xRqCntXcapDirReq          Counter32,
+   xRqCntXcapReqUnsuccessful Counter32,
+   xRqCntAuthReq             Counter32,
+   xRqCntAuthDigestReq       Counter32,
+   xRqCntAuthGbaReq          Counter32,
+   xRqCntAuthSsoReq          Counter32,
+   xRqCntZnReq               Counter32,
+   xRqCntAuthGibaReq         Counter32,
+   xRqCntAuthGbaDigestReq    Counter32,
+   xRqCntAuthGbaMeReq        Counter32,
+   xRqCntTrustGwReq          Counter32
+}
+
+xRqCntXcapPutReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of XCAP PUT requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { xRqCntEntry 1 }
+
+xRqCntXcapDelReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of XCAP DELETE requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { xRqCntEntry 2 }
+
+xRqCntXcapGetReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of XCAP GET requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { xRqCntEntry 3 }
+
+xRqCntXcapCapReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of XCAP Capability requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { xRqCntEntry 4 }
+
+xRqCntXcapDirReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of XCAP Directory requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { xRqCntEntry 5 }
+
+xRqCntXcapReqUnsuccessful  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of unsuccessful XCAP requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { xRqCntEntry 6 }
+
+xRqCntAuthReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of Digest, GBA (Digest, U, ME), SSO and 
+                    GIBA
+                    Authentication requests attempts. Note that the 
+                    original
+                    authentication request may trigger multiple 
+                    subsequent requests of
+                    different types. As such, the AuthDigestReq, 
+                    AuthGbaReq,
+                    AuthSsoReq and AuthGibaReq counters may not total to 
+                    AuthReq.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { xRqCntEntry 7 }
+
+xRqCntAuthDigestReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Digest authentication requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { xRqCntEntry 8 }
+
+xRqCntAuthGbaReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of GBA authentication requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { xRqCntEntry 9 }
+
+xRqCntAuthSsoReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SSO authentication requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { xRqCntEntry 10 }
+
+xRqCntZnReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Zn requests to BSF.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { xRqCntEntry 11 }
+
+xRqCntAuthGibaReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of GIBA authentication requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { xRqCntEntry 12 }
+
+xRqCntAuthGbaDigestReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of GBA_Digest authentication requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { xRqCntEntry 13 }
+
+xRqCntAuthGbaMeReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of ME-based GBA authentication requests 
+                    (GBA_ME and GBA_U).
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { xRqCntEntry 15 }
+
+xRqCntTrustGwReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of requests incoming to the Trusted Port.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { xRqCntEntry 16 }
+
+xRpCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF XRpCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the
+                    Aggregation Proxy
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless,
+                    3=Connection-Oriented, 4=Connectionless, 5=W-HTTP, 
+                    30=RTSP)."
+::= { xRpCnt 1 } 
+
+xRpCntEntry OBJECT-TYPE
+   SYNTAX          XRpCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "XCAP Response Counters for the Aggregation Proxy."
+   INDEX { applIndex }
+::= { xRpCntTable  1 }
+
+XRpCntEntry  ::= SEQUENCE
+{
+   xRpCntAuthResp      Counter32,
+   xRpCntAuthFailed403 Counter32,
+   xRpCntAuthFailed    Counter32,
+   xRpCntTrustGwResp   Counter32,
+   xRpCntTrustGwFailed Counter32
+}
+
+xRpCntAuthResp  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of all authentication responses.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { xRpCntEntry 1 }
+
+xRpCntAuthFailed403  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of failed authentication responses indicated 
+                    by HTTP 403-
+                    Forbidden status code.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { xRpCntEntry 2 }
+
+xRpCntAuthFailed  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of all failed authentication responses.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { xRpCntEntry 3 }
+
+xRpCntTrustGwResp  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of responses to Trusted Gateway(s).
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { xRpCntEntry 4 }
+
+xRpCntTrustGwFailed  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of failed requests to the Trusted Gateway 
+                    port.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { xRpCntEntry 5 }
+
+cnpCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF CnpCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the
+                    Aggregation Proxy
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless,
+                    3=Connection-Oriented, 4=Connectionless, 5=W-HTTP, 
+                    30=RTSP)."
+::= { cnpCnt 1 } 
+
+cnpCntEntry OBJECT-TYPE
+   SYNTAX          CnpCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "XCAP CNP Counters for the Aggregation Proxy."
+   INDEX { applIndex }
+::= { cnpCntTable  1 }
+
+CnpCntEntry  ::= SEQUENCE
+{
+   cnpCntInboundReq              Counter32,
+   cnpCntOutboundReq             Counter32,
+   cnpCntInboundReqFailed403     Counter32,
+   cnpCntInboundReqFailed404     Counter32,
+   cnpCntInboundReqFailedOthers  Counter32,
+   cnpCntOutboundReqFailed404    Counter32,
+   cnpCntOutboundReqFailedOthers Counter32
+}
+
+cnpCntInboundReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of all inbound requests received by 
+                    Terminating CNP.
+                    
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { cnpCntEntry 1 }
+
+cnpCntOutboundReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of requests received by the Originating 
+                    CNP.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { cnpCntEntry 2 }
+
+cnpCntInboundReqFailed403  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of failed inbound requests handled by 
+                    Terminating
+                    CNP with error code 403.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { cnpCntEntry 3 }
+
+cnpCntInboundReqFailed404  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of failed inbound requests handled by 
+                    Terminating
+                    CNP with error code 404.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { cnpCntEntry 4 }
+
+cnpCntInboundReqFailedOthers  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of failed inbound requests handled by 
+                    Terminating
+                    CNP other than error code 403 or 404.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { cnpCntEntry 5 }
+
+cnpCntOutboundReqFailed404  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of failed outbound requests handled by 
+                    Originating
+                    CNP with error code 404.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { cnpCntEntry 6 }
+
+cnpCntOutboundReqFailedOthers  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of failed outbound requests handled by 
+                    Originating
+                    CNP other than error code 404.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { cnpCntEntry 7 }
+
+apEvtTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF ApEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each XDM remote peer, such 
+                    as XDMS,
+                    CNP, Search Proxy, etc."
+::= { apEvt 1 } 
+
+apEvtEntry OBJECT-TYPE
+   SYNTAX          ApEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The alarms used for the Aggregation Proxy."
+   INDEX { apEvtIndex }
+::= { apEvtTable  1 }
+
+ApEvtEntry  ::= SEQUENCE
+{
+   apEvtIndex                     Unsigned32,
+   apEvtXdmsConnectionError       ItuPerceivedSeverity,
+   apEvtXdmsLongResponseTime      ItuPerceivedSeverity,
+   apEvtTrustedGatewayIpWhiteList ItuPerceivedSeverity,
+   apEvtCnpConnectionError        ItuPerceivedSeverity,
+   apEvtCnpLongResponseTime       ItuPerceivedSeverity,
+   apEvtCnpTerminatingOwnDomain   ItuPerceivedSeverity,
+   apEvtCnpTerminatingIpWhiteList ItuPerceivedSeverity
+}
+
+apEvtIndex  OBJECT-TYPE
+   SYNTAX          Unsigned32
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "An integer used to uniquely identify a ap evt table 
+                    entry."
+::= { apEvtEntry 1 }
+
+apEvtXdmsConnectionError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "A Communication Error with the XDMS server has been 
+                    detected."
+::= { apEvtEntry 2 }
+
+apEvtXdmsLongResponseTime  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Long Response Time from the XDMS has been detected."
+::= { apEvtEntry 3 }
+
+apEvtTrustedGatewayIpWhiteList  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Source IP Address of HTTP Request does not match 
+                    Trusted
+                    Gateway White List."
+::= { apEvtEntry 4 }
+
+apEvtCnpConnectionError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "A Communication Error with the remote CNP has been 
+                    detected."
+::= { apEvtEntry 5 }
+
+apEvtCnpLongResponseTime  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Long Response Time from the remote CNP has been 
+                    detected."
+::= { apEvtEntry 6 }
+
+apEvtCnpTerminatingOwnDomain  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The requested domain received by Terminating CNP does 
+                    not match
+                    Own Domain List."
+::= { apEvtEntry 7 }
+
+apEvtCnpTerminatingIpWhiteList  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Source IP Address of HTTP Request does not match 
+                    Terminating
+                    CNP White List."
+::= { apEvtEntry 8 }
+
+apSubCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF ApSubCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the
+                    Subscriber Counting (1=Secure Connection Oriented, 
+                    2=Secure
+                    Connectionless, 3=Connection-Oriented, 
+                    4=Connectionless, 5=W-HTTP,
+                    30=RTSP)."
+::= { apSubCnt 1 } 
+
+apSubCntEntry OBJECT-TYPE
+   SYNTAX          ApSubCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Subscriber Counting counters for Aggregation Proxy."
+   INDEX { applIndex }
+::= { apSubCntTable  1 }
+
+ApSubCntEntry  ::= SEQUENCE
+{
+   apSubCntSsoVpMaxSubCount Counter32,
+   apSubCntSsoVpActSubCount Gauge32
+}
+
+apSubCntSsoVpMaxSubCount  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Maximum number of active subscribers allowed to use 
+                    the Aggregation Proxy Auth Pkg VP according to the 
+                    license available
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { apSubCntEntry 1 }
+
+apSubCntSsoVpActSubCount  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of active subscribers using the Aggregation 
+                    Proxy Auth Pkg VP"
+::= { apSubCntEntry 3 }
+
+apLicSubCntEvtTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF ApLicSubCntEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One instance for each stack type (1=Secure Connection 
+                    Oriented, 2=Secure Connectionless, 
+                    3=Connection-Oriented, 4=Connectionless, 5=W-HTTP)."
+::= { apLicSubCntEvt 1 } 
+
+apLicSubCntEvtEntry OBJECT-TYPE
+   SYNTAX          ApLicSubCntEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The alarms used for the Aggregation Proxy Auth Pkg VP 
+                    Subscriber Counting."
+   INDEX { apLicSubCntEvtIndex }
+::= { apLicSubCntEvtTable  1 }
+
+ApLicSubCntEvtEntry  ::= SEQUENCE
+{
+   apLicSubCntEvtIndex          Unsigned32,
+   apLicSubCntEvtXdmApHighUsage ItuPerceivedSeverity,
+   apLicSubCntEvtXdmApMaxUsage  ItuPerceivedSeverity
+}
+
+apLicSubCntEvtIndex  OBJECT-TYPE
+   SYNTAX          Unsigned32
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "An integer used to uniquely identify a ap lic sub cnt 
+                    evt table entry."
+::= { apLicSubCntEvtEntry 1 }
+
+apLicSubCntEvtXdmApHighUsage  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Aggregation Proxy Auth Pkg VP License has reached 
+                    high level usage."
+::= { apLicSubCntEvtEntry 2 }
+
+apLicSubCntEvtXdmApMaxUsage  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Aggregation Proxy Auth Pkg VP License has reached the 
+                    maximum level usage."
+::= { apLicSubCntEvtEntry 3 }
+
+mediaCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF MediaCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the
+                    Aggregation Proxy
+                    (1=Secure Connection Oriented, 2=Secure 
+                    Connectionless,
+                    3=Connection-Oriented, 4=Connectionless, 5=W-HTTP, 
+                    30=RTSP)."
+::= { mediaCnt 1 } 
+
+mediaCntEntry OBJECT-TYPE
+   SYNTAX          MediaCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Media NAF counters."
+   INDEX { applIndex }
+::= { mediaCntTable  1 }
+
+MediaCntEntry  ::= SEQUENCE
+{
+   mediaCntAuthReq          Counter32,
+   mediaCntAuthResp         Counter32,
+   mediaCntAuthGbaMeReq     Counter32,
+   mediaCntAuthGbaReq       Counter32,
+   mediaCntZnReq            Counter32,
+   mediaCntAuthReqFailed403 Counter32,
+   mediaCntAuthFailed       Counter32,
+   mediaCntReq              Counter32,
+   mediaCntUnsuccessfulReq  Counter32
+}
+
+mediaCntAuthReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of Media Authentication requests 
+                    attempts.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { mediaCntEntry 1 }
+
+mediaCntAuthResp  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of NAF Media Authentication responses.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { mediaCntEntry 2 }
+
+mediaCntAuthGbaMeReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Media ME-based GBA authentication requests 
+                    (GBA_ME and GBA_U).
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { mediaCntEntry 3 }
+
+mediaCntAuthGbaReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Media GBA authentication requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { mediaCntEntry 4 }
+
+mediaCntZnReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Media Zn requests to BSF.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { mediaCntEntry 5 }
+
+mediaCntAuthReqFailed403  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of failed Media authentications responses 
+                    indicated by HTTP
+                    403-Forbidden status code.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { mediaCntEntry 6 }
+
+mediaCntAuthFailed  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of all failed Media authentication request.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { mediaCntEntry 7 }
+
+mediaCntReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Media requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { mediaCntEntry 8 }
+
+mediaCntUnsuccessfulReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of unsuccessful Media requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { mediaCntEntry 9 }
+
+-- Compliance Statements
+
+aggregationProxyCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for aggregation proxy."
+   MODULE          -- this module
+   MANDATORY-GROUPS {aggregationProxyConfGroup}
+::= { aggregationProxyPmCompliances 1 }
+
+-- Units of Conformance
+
+aggregationProxyConfGroup OBJECT-GROUP
+   OBJECTS { xRqCntXcapPutReq,
+             xRqCntXcapDelReq,
+             xRqCntXcapGetReq,
+             xRqCntXcapCapReq,
+             xRqCntXcapDirReq,
+             xRqCntXcapReqUnsuccessful,
+             xRqCntAuthReq,
+             xRqCntAuthDigestReq,
+             xRqCntAuthGbaReq,
+             xRqCntAuthSsoReq,
+             xRqCntZnReq,
+             xRqCntAuthGibaReq,
+             xRqCntAuthGbaDigestReq,
+             xRqCntAuthGbaMeReq,
+             xRqCntTrustGwReq,
+             xRpCntAuthResp,
+             xRpCntAuthFailed403,
+             xRpCntAuthFailed,
+             xRpCntTrustGwResp,
+             xRpCntTrustGwFailed,
+             cnpCntInboundReq,
+             cnpCntOutboundReq,
+             cnpCntInboundReqFailed403,
+             cnpCntInboundReqFailed404,
+             cnpCntInboundReqFailedOthers,
+             cnpCntOutboundReqFailed404,
+             cnpCntOutboundReqFailedOthers,
+             apEvtXdmsConnectionError,
+             apEvtXdmsLongResponseTime,
+             apEvtTrustedGatewayIpWhiteList,
+             apEvtCnpConnectionError,
+             apEvtCnpLongResponseTime,
+             apEvtCnpTerminatingOwnDomain,
+             apEvtCnpTerminatingIpWhiteList,
+             apSubCntSsoVpMaxSubCount,
+             apSubCntSsoVpActSubCount,
+             apLicSubCntEvtXdmApHighUsage,
+             apLicSubCntEvtXdmApMaxUsage,
+             mediaCntAuthReq,
+             mediaCntAuthResp,
+             mediaCntAuthGbaMeReq,
+             mediaCntAuthGbaReq,
+             mediaCntZnReq,
+             mediaCntAuthReqFailed403,
+             mediaCntAuthFailed,
+             mediaCntReq,
+             mediaCntUnsuccessfulReq}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a aggregation proxy."
+::= { aggregationProxyPmGroups 1 }
+END

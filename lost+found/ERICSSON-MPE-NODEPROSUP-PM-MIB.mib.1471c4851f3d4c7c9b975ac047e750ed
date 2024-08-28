@@ -1,0 +1,92 @@
+ERICSSON-MPE-NODEPROSUP-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Counter32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     applIndex
+          FROM NETWORK-SERVICES-MIB
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeNodeprosupPmModule MODULE-IDENTITY
+   LAST-UPDATED    "201804151612Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "Process failure counters."
+::= { mpeModules 35 }
+
+nodeprosupPmObjects  OBJECT IDENTIFIER ::= { mpeNodeprosupPmModule 1 }
+
+nsapp  OBJECT IDENTIFIER ::= { nodeprosupPmObjects 1 }
+
+nodeprosupPmConformance  OBJECT IDENTIFIER ::= { mpeNodeprosupPmModule 3 }
+
+nodeprosupPmGroups  OBJECT IDENTIFIER ::= { nodeprosupPmConformance 1 }
+
+nodeprosupPmCompliances  OBJECT IDENTIFIER ::= { nodeprosupPmConformance 2 }
+
+nsappTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF NsappEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One instance is created for each service/application."
+::= { nsapp 1 } 
+
+nsappEntry OBJECT-TYPE
+   SYNTAX          NsappEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Contains counters that represent supervised process 
+                    failures."
+   INDEX { applIndex }
+::= { nsappTable  1 }
+
+NsappEntry  ::= SEQUENCE
+{
+   nsappProcessFail Counter32
+}
+
+nsappProcessFail  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of unintented process restarts.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { nsappEntry 3 }
+
+-- Compliance Statements
+
+nodeprosupCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for node process 
+                    supervision."
+   MODULE          -- this module
+   MANDATORY-GROUPS {nodeprosupConfGroup}
+::= { nodeprosupPmCompliances 1 }
+
+-- Units of Conformance
+
+nodeprosupConfGroup OBJECT-GROUP
+   OBJECTS { nsappProcessFail}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a node process 
+                    supervision."
+::= { nodeprosupPmGroups 1 }
+END

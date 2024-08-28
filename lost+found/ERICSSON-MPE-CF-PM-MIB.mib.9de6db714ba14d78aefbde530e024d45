@@ -1,0 +1,1048 @@
+ERICSSON-MPE-CF-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Gauge32 , Counter32 , Unsigned32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     applIndex
+          FROM NETWORK-SERVICES-MIB
+
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeCfPmModule MODULE-IDENTITY
+   LAST-UPDATED    "201709182005Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "Counters and states used by Classifier And Forwarder."
+::= { mpeModules 151 }
+
+cfPmObjects  OBJECT IDENTIFIER ::= { mpeCfPmModule 1 }
+
+cfHcEvt  OBJECT IDENTIFIER ::= { cfPmObjects 1 }
+
+cfSysCount  OBJECT IDENTIFIER ::= { cfPmObjects 2 }
+
+cfSysStat  OBJECT IDENTIFIER ::= { cfPmObjects 3 }
+
+cfAccessPacketsCount  OBJECT IDENTIFIER ::= { cfPmObjects 4 }
+
+cfInternetPacketsCount  OBJECT IDENTIFIER ::= { cfPmObjects 5 }
+
+cfAccessDroppedCount  OBJECT IDENTIFIER ::= { cfPmObjects 6 }
+
+cfInternetDroppedCount  OBJECT IDENTIFIER ::= { cfPmObjects 7 }
+
+cfAccessPacketsStat  OBJECT IDENTIFIER ::= { cfPmObjects 8 }
+
+cfInternetPacketsStat  OBJECT IDENTIFIER ::= { cfPmObjects 9 }
+
+cfAccessDroppedStat  OBJECT IDENTIFIER ::= { cfPmObjects 10 }
+
+cfInternetDroppedStat  OBJECT IDENTIFIER ::= { cfPmObjects 11 }
+
+cfhaAlarm  OBJECT IDENTIFIER ::= { cfPmObjects 12 }
+
+cfSpvAlarm  OBJECT IDENTIFIER ::= { cfPmObjects 13 }
+
+cfSpvSwAlarm  OBJECT IDENTIFIER ::= { cfPmObjects 14 }
+
+cfPmConformance  OBJECT IDENTIFIER ::= { mpeCfPmModule 3 }
+
+cfPmGroups  OBJECT IDENTIFIER ::= { cfPmConformance 1 }
+
+cfPmCompliances  OBJECT IDENTIFIER ::= { cfPmConformance 2 }
+
+cfHcEvtLowPacketError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "CF health check detected the packet numbers go 
+                    through CF is too small."
+::= { cfHcEvt 1 }
+
+cfHcEvtEvenDistributionError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "CF health check detected IPv4 traffic distribution to 
+                    L4SF is not even."
+::= { cfHcEvt 2 }
+
+cfHcEvtEvenDistributionErrorV6  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "CF health check detected IPv6 traffic distribution to 
+                    L4SF is not even."
+::= { cfHcEvt 3 }
+
+cfSysCountAccessPacketsHigh  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF distributed packet on access interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { cfSysCount 1 }
+
+cfSysCountAccessPacketsLow  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF distributed packet on access interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { cfSysCount 2 }
+
+cfSysCountInternetPacketsHigh  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF distributed packet on internet 
+                    interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { cfSysCount 3 }
+
+cfSysCountInternetPacketsLow  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF distributed packet on internet 
+                    interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { cfSysCount 4 }
+
+cfSysCountAccessDroppedHigh  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF dropped packet on access interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { cfSysCount 5 }
+
+cfSysCountAccessDroppedLow  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF dropped packet on access interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { cfSysCount 6 }
+
+cfSysCountInternetDroppedHigh  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF dropped packet on internet interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { cfSysCount 7 }
+
+cfSysCountInternetDroppedLow  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF dropped packet on internet interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { cfSysCount 8 }
+
+cfSysCountAccessPacketsV6High  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF distributed IPv6 packet on access 
+                    interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { cfSysCount 9 }
+
+cfSysCountAccessPacketsV6Low  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF distributed IPv6 packet on access 
+                    interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { cfSysCount 10 }
+
+cfSysCountInternetPacketsV6High  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF distributed IPv6 packet on internet 
+                    interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { cfSysCount 11 }
+
+cfSysCountInternetPacketsV6Low  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF distributed IPv6 packet on internet 
+                    interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { cfSysCount 12 }
+
+cfSysCountAccessDroppedV6High  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF dropped IPv6 packet on access interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { cfSysCount 13 }
+
+cfSysCountAccessDroppedV6Low  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF dropped IPv6 packet on access interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { cfSysCount 14 }
+
+cfSysCountInternetDroppedV6High  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF dropped IPv6 packet on internet 
+                    interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { cfSysCount 15 }
+
+cfSysCountInternetDroppedV6Low  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF dropped IPv6 packet on internet 
+                    interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { cfSysCount 16 }
+
+cfSysStatAccessPacketsHigh  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Average n of CF distributed packet on access 
+                    interface during the specified period."
+::= { cfSysStat 1 }
+
+cfSysStatAccessPacketsLow  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Average n of CF distributed packet on access 
+                    interface during the specified period."
+::= { cfSysStat 2 }
+
+cfSysStatInternetPacketsHigh  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Average n of CF distributed packet on internet 
+                    interface during the specified period."
+::= { cfSysStat 3 }
+
+cfSysStatInternetPacketsLow  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Average n of CF distributed packet on internet 
+                    interface during the specified period."
+::= { cfSysStat 4 }
+
+cfSysStatAccessDroppedHigh  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Average n of CF dropped packet on access interface 
+                    during the specified period."
+::= { cfSysStat 5 }
+
+cfSysStatAccessDroppedLow  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Average n of CF dropped packet on access interface 
+                    during the specified period."
+::= { cfSysStat 6 }
+
+cfSysStatInternetDroppedHigh  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Average n of CF dropped packet on internet interface 
+                    during the specified period."
+::= { cfSysStat 7 }
+
+cfSysStatInternetDroppedLow  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Average n of CF dropped packet on internet interface 
+                    during the specified period."
+::= { cfSysStat 8 }
+
+cfSysStatAccessPacketsV6High  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "onof CF distributed IPv6 packet on access interface 
+                    during the specified period."
+::= { cfSysStat 9 }
+
+cfSysStatAccessPacketsV6Low  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Average n of CF distributed IPv6 packet on access 
+                    interface during the specified period."
+::= { cfSysStat 10 }
+
+cfSysStatInternetPacketsV6High  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Average n of CF distributed IPv6 packet on internet 
+                    interface during the specified period."
+::= { cfSysStat 11 }
+
+cfSysStatInternetPacketsV6Low  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Average n of CF distributed IPv6 packet on internet 
+                    interface during the specified period."
+::= { cfSysStat 12 }
+
+cfSysStatAccessDroppedV6High  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Average n of CF dropped IPv6 packet on access 
+                    interface during the specified period."
+::= { cfSysStat 13 }
+
+cfSysStatAccessDroppedV6Low  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Average n of CF dropped IPv6 packet on access 
+                    interface during the specified period."
+::= { cfSysStat 14 }
+
+cfSysStatInternetDroppedV6High  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Average n of CF dropped IPv6 packet on internet 
+                    interface during the specified period."
+::= { cfSysStat 15 }
+
+cfSysStatInternetDroppedV6Low  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Average n of CF dropped IPv6 packet on internet 
+                    interface during the specified period."
+::= { cfSysStat 16 }
+
+cfAccessPacketsCountTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF CfAccessPacketsCountEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each L4SF."
+::= { cfAccessPacketsCount 1 } 
+
+cfAccessPacketsCountEntry OBJECT-TYPE
+   SYNTAX          CfAccessPacketsCountEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for CF."
+   INDEX { applIndex }
+::= { cfAccessPacketsCountTable  1 }
+
+CfAccessPacketsCountEntry  ::= SEQUENCE
+{
+   cfAccessPacketsCountHigh   Counter32,
+   cfAccessPacketsCountLow    Counter32,
+   cfAccessPacketsCountV6High Counter32,
+   cfAccessPacketsCountV6Low  Counter32
+}
+
+cfAccessPacketsCountHigh  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF distributed packet to L4SF on access 
+                    interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { cfAccessPacketsCountEntry 1 }
+
+cfAccessPacketsCountLow  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF distributed packet to L4SF on access 
+                    interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { cfAccessPacketsCountEntry 2 }
+
+cfAccessPacketsCountV6High  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF distributed IPv6 packet to L4SF on 
+                    access interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { cfAccessPacketsCountEntry 3 }
+
+cfAccessPacketsCountV6Low  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF distributed IPv6 packet to L4SF on 
+                    access interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { cfAccessPacketsCountEntry 4 }
+
+cfInternetPacketsCountTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF CfInternetPacketsCountEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each L4SF."
+::= { cfInternetPacketsCount 1 } 
+
+cfInternetPacketsCountEntry OBJECT-TYPE
+   SYNTAX          CfInternetPacketsCountEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for CF."
+   INDEX { applIndex }
+::= { cfInternetPacketsCountTable  1 }
+
+CfInternetPacketsCountEntry  ::= SEQUENCE
+{
+   cfInternetPacketsCountHigh   Counter32,
+   cfInternetPacketsCountLow    Counter32,
+   cfInternetPacketsCountV6High Counter32,
+   cfInternetPacketsCountV6Low  Counter32
+}
+
+cfInternetPacketsCountHigh  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF distributed packet to L4SF on internet 
+                    interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { cfInternetPacketsCountEntry 1 }
+
+cfInternetPacketsCountLow  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF distributed packet to L4SF on internet 
+                    interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { cfInternetPacketsCountEntry 2 }
+
+cfInternetPacketsCountV6High  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF distributed IPV6 packet to L4SF on 
+                    internet interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { cfInternetPacketsCountEntry 3 }
+
+cfInternetPacketsCountV6Low  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF distributed IPV6 packet to L4SF on 
+                    internet interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { cfInternetPacketsCountEntry 4 }
+
+cfAccessDroppedCountTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF CfAccessDroppedCountEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each traffic server and DDC."
+::= { cfAccessDroppedCount 1 } 
+
+cfAccessDroppedCountEntry OBJECT-TYPE
+   SYNTAX          CfAccessDroppedCountEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for CF."
+   INDEX { applIndex }
+::= { cfAccessDroppedCountTable  1 }
+
+CfAccessDroppedCountEntry  ::= SEQUENCE
+{
+   cfAccessDroppedCountHigh   Counter32,
+   cfAccessDroppedCountLow    Counter32,
+   cfAccessDroppedCountV6High Counter32,
+   cfAccessDroppedCountV6Low  Counter32
+}
+
+cfAccessDroppedCountHigh  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF dropped packet to L4SF on access 
+                    interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { cfAccessDroppedCountEntry 1 }
+
+cfAccessDroppedCountLow  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF dropped packet to L4SF on access 
+                    interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { cfAccessDroppedCountEntry 2 }
+
+cfAccessDroppedCountV6High  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF dropped IPv6 packet to L4SF on access 
+                    interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { cfAccessDroppedCountEntry 3 }
+
+cfAccessDroppedCountV6Low  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF dropped IPv6 packet to L4SF on access 
+                    interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { cfAccessDroppedCountEntry 4 }
+
+cfInternetDroppedCountTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF CfInternetDroppedCountEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each traffic server and DDC."
+::= { cfInternetDroppedCount 1 } 
+
+cfInternetDroppedCountEntry OBJECT-TYPE
+   SYNTAX          CfInternetDroppedCountEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for CF."
+   INDEX { applIndex }
+::= { cfInternetDroppedCountTable  1 }
+
+CfInternetDroppedCountEntry  ::= SEQUENCE
+{
+   cfInternetDroppedCountHigh   Counter32,
+   cfInternetDroppedCountLow    Counter32,
+   cfInternetDroppedCountV6High Counter32,
+   cfInternetDroppedCountV6Low  Counter32
+}
+
+cfInternetDroppedCountHigh  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF dropped packet to L4SF on internet 
+                    interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { cfInternetDroppedCountEntry 1 }
+
+cfInternetDroppedCountLow  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF dropped packet to L4SF on internet 
+                    interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { cfInternetDroppedCountEntry 2 }
+
+cfInternetDroppedCountV6High  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF dropped IPv6 packet to L4SF on internet 
+                    interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { cfInternetDroppedCountEntry 3 }
+
+cfInternetDroppedCountV6Low  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF dropped IPv6 packet to L4SF on internet 
+                    interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { cfInternetDroppedCountEntry 4 }
+
+cfAccessPacketsStatTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF CfAccessPacketsStatEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each traffic server and DDC."
+::= { cfAccessPacketsStat 1 } 
+
+cfAccessPacketsStatEntry OBJECT-TYPE
+   SYNTAX          CfAccessPacketsStatEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for CF during the specified period."
+   INDEX { applIndex }
+::= { cfAccessPacketsStatTable  1 }
+
+CfAccessPacketsStatEntry  ::= SEQUENCE
+{
+   cfAccessPacketsStatHigh   Gauge32,
+   cfAccessPacketsStatLow    Gauge32,
+   cfAccessPacketsStatV6High Gauge32,
+   cfAccessPacketsStatV6Low  Gauge32
+}
+
+cfAccessPacketsStatHigh  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF distributed packet to L4SF on access 
+                    interface."
+::= { cfAccessPacketsStatEntry 1 }
+
+cfAccessPacketsStatLow  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF distributed packet to L4SF on access 
+                    interface."
+::= { cfAccessPacketsStatEntry 2 }
+
+cfAccessPacketsStatV6High  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF distributed IPv6 packet to L4SF on 
+                    access interface."
+::= { cfAccessPacketsStatEntry 3 }
+
+cfAccessPacketsStatV6Low  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF distributed IPv6 packet to L4SF on 
+                    access interface."
+::= { cfAccessPacketsStatEntry 4 }
+
+cfInternetPacketsStatTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF CfInternetPacketsStatEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each traffic server and DDC."
+::= { cfInternetPacketsStat 1 } 
+
+cfInternetPacketsStatEntry OBJECT-TYPE
+   SYNTAX          CfInternetPacketsStatEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for CF during the specified period."
+   INDEX { applIndex }
+::= { cfInternetPacketsStatTable  1 }
+
+CfInternetPacketsStatEntry  ::= SEQUENCE
+{
+   cfInternetPacketsStatHigh   Gauge32,
+   cfInternetPacketsStatLow    Gauge32,
+   cfInternetPacketsStatV6High Gauge32,
+   cfInternetPacketsStatV6Low  Gauge32
+}
+
+cfInternetPacketsStatHigh  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF distributed packet to L4SF on internet 
+                    interface."
+::= { cfInternetPacketsStatEntry 1 }
+
+cfInternetPacketsStatLow  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF distributed packet to L4SF on internet 
+                    interface."
+::= { cfInternetPacketsStatEntry 2 }
+
+cfInternetPacketsStatV6High  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF distributed IPv6 packet to L4SF on 
+                    internet interface."
+::= { cfInternetPacketsStatEntry 3 }
+
+cfInternetPacketsStatV6Low  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF distributed IPv6 packet to L4SF on 
+                    internet interface."
+::= { cfInternetPacketsStatEntry 4 }
+
+cfAccessDroppedStatTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF CfAccessDroppedStatEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each traffic server and DDC."
+::= { cfAccessDroppedStat 1 } 
+
+cfAccessDroppedStatEntry OBJECT-TYPE
+   SYNTAX          CfAccessDroppedStatEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for CF during the specified period."
+   INDEX { applIndex }
+::= { cfAccessDroppedStatTable  1 }
+
+CfAccessDroppedStatEntry  ::= SEQUENCE
+{
+   cfAccessDroppedStatHigh   Gauge32,
+   cfAccessDroppedStatLow    Gauge32,
+   cfAccessDroppedStatV6High Gauge32,
+   cfAccessDroppedStatV6Low  Gauge32
+}
+
+cfAccessDroppedStatHigh  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF dropped packet to L4SF on access 
+                    interface."
+::= { cfAccessDroppedStatEntry 1 }
+
+cfAccessDroppedStatLow  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF dropped packet to L4SF on access 
+                    interface."
+::= { cfAccessDroppedStatEntry 2 }
+
+cfAccessDroppedStatV6High  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF dropped IPv6 packet to L4SF on access 
+                    interface."
+::= { cfAccessDroppedStatEntry 3 }
+
+cfAccessDroppedStatV6Low  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF dropped IPv6 packet to L4SF on access 
+                    interface."
+::= { cfAccessDroppedStatEntry 4 }
+
+cfInternetDroppedStatTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF CfInternetDroppedStatEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each traffic server and DDC."
+::= { cfInternetDroppedStat 1 } 
+
+cfInternetDroppedStatEntry OBJECT-TYPE
+   SYNTAX          CfInternetDroppedStatEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for CF during the specified period."
+   INDEX { applIndex }
+::= { cfInternetDroppedStatTable  1 }
+
+CfInternetDroppedStatEntry  ::= SEQUENCE
+{
+   cfInternetDroppedStatHigh   Gauge32,
+   cfInternetDroppedStatLow    Gauge32,
+   cfInternetDroppedStatV6High Gauge32,
+   cfInternetDroppedStatV6Low  Gauge32
+}
+
+cfInternetDroppedStatHigh  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF dropped packet to L4SF on internet 
+                    interface."
+::= { cfInternetDroppedStatEntry 1 }
+
+cfInternetDroppedStatLow  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF dropped packet to L4SF on internet 
+                    interface."
+::= { cfInternetDroppedStatEntry 2 }
+
+cfInternetDroppedStatV6High  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF dropped IPv6 packet to L4SF on internet 
+                    interface."
+::= { cfInternetDroppedStatEntry 3 }
+
+cfInternetDroppedStatV6Low  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of CF dropped IPv6 packet to L4SF on internet 
+                    interface."
+::= { cfInternetDroppedStatEntry 4 }
+
+cfReboot  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "CF server is reboot, probable cause: resource out of 
+                    service."
+::= { cfhaAlarm 1 }
+
+cfRebootBlocked  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "CF server can NOT solve issue by reboot"
+::= { cfhaAlarm 2 }
+
+cfIsolated  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "CF server is isolated. It is out of service.'"
+::= { cfhaAlarm 3 }
+
+cfSpvAlarmAllCfDown  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "CF supervisor detects all CFs are down. Possible 
+                    cause: network of supervisor network is abnormal, or all 
+                    CFs are down."
+::= { cfSpvAlarm 1 }
+
+cfSpvAlarmCfDown  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "CF supervisor detects one CF is down. Possible cause: 
+                    cf resource out of service."
+::= { cfSpvAlarm 2 }
+
+cfSpvAlarmMonNotWorking  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The CF Monitor process is not working."
+::= { cfSpvAlarm 3 }
+
+cfSpvAlarmBadCIPv4Range  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Client IPv4 range contains default CIDRs."
+::= { cfSpvAlarm 4 }
+
+cfSpvAlarmBadCIPv6Range  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Client IPv6 range contains default CIDRs."
+::= { cfSpvAlarm 5 }
+
+cfSpvSwAlarmTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF CfSpvSwAlarmEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each switch."
+::= { cfSpvSwAlarm 1 } 
+
+cfSpvSwAlarmEntry OBJECT-TYPE
+   SYNTAX          CfSpvSwAlarmEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The alarms for swtiches"
+   INDEX { cfSpvSwAlarmIndex }
+::= { cfSpvSwAlarmTable  1 }
+
+CfSpvSwAlarmEntry  ::= SEQUENCE
+{
+   cfSpvSwAlarmIndex    Unsigned32,
+   cfSpvSwAlarmConnFail ItuPerceivedSeverity,
+   cfSpvSwAlarmUpdFail  ItuPerceivedSeverity
+}
+
+cfSpvSwAlarmIndex  OBJECT-TYPE
+   SYNTAX          Unsigned32
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "An integer used to uniquely identify a cf spv sw 
+                    alarm table entry."
+::= { cfSpvSwAlarmEntry 1 }
+
+cfSpvSwAlarmConnFail  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Supervisor can not connect switch."
+::= { cfSpvSwAlarmEntry 3 }
+
+cfSpvSwAlarmUpdFail  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Failed to update the routing information of the 
+                    switch."
+::= { cfSpvSwAlarmEntry 6 }
+
+-- Compliance Statements
+
+cfCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for classifier and 
+                    forwarder."
+   MODULE          -- this module
+   MANDATORY-GROUPS {cfConfGroup}
+::= { cfPmCompliances 1 }
+
+-- Units of Conformance
+
+cfConfGroup OBJECT-GROUP
+   OBJECTS { cfHcEvtLowPacketError,
+             cfHcEvtEvenDistributionError,
+             cfHcEvtEvenDistributionErrorV6,
+             cfSysCountAccessPacketsHigh,
+             cfSysCountAccessPacketsLow,
+             cfSysCountInternetPacketsHigh,
+             cfSysCountInternetPacketsLow,
+             cfSysCountAccessDroppedHigh,
+             cfSysCountAccessDroppedLow,
+             cfSysCountInternetDroppedHigh,
+             cfSysCountInternetDroppedLow,
+             cfSysCountAccessPacketsV6High,
+             cfSysCountAccessPacketsV6Low,
+             cfSysCountInternetPacketsV6High,
+             cfSysCountInternetPacketsV6Low,
+             cfSysCountAccessDroppedV6High,
+             cfSysCountAccessDroppedV6Low,
+             cfSysCountInternetDroppedV6High,
+             cfSysCountInternetDroppedV6Low,
+             cfSysStatAccessPacketsHigh,
+             cfSysStatAccessPacketsLow,
+             cfSysStatInternetPacketsHigh,
+             cfSysStatInternetPacketsLow,
+             cfSysStatAccessDroppedHigh,
+             cfSysStatAccessDroppedLow,
+             cfSysStatInternetDroppedHigh,
+             cfSysStatInternetDroppedLow,
+             cfSysStatAccessPacketsV6High,
+             cfSysStatAccessPacketsV6Low,
+             cfSysStatInternetPacketsV6High,
+             cfSysStatInternetPacketsV6Low,
+             cfSysStatAccessDroppedV6High,
+             cfSysStatAccessDroppedV6Low,
+             cfSysStatInternetDroppedV6High,
+             cfSysStatInternetDroppedV6Low,
+             cfAccessPacketsCountHigh,
+             cfAccessPacketsCountLow,
+             cfAccessPacketsCountV6High,
+             cfAccessPacketsCountV6Low,
+             cfInternetPacketsCountHigh,
+             cfInternetPacketsCountLow,
+             cfInternetPacketsCountV6High,
+             cfInternetPacketsCountV6Low,
+             cfAccessDroppedCountHigh,
+             cfAccessDroppedCountLow,
+             cfAccessDroppedCountV6High,
+             cfAccessDroppedCountV6Low,
+             cfInternetDroppedCountHigh,
+             cfInternetDroppedCountLow,
+             cfInternetDroppedCountV6High,
+             cfInternetDroppedCountV6Low,
+             cfAccessPacketsStatHigh,
+             cfAccessPacketsStatLow,
+             cfAccessPacketsStatV6High,
+             cfAccessPacketsStatV6Low,
+             cfInternetPacketsStatHigh,
+             cfInternetPacketsStatLow,
+             cfInternetPacketsStatV6High,
+             cfInternetPacketsStatV6Low,
+             cfAccessDroppedStatHigh,
+             cfAccessDroppedStatLow,
+             cfAccessDroppedStatV6High,
+             cfAccessDroppedStatV6Low,
+             cfInternetDroppedStatHigh,
+             cfInternetDroppedStatLow,
+             cfInternetDroppedStatV6High,
+             cfInternetDroppedStatV6Low,
+             cfReboot,
+             cfRebootBlocked,
+             cfIsolated,
+             cfSpvAlarmAllCfDown,
+             cfSpvAlarmCfDown,
+             cfSpvAlarmMonNotWorking,
+             cfSpvAlarmBadCIPv4Range,
+             cfSpvAlarmBadCIPv6Range,
+             cfSpvSwAlarmConnFail,
+             cfSpvSwAlarmUpdFail}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a classifier and 
+                    forwarder."
+::= { cfPmGroups 1 }
+END

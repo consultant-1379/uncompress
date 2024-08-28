@@ -1,0 +1,154 @@
+ERICSSON-MPE-LICENSE-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Unsigned32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeLicensePmModule MODULE-IDENTITY
+   LAST-UPDATED    "201804151612Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "The counters and events used by the License Handling 
+                    and Traffic Regulation functionality."
+::= { mpeModules 39 }
+
+licensePmObjects  OBJECT IDENTIFIER ::= { mpeLicensePmModule 1 }
+
+sLicEvt  OBJECT IDENTIFIER ::= { licensePmObjects 1 }
+
+dLicEvt  OBJECT IDENTIFIER ::= { licensePmObjects 2 }
+
+licensePmConformance  OBJECT IDENTIFIER ::= { mpeLicensePmModule 3 }
+
+licensePmGroups  OBJECT IDENTIFIER ::= { licensePmConformance 1 }
+
+licensePmCompliances  OBJECT IDENTIFIER ::= { licensePmConformance 2 }
+
+licenseGenericError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Generic license occured, traffic is blocked."
+::= { sLicEvt 1 }
+
+licenseConfigurationError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "License configuration problem occured, traffic is 
+                    blocked."
+::= { sLicEvt 2 }
+
+licenseSslError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "License SSL problem occured, traffic is blocked."
+::= { sLicEvt 3 }
+
+licenseTsActivationError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "A failure occured on the feature license for Virtual 
+                    TS Instance, traffic is blocked."
+::= { sLicEvt 4 }
+
+licenseTcpAccOptError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "A failure occured on the feature license for TCP 
+                    Acceleration and Optimization, traffic is blocked."
+::= { sLicEvt 5 }
+
+offlineLicenseError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Offline license error occurs, traffic is blocked."
+::= { sLicEvt 6 }
+
+dLicEvtTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF DLicEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each license feature. 
+                    (0=Virtual TS Instance, 1=Web Optimization, 2=Video 
+                    Optimization, 3=Policy Management, 4=TCP Acceleration and 
+                    Opimization, 5=Monetization, 6=TIC)."
+::= { dLicEvt 1 } 
+
+dLicEvtEntry OBJECT-TYPE
+   SYNTAX          DLicEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The dynamic events used by the License Handling and 
+                    Traffic Regulation functionality."
+   INDEX { dLicEvtFeatureIndex }
+::= { dLicEvtTable  1 }
+
+DLicEvtEntry  ::= SEQUENCE
+{
+   dLicEvtFeatureIndex  Unsigned32,
+   dLicEvtFeatureExpiry ItuPerceivedSeverity
+}
+
+dLicEvtFeatureIndex  OBJECT-TYPE
+   SYNTAX          Unsigned32
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "An integer used to uniquely identify a d lic evt 
+                    table entry."
+::= { dLicEvtEntry 1 }
+
+dLicEvtFeatureExpiry  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The feature license is close to expiration."
+::= { dLicEvtEntry 2 }
+
+-- Compliance Statements
+
+licenseCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for license handling."
+   MODULE          -- this module
+   MANDATORY-GROUPS {licenseConfGroup}
+::= { licensePmCompliances 1 }
+
+-- Units of Conformance
+
+licenseConfGroup OBJECT-GROUP
+   OBJECTS { licenseGenericError,
+             licenseConfigurationError,
+             licenseSslError,
+             licenseTsActivationError,
+             licenseTcpAccOptError,
+             offlineLicenseError,
+             dLicEvtFeatureExpiry}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a license handling."
+::= { licensePmGroups 1 }
+END

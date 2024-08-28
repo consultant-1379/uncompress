@@ -1,0 +1,192 @@
+ERICSSON-MPE-URL-FILTER-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Counter32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     applIndex
+          FROM NETWORK-SERVICES-MIB
+
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeUrlFilterPmModule MODULE-IDENTITY
+   LAST-UPDATED    "201804151612Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "Counters and alarms related with the URL Filter area."
+::= { mpeModules 21 }
+
+urlFilterPmObjects  OBJECT IDENTIFIER ::= { mpeUrlFilterPmModule 1 }
+
+catEngine  OBJECT IDENTIFIER ::= { urlFilterPmObjects 1 }
+
+urlCategoriesCache  OBJECT IDENTIFIER ::= { urlFilterPmObjects 2 }
+
+urlFiltering  OBJECT IDENTIFIER ::= { urlFilterPmObjects 3 }
+
+urlFilterGroups  OBJECT IDENTIFIER ::= { urlFilterPmObjects 4 }
+
+blockedUrlLog  OBJECT IDENTIFIER ::= { urlFilterPmObjects 5 }
+
+urlFilterPmConformance  OBJECT IDENTIFIER ::= { mpeUrlFilterPmModule 3 }
+
+urlFilterPmGroups  OBJECT IDENTIFIER ::= { urlFilterPmConformance 1 }
+
+urlFilterPmCompliances  OBJECT IDENTIFIER ::= { urlFilterPmConformance 2 }
+
+catEngineClientComFailure  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The categorization engine client can't communicate 
+                    with the server."
+::= { catEngine 1 }
+
+catEngineServerLicenseFailure  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The URL categorization engine's license is missing or 
+                    has expire."
+::= { catEngine 2 }
+
+urlCategoriesCacheTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF UrlCategoriesCacheEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One instance for each stack type ( 5=W-HTTP)."
+::= { urlCategoriesCache 1 } 
+
+urlCategoriesCacheEntry OBJECT-TYPE
+   SYNTAX          UrlCategoriesCacheEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counter and alarms related with the URL Categories 
+                    Cache."
+   INDEX { applIndex }
+::= { urlCategoriesCacheTable  1 }
+
+UrlCategoriesCacheEntry  ::= SEQUENCE
+{
+   urlCategoriesCacheRequests    Counter32,
+   urlCategoriesCacheRequestHits Counter32
+}
+
+urlCategoriesCacheRequests  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of times a cache request has occurred.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { urlCategoriesCacheEntry 1 }
+
+urlCategoriesCacheRequestHits  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of times a cache hit has occurred.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { urlCategoriesCacheEntry 2 }
+
+urlFilteringTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF UrlFilteringEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One instance for each stack type, ( 5=W-HTTP)."
+::= { urlFiltering 1 } 
+
+urlFilteringEntry OBJECT-TYPE
+   SYNTAX          UrlFilteringEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counter related with the URL Filtering."
+   INDEX { applIndex }
+::= { urlFilteringTable  1 }
+
+UrlFilteringEntry  ::= SEQUENCE
+{
+   urlFilteringRequests       Counter32,
+   urlFilteringDeniedRequests Counter32
+}
+
+urlFilteringRequests  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of times an URL filtering has occurred.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { urlFilteringEntry 1 }
+
+urlFilteringDeniedRequests  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of times a request has been denied access by 
+                    URL Filtering.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { urlFilteringEntry 2 }
+
+urlFilterGroupsDirectoryFailure  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Check the configuration parameters for the URL filter 
+                    groups.
+                    Contact Customer Support if the problem remains."
+::= { urlFilterGroups 1 }
+
+blockedUrlLogDirectoryFailure  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Check the configuration parameter for the blocked URL 
+                    log.
+                    Contact Customer Support if the problem remains."
+::= { blockedUrlLog 1 }
+
+-- Compliance Statements
+
+urlFilterCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for url filter."
+   MODULE          -- this module
+   MANDATORY-GROUPS {urlFilterConfGroup}
+::= { urlFilterPmCompliances 1 }
+
+-- Units of Conformance
+
+urlFilterConfGroup OBJECT-GROUP
+   OBJECTS { catEngineClientComFailure,
+             catEngineServerLicenseFailure,
+             urlCategoriesCacheRequests,
+             urlCategoriesCacheRequestHits,
+             urlFilteringRequests,
+             urlFilteringDeniedRequests,
+             urlFilterGroupsDirectoryFailure,
+             blockedUrlLogDirectoryFailure}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a url filter."
+::= { urlFilterPmGroups 1 }
+END

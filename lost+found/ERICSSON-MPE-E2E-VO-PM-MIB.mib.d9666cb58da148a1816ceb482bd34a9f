@@ -1,0 +1,130 @@
+ERICSSON-MPE-E2E-VO-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Counter32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeE2eVoPmModule MODULE-IDENTITY
+   LAST-UPDATED    "201804151612Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "End-to-end video optimization counters."
+::= { mpeModules 40 }
+
+e2eVoPmObjects  OBJECT IDENTIFIER ::= { mpeE2eVoPmModule 1 }
+
+e2eVOCnt  OBJECT IDENTIFIER ::= { e2eVoPmObjects 1 }
+
+e2eVoPmConformance  OBJECT IDENTIFIER ::= { mpeE2eVoPmModule 3 }
+
+e2eVoPmGroups  OBJECT IDENTIFIER ::= { e2eVoPmConformance 1 }
+
+e2eVoPmCompliances  OBJECT IDENTIFIER ::= { e2eVoPmConformance 2 }
+
+e2eTxedVideoReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of requests for transcoded video.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { e2eVOCnt 1 }
+
+e2eTxedVideoReqOk  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of requests for transcoded video that are 
+                    successfully served.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { e2eVOCnt 2 }
+
+e2eTxedVideoReqNok  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of requests for transcoded video that are not 
+                    successfully served.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { e2eVOCnt 3 }
+
+e2eTxedVideoKBytes  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Transcoded video kbytes served.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { e2eVOCnt 4 }
+
+e2eOrigVideoKBytes  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Original video kbytes served.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { e2eVOCnt 5 }
+
+e2eTotalVideoKBytesOut  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total video KBytes going out of the VO script.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { e2eVOCnt 6 }
+
+e2eTotalVideoRequests  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of video requests to the VO script.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { e2eVOCnt 7 }
+
+-- Compliance Statements
+
+e2eVoCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for end-to-end video 
+                    optimization counters."
+   MODULE          -- this module
+   MANDATORY-GROUPS {e2eVoConfGroup}
+::= { e2eVoPmCompliances 1 }
+
+-- Units of Conformance
+
+e2eVoConfGroup OBJECT-GROUP
+   OBJECTS { e2eTxedVideoReq,
+             e2eTxedVideoReqOk,
+             e2eTxedVideoReqNok,
+             e2eTxedVideoKBytes,
+             e2eOrigVideoKBytes,
+             e2eTotalVideoKBytesOut,
+             e2eTotalVideoRequests}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a end-to-end video 
+                    optimization counters."
+::= { e2eVoPmGroups 1 }
+END

@@ -1,0 +1,179 @@
+ERICSSON-MPE-ANTI-VIRUS-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Counter32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     applIndex
+          FROM NETWORK-SERVICES-MIB
+
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeAntiVirusPmModule MODULE-IDENTITY
+   LAST-UPDATED    "201804151612Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "Counters and alarms related with the Anti-Virus area."
+::= { mpeModules 22 }
+
+antiVirusPmObjects  OBJECT IDENTIFIER ::= { mpeAntiVirusPmModule 1 }
+
+virEngine  OBJECT IDENTIFIER ::= { antiVirusPmObjects 1 }
+
+infectionCache  OBJECT IDENTIFIER ::= { antiVirusPmObjects 2 }
+
+antiVirusScan  OBJECT IDENTIFIER ::= { antiVirusPmObjects 3 }
+
+detectedVirusLog  OBJECT IDENTIFIER ::= { antiVirusPmObjects 4 }
+
+antiVirusPmConformance  OBJECT IDENTIFIER ::= { mpeAntiVirusPmModule 3 }
+
+antiVirusPmGroups  OBJECT IDENTIFIER ::= { antiVirusPmConformance 1 }
+
+antiVirusPmCompliances  OBJECT IDENTIFIER ::= { antiVirusPmConformance 2 }
+
+virEngineClientComFailure  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The virus detection client can't communicate with the 
+                    server."
+::= { virEngine 1 }
+
+virEngineServerLicenseFailure  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The virus detection engine's license is missing or 
+                    has expire."
+::= { virEngine 2 }
+
+infectionCacheTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF InfectionCacheEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One instance for each stack type, ( 5=W-HTTP)."
+::= { infectionCache 1 } 
+
+infectionCacheEntry OBJECT-TYPE
+   SYNTAX          InfectionCacheEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counter related with the content infection cache."
+   INDEX { applIndex }
+::= { infectionCacheTable  1 }
+
+InfectionCacheEntry  ::= SEQUENCE
+{
+   infectionCacheRequests    Counter32,
+   infectionCacheRequestHits Counter32
+}
+
+infectionCacheRequests  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of times a cache request has occurred.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { infectionCacheEntry 1 }
+
+infectionCacheRequestHits  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of times a cache hit has occurred.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { infectionCacheEntry 2 }
+
+antiVirusScanTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF AntiVirusScanEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One instance for each stack type, ( 5=W-HTTP)."
+::= { antiVirusScan 1 } 
+
+antiVirusScanEntry OBJECT-TYPE
+   SYNTAX          AntiVirusScanEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counter related with the Anti-Virus scanning."
+   INDEX { applIndex }
+::= { antiVirusScanTable  1 }
+
+AntiVirusScanEntry  ::= SEQUENCE
+{
+   antiVirusScanRequests   Counter32,
+   antiVirusScanDetections Counter32
+}
+
+antiVirusScanRequests  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of times an Anti-Virus scanning has occurred.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { antiVirusScanEntry 1 }
+
+antiVirusScanDetections  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of times an Anti-Virus scanning detections has 
+                    occurred.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { antiVirusScanEntry 2 }
+
+detectedVirusLogDirectoryFailure  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Check the configuration parameter for the detected 
+                    virus log.
+                    Contact Customer Support if the problem remains."
+::= { detectedVirusLog 1 }
+
+-- Compliance Statements
+
+antiVirusCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for anti- virus."
+   MODULE          -- this module
+   MANDATORY-GROUPS {antiVirusConfGroup}
+::= { antiVirusPmCompliances 1 }
+
+-- Units of Conformance
+
+antiVirusConfGroup OBJECT-GROUP
+   OBJECTS { virEngineClientComFailure,
+             virEngineServerLicenseFailure,
+             infectionCacheRequests,
+             infectionCacheRequestHits,
+             antiVirusScanRequests,
+             antiVirusScanDetections,
+             detectedVirusLogDirectoryFailure}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a anti- virus."
+::= { antiVirusPmGroups 1 }
+END

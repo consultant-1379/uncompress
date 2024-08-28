@@ -1,0 +1,259 @@
+ERICSSON-MPE-NETWORK-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Gauge32 , Counter32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     applIndex
+          FROM NETWORK-SERVICES-MIB
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeNetworkPmModule MODULE-IDENTITY
+   LAST-UPDATED    "201804151612Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "Counters related to network statistics"
+::= { mpeModules 26 }
+
+networkPmObjects  OBJECT IDENTIFIER ::= { mpeNetworkPmModule 1 }
+
+portUtilCnt  OBJECT IDENTIFIER ::= { networkPmObjects 1 }
+
+idsCnt  OBJECT IDENTIFIER ::= { networkPmObjects 2 }
+
+overflowCtlCnt  OBJECT IDENTIFIER ::= { networkPmObjects 3 }
+
+networkPmConformance  OBJECT IDENTIFIER ::= { mpeNetworkPmModule 3 }
+
+networkPmGroups  OBJECT IDENTIFIER ::= { networkPmConformance 1 }
+
+networkPmCompliances  OBJECT IDENTIFIER ::= { networkPmConformance 2 }
+
+portUtilCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF PortUtilCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One instance is created for each IP address that is 
+                    listed in the nodesupervisor configuration parameter 
+                    &quot;Counter Instance binding&quot;."
+::= { portUtilCnt 1 } 
+
+portUtilCntEntry OBJECT-TYPE
+   SYNTAX          PortUtilCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters For Port Utilization."
+   INDEX { applIndex }
+::= { portUtilCntTable  1 }
+
+PortUtilCntEntry  ::= SEQUENCE
+{
+   portUtilCntTwPorts       Gauge32,
+   portUtilCntUnusedPorts   Gauge32,
+   portUtilCntEstPorts      Gauge32,
+   portUtilCntReusedTwPorts Counter32,
+   portUtilCntPortAllocFail Counter32,
+   portUtilCntPortAllocAtt  Counter32
+}
+
+portUtilCntTwPorts  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Ports that are currently in state Time 
+                    Wait."
+::= { portUtilCntEntry 1 }
+
+portUtilCntUnusedPorts  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Ports that are currently not used."
+::= { portUtilCntEntry 2 }
+
+portUtilCntEstPorts  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Ports that are currently in state 
+                    established."
+::= { portUtilCntEntry 3 }
+
+portUtilCntReusedTwPorts  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Ports that have been re-used from state 
+                    Time Wait.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { portUtilCntEntry 4 }
+
+portUtilCntPortAllocFail  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Port Utilization Failures.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { portUtilCntEntry 5 }
+
+portUtilCntPortAllocAtt  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Port Utilization Attempts.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { portUtilCntEntry 6 }
+
+idsCntAnalyzedPkts  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of analyzed packets.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { idsCnt 1 }
+
+idsCntDroppedPkts  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of packets that were dropped by the intrusion 
+                    detection function.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { idsCnt 2 }
+
+idsCntInMarginsPkts  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of packets that were received inside the 
+                    window margins.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { idsCnt 3 }
+
+curConnCnt  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of connections are currently being Handled."
+::= { overflowCtlCnt 1 }
+
+bypassedConnCntHi  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of bypassed or dropped connections.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { overflowCtlCnt 2 }
+
+bypassedConnCntLo  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of bypassed or dropped connections.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { overflowCtlCnt 3 }
+
+bypassedDataCntHi  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "This counter is depreciated. It is no longer used and 
+                    it's value will always be 0.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { overflowCtlCnt 4 }
+
+bypassedDataCntLo  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "This counter is depreciated. It is no longer used and 
+                    it's value will always be 0.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { overflowCtlCnt 5 }
+
+overallDataCntHi  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of overall data in byte.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { overflowCtlCnt 6 }
+
+overallDataCntLo  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of overall data in byte.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { overflowCtlCnt 7 }
+
+estConnCnt  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of TCP connections that are in the ESTABLISHED 
+                    state and handled by the Browsing Proxy components, 
+                    such as HTTP/TCP Proxy and W-HTTP Proxy."
+::= { overflowCtlCnt 8 }
+
+-- Compliance Statements
+
+networkCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for network."
+   MODULE          -- this module
+   MANDATORY-GROUPS {networkConfGroup}
+::= { networkPmCompliances 1 }
+
+-- Units of Conformance
+
+networkConfGroup OBJECT-GROUP
+   OBJECTS { portUtilCntTwPorts,
+             portUtilCntUnusedPorts,
+             portUtilCntEstPorts,
+             portUtilCntReusedTwPorts,
+             portUtilCntPortAllocFail,
+             portUtilCntPortAllocAtt,
+             idsCntAnalyzedPkts,
+             idsCntDroppedPkts,
+             idsCntInMarginsPkts,
+             curConnCnt,
+             bypassedConnCntHi,
+             bypassedConnCntLo,
+             bypassedDataCntHi,
+             bypassedDataCntLo,
+             overallDataCntHi,
+             overallDataCntLo,
+             estConnCnt}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a network."
+::= { networkPmGroups 1 }
+END

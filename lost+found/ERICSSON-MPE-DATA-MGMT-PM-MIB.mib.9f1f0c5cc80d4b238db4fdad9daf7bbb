@@ -1,0 +1,728 @@
+ERICSSON-MPE-DATA-MGMT-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Gauge32 , Counter32 , Unsigned32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     applIndex
+          FROM NETWORK-SERVICES-MIB
+
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeDataMgmtPmModule MODULE-IDENTITY
+   LAST-UPDATED    "201804151612Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "Data Management events and counters."
+::= { mpeModules 4 }
+
+dataMgmtPmObjects  OBJECT IDENTIFIER ::= { mpeDataMgmtPmModule 1 }
+
+ldap  OBJECT IDENTIFIER ::= { dataMgmtPmObjects 1 }
+
+database  OBJECT IDENTIFIER ::= { dataMgmtPmObjects 2 }
+
+networkAccess  OBJECT IDENTIFIER ::= { dataMgmtPmObjects 4 }
+
+ddcCnt  OBJECT IDENTIFIER ::= { dataMgmtPmObjects 9 }
+
+pilotPacket  OBJECT IDENTIFIER ::= { dataMgmtPmObjects 5 }
+
+ddcError  OBJECT IDENTIFIER ::= { dataMgmtPmObjects 10 }
+
+ddcApiCnt  OBJECT IDENTIFIER ::= { dataMgmtPmObjects 11 }
+
+ddcApiErr  OBJECT IDENTIFIER ::= { dataMgmtPmObjects 12 }
+
+capLogEvt  OBJECT IDENTIFIER ::= { dataMgmtPmObjects 13 }
+
+ldapClient  OBJECT IDENTIFIER ::= { dataMgmtPmObjects 14 }
+
+msaError  OBJECT IDENTIFIER ::= { dataMgmtPmObjects 15 }
+
+pgErr  OBJECT IDENTIFIER ::= { dataMgmtPmObjects 16 }
+
+forwardCounter  OBJECT IDENTIFIER ::= { dataMgmtPmObjects 17 }
+
+forwardRsCnt  OBJECT IDENTIFIER ::= { dataMgmtPmObjects 18 }
+
+forwardEvt  OBJECT IDENTIFIER ::= { dataMgmtPmObjects 19 }
+
+dataMgmtPmConformance  OBJECT IDENTIFIER ::= { mpeDataMgmtPmModule 3 }
+
+dataMgmtPmGroups  OBJECT IDENTIFIER ::= { dataMgmtPmConformance 1 }
+
+dataMgmtPmCompliances  OBJECT IDENTIFIER ::= { dataMgmtPmConformance 2 }
+
+ldapCommError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "A Communication error has occurred."
+::= { ldap 2 }
+
+databaseErr  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "A Communication error has occured"
+::= { database 2 }
+
+networkAccessLdapComErr  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "A configuration error has occurred."
+::= { networkAccess 1 }
+
+networkAccessConfigError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "A configuration error has occurred."
+::= { networkAccess 2 }
+
+networkAccessRadiusPortError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "A socket communication error has occurred."
+::= { networkAccess 3 }
+
+networkAccessCommunicationError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "A syntax error in the text-based protocol has been 
+                    detected."
+::= { networkAccess 4 }
+
+networkAccessAcctStart  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of RADIUS accounting start.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { networkAccess 5 }
+
+networkAccessAcctStop  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of RADIUS accounting stop.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { networkAccess 6 }
+
+networkAccessInterimUpdate  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of RADIUS interim updates.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { networkAccess 7 }
+
+networkAccessFaultyMessages  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of faulty RADIUS messages.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { networkAccess 8 }
+
+networkAccessMaxResponseTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Maximum response time towards the RADIUS Client (NAS) 
+                    during the time period."
+::= { networkAccess 9 }
+
+networkAccessAvgRespTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Average response time towards the RADIUS Client (NAS) 
+                    during the time period."
+::= { networkAccess 10 }
+
+networkAccessLdapAvgRespTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Average response time towards the LDAP server."
+::= { networkAccess 11 }
+
+networkAccessAcctStartDiffEntry  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of RADIUS accounting start when there is an 
+                    existing DDC entry with a different MSISDN.
+                    Indicates that a RADIUS Stop was lost.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { networkAccess 12 }
+
+networkAccessAcctStopDiffEntry  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of RADIUS accounting stop when there is an 
+                    existing DDC entry with a different MSISDN.
+                    Indicates that both RADIUS Stop and RADIUS Start were 
+                    lost.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { networkAccess 13 }
+
+netwAccInterimUpdateDiffEntry  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of RADIUS interim updates when there is an 
+                    existing DDC entry with a different MSISDN.
+                    Indicates that both RADIUS Stop and RADIUS Start were 
+                    lost.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { networkAccess 14 }
+
+netwAccInterimUpdateNoEntry  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of RADIUS interim updates when there is no 
+                    existing DDC entry.
+                    Indicates that a RADIUS Start was lost.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { networkAccess 15 }
+
+ddcCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF DdcCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Instance number is mapped to table in 
+                    distributed_data_cache.cfg. 1-3 are reserved. 4-32 can be assigned to 
+                    custom tables in distributed_data_cache.cfg
+                    (1=Others, all entries not having a counter 
+                    associated, 2=RADIUS entries, 3=SESSION entries, 4-32=Can be 
+                    assigned to custom tables)."
+::= { ddcCnt 1 } 
+
+ddcCntEntry OBJECT-TYPE
+   SYNTAX          DdcCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for the Distributed Data Cache."
+   INDEX { applIndex }
+::= { ddcCntTable  1 }
+
+DdcCntEntry  ::= SEQUENCE
+{
+   ddcCntNumEnt Gauge32
+}
+
+ddcCntNumEnt  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of entries in a table."
+::= { ddcCntEntry 1 }
+
+pilotPacketAllocation  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Pilot Packet 'Allocation'.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { pilotPacket 5 }
+
+pilotPacketDeallocation  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Pilot Packet 'Deallocation'.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { pilotPacket 6 }
+
+pilotPacketUpdate  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Pilot Packet 'Update'
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { pilotPacket 7 }
+
+ddcErrorSocketErr  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "A socket problem has occurred."
+::= { ddcError 1 }
+
+ddcApiCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF DdcApiCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Instance number is mapped to table in 
+                    distributed_data_cache.cfg. 1-3 are reserved. 4-32 can be assigned to 
+                    custom tables in distributed_data_cache.cfg
+                    (1=Others, all entries not having a counter 
+                    associated, 2=RADIUS entries, 3=SESSION entries, 4-32=Can be 
+                    assigned to custom tables)."
+::= { ddcApiCnt 1 } 
+
+ddcApiCntEntry OBJECT-TYPE
+   SYNTAX          DdcApiCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for Distributed Data Cache API."
+   INDEX { applIndex }
+::= { ddcApiCntTable  1 }
+
+DdcApiCntEntry  ::= SEQUENCE
+{
+   ddcApiCntAcc     Counter32,
+   ddcApiCntFailAcc Counter32
+}
+
+ddcApiCntAcc  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of requests to a table.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { ddcApiCntEntry 1 }
+
+ddcApiCntFailAcc  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number failed requests to a table.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { ddcApiCntEntry 2 }
+
+ddcApiErrSocket  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "A socket problem has occurred."
+::= { ddcApiErr 1 }
+
+capLogEvtTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF CapLogEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module
+                    ( 5=W-HTTP)."
+::= { capLogEvt 1 } 
+
+capLogEvtEntry OBJECT-TYPE
+   SYNTAX          CapLogEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Events for the Capacity Log Function."
+   INDEX { applIndex }
+::= { capLogEvtTable  1 }
+
+CapLogEvtEntry  ::= SEQUENCE
+{
+   capLogEvtDir ItuPerceivedSeverity
+}
+
+capLogEvtDir  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The runtime backup directory cannot be accessed. The 
+                    directory is specified in the dynamic text."
+::= { capLogEvtEntry 1 }
+
+ldapClientTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF LdapClientEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each instance of the LDAP 
+                    client. Each LDAP HOST:PORT combination will create an 
+                    instance in the table"
+::= { ldapClient 1 } 
+
+ldapClientEntry OBJECT-TYPE
+   SYNTAX          LdapClientEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for LDAP Client."
+   INDEX { ldapClientIndex }
+::= { ldapClientTable  1 }
+
+LdapClientEntry  ::= SEQUENCE
+{
+   ldapClientIndex       Unsigned32,
+   ldapClientSucc        Counter32,
+   ldapClientFail        Counter32,
+   ldapClientAvgRespTime Gauge32
+}
+
+ldapClientIndex  OBJECT-TYPE
+   SYNTAX          Unsigned32
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "An integer used to uniquely identify a ldap client 
+                    table entry."
+::= { ldapClientEntry 1 }
+
+ldapClientSucc  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of successful LDAP search requests.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ldapClientEntry 2 }
+
+ldapClientFail  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of failed LDAP search requests.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ldapClientEntry 3 }
+
+ldapClientAvgRespTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Average response time in milliseconds to get a 
+                    response from the LDAP server."
+::= { ldapClientEntry 4 }
+
+msaErrorProcessMonitor  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Failed to download MSA login page."
+::= { msaError 1 }
+
+msaErrorLightHttpd  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Failed to download file from lighttpd."
+::= { msaError 2 }
+
+msaErrorCaplog  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Failed to download file from caplog."
+::= { msaError 3 }
+
+msaErrorTracelog  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Failed to download file from tracelog."
+::= { msaError 4 }
+
+pgErrConn  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Failed to connect to instance."
+::= { pgErr 1 }
+
+pgErrLog  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Error in postgresql log file"
+::= { pgErr 2 }
+
+pgErrMonErr  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Postgresql Monitor table creation failed."
+::= { pgErr 3 }
+
+pgErrMonTruncErr  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Postgresql Monitor table truncate failed."
+::= { pgErr 4 }
+
+pgErrMonInsErr  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Postgresql Monitor table insert failed."
+::= { pgErr 5 }
+
+pgErrMonCountErr  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Postgresql Monitor table count failed."
+::= { pgErr 6 }
+
+forwardCounterTotalReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of RADIUS forward requests.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { forwardCounter 1 }
+
+forwardCounterTotalResentReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of RADIUS forward resent requests.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { forwardCounter 2 }
+
+forwardCounterTotalFailedReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of RADIUS forward sent requests fail.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { forwardCounter 3 }
+
+forwardCounterTotalFaultyResp  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of RADIUS forward faulty responses.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { forwardCounter 4 }
+
+forwardRsCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF ForwardRsCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each radius server."
+::= { forwardRsCnt 1 } 
+
+forwardRsCntEntry OBJECT-TYPE
+   SYNTAX          ForwardRsCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for each network access forwarding radius 
+                    server."
+   INDEX { applIndex }
+::= { forwardRsCntTable  1 }
+
+ForwardRsCntEntry  ::= SEQUENCE
+{
+   forwardRsCntReq             Counter32,
+   forwardRsCntResentReq       Counter32,
+   forwardRsCntFailedReq       Counter32,
+   forwardRsCntFaultyResp      Counter32,
+   forwardRsCntMaxResponseTime Gauge32,
+   forwardRsCntAvgRespTime     Gauge32
+}
+
+forwardRsCntReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of RADIUS forward sent requests to RADIUS 
+                    server.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { forwardRsCntEntry 1 }
+
+forwardRsCntResentReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of RADIUS forward resent requests to RADIUS 
+                    server.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { forwardRsCntEntry 2 }
+
+forwardRsCntFailedReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of RADIUS forward sent requests to RADIUS 
+                    server fail.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { forwardRsCntEntry 3 }
+
+forwardRsCntFaultyResp  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of RADIUS forward faulty responses from RADIUS 
+                    server.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { forwardRsCntEntry 4 }
+
+forwardRsCntMaxResponseTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Maximum response time towards the RADIUS Server 
+                    during the time period."
+::= { forwardRsCntEntry 5 }
+
+forwardRsCntAvgRespTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Average response time towards the RADIUS Server 
+                    during the time period."
+::= { forwardRsCntEntry 6 }
+
+forwardEvtTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF ForwardEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Network Access Forwarding Some Percentage Exceeded."
+::= { forwardEvt 1 } 
+
+forwardEvtEntry OBJECT-TYPE
+   SYNTAX          ForwardEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Alarm for each network access forwarding radius 
+                    server."
+   INDEX { forwardEvtIndex }
+::= { forwardEvtTable  1 }
+
+ForwardEvtEntry  ::= SEQUENCE
+{
+   forwardEvtIndex          Unsigned32,
+   forwardEvtResentExceeded ItuPerceivedSeverity,
+   forwardEvtFailedExceeded ItuPerceivedSeverity
+}
+
+forwardEvtIndex  OBJECT-TYPE
+   SYNTAX          Unsigned32
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "An integer used to uniquely identify a forward evt 
+                    table entry."
+::= { forwardEvtEntry 1 }
+
+forwardEvtResentExceeded  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Network Access Forwarding Resent Percentage Exceeded."
+::= { forwardEvtEntry 2 }
+
+forwardEvtFailedExceeded  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Network Access Forwarding Failed Percentage Exceeded."
+::= { forwardEvtEntry 3 }
+
+-- Compliance Statements
+
+dataMgmtCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for data management."
+   MODULE          -- this module
+   MANDATORY-GROUPS {dataMgmtConfGroup}
+::= { dataMgmtPmCompliances 1 }
+
+-- Units of Conformance
+
+dataMgmtConfGroup OBJECT-GROUP
+   OBJECTS { ldapCommError,
+             databaseErr,
+             networkAccessLdapComErr,
+             networkAccessConfigError,
+             networkAccessRadiusPortError,
+             networkAccessCommunicationError,
+             networkAccessAcctStart,
+             networkAccessAcctStop,
+             networkAccessInterimUpdate,
+             networkAccessFaultyMessages,
+             networkAccessMaxResponseTime,
+             networkAccessAvgRespTime,
+             networkAccessLdapAvgRespTime,
+             networkAccessAcctStartDiffEntry,
+             networkAccessAcctStopDiffEntry,
+             netwAccInterimUpdateDiffEntry,
+             netwAccInterimUpdateNoEntry,
+             ddcCntNumEnt,
+             pilotPacketAllocation,
+             pilotPacketDeallocation,
+             pilotPacketUpdate,
+             ddcErrorSocketErr,
+             ddcApiCntAcc,
+             ddcApiCntFailAcc,
+             ddcApiErrSocket,
+             capLogEvtDir,
+             ldapClientSucc,
+             ldapClientFail,
+             ldapClientAvgRespTime,
+             msaErrorProcessMonitor,
+             msaErrorLightHttpd,
+             msaErrorCaplog,
+             msaErrorTracelog,
+             pgErrConn,
+             pgErrLog,
+             pgErrMonErr,
+             pgErrMonTruncErr,
+             pgErrMonInsErr,
+             pgErrMonCountErr,
+             forwardCounterTotalReq,
+             forwardCounterTotalResentReq,
+             forwardCounterTotalFailedReq,
+             forwardCounterTotalFaultyResp,
+             forwardRsCntReq,
+             forwardRsCntResentReq,
+             forwardRsCntFailedReq,
+             forwardRsCntFaultyResp,
+             forwardRsCntMaxResponseTime,
+             forwardRsCntAvgRespTime,
+             forwardEvtResentExceeded,
+             forwardEvtFailedExceeded}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a data management."
+::= { dataMgmtPmGroups 1 }
+END

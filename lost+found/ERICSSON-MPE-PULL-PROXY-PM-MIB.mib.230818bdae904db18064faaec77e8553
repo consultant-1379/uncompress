@@ -1,0 +1,987 @@
+ERICSSON-MPE-PULL-PROXY-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Gauge32 , Counter32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     applIndex
+          FROM NETWORK-SERVICES-MIB
+
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpePullProxyPmModule MODULE-IDENTITY
+   LAST-UPDATED    "201804151612Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "Counters and states used by the Pull Proxy 
+                    functionality."
+::= { mpeModules 10 }
+
+pullProxyPmObjects  OBJECT IDENTIFIER ::= { mpePullProxyPmModule 1 }
+
+identAuthent  OBJECT IDENTIFIER ::= { pullProxyPmObjects 1 }
+
+garbageCollection  OBJECT IDENTIFIER ::= { pullProxyPmObjects 2 }
+
+pullCommon  OBJECT IDENTIFIER ::= { pullProxyPmObjects 3 }
+
+pullSupervision  OBJECT IDENTIFIER ::= { pullProxyPmObjects 4 }
+
+multipart  OBJECT IDENTIFIER ::= { pullProxyPmObjects 6 }
+
+tProxy  OBJECT IDENTIFIER ::= { pullProxyPmObjects 7 }
+
+enumDns  OBJECT IDENTIFIER ::= { pullProxyPmObjects 8 }
+
+icap  OBJECT IDENTIFIER ::= { pullProxyPmObjects 9 }
+
+vPacing  OBJECT IDENTIFIER ::= { pullProxyPmObjects 11 }
+
+certificates  OBJECT IDENTIFIER ::= { pullProxyPmObjects 12 }
+
+pullProxyPmConformance  OBJECT IDENTIFIER ::= { mpePullProxyPmModule 3 }
+
+pullProxyPmGroups  OBJECT IDENTIFIER ::= { pullProxyPmConformance 1 }
+
+pullProxyPmCompliances  OBJECT IDENTIFIER ::= { pullProxyPmConformance 2 }
+
+identAuthentTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF IdentAuthentEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module 
+                    ( 5=W-HTTP)."
+::= { identAuthent 1 } 
+
+identAuthentEntry OBJECT-TYPE
+   SYNTAX          IdentAuthentEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The number of database accesses and occurrences of 
+                    missing information."
+   INDEX { applIndex }
+::= { identAuthentTable  1 }
+
+IdentAuthentEntry  ::= SEQUENCE
+{
+   identAuthentSubscriberDbAccess Counter32,
+   identAuthentIpAddressMissing   Counter32,
+   identAuthentMsisdnMissing      Counter32,
+   identAuthentPppUserNameMissing Counter32,
+   identAuthentSubscriberPlan     ItuPerceivedSeverity
+}
+
+identAuthentSubscriberDbAccess  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of times the subscriber database has been 
+                    accessed.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { identAuthentEntry 1 }
+
+identAuthentIpAddressMissing  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of times the IP address was not found in the 
+                    RADIUS table.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { identAuthentEntry 2 }
+
+identAuthentMsisdnMissing  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of times the MSISDN was not found in the 
+                    RADIUS table.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { identAuthentEntry 3 }
+
+identAuthentPppUserNameMissing  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of times the PPP user name was not found in 
+                    the RADIUS table.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { identAuthentEntry 4 }
+
+identAuthentSubscriberPlan  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Error when communicating with the Subscriber Plan 
+                    database. The cause of the error is given in the dynamic 
+                    text."
+::= { identAuthentEntry 5 }
+
+garbageCollectionTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF GarbageCollectionEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module 
+                    (5=W-HTTP)."
+::= { garbageCollection 1 } 
+
+garbageCollectionEntry OBJECT-TYPE
+   SYNTAX          GarbageCollectionEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The number of sessions currently running in Pull 
+                    Proxy."
+   INDEX { applIndex }
+::= { garbageCollectionTable  1 }
+
+GarbageCollectionEntry  ::= SEQUENCE
+{
+   garbageCollectionProxySessions Gauge32
+}
+
+garbageCollectionProxySessions  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of sessions currently running in Pull Proxy."
+::= { garbageCollectionEntry 1 }
+
+pullCommonTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF PullCommonEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module 
+                    ( 5=W-HTTP)."
+::= { pullCommon 1 } 
+
+pullCommonEntry OBJECT-TYPE
+   SYNTAX          PullCommonEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The number of HTTP requests and responses handled."
+   INDEX { applIndex }
+::= { pullCommonTable  1 }
+
+PullCommonEntry  ::= SEQUENCE
+{
+   pullCommonHttpReq         Counter32,
+   pullCommonHttpResp        Counter32,
+   pullCommonGetResp2xx      Counter32,
+   pullCommonGetResp3xx      Counter32,
+   pullCommonGetResp4xx      Counter32,
+   pullCommonGetResp5xx      Counter32,
+   pullCommonFailedGetResp   Counter32,
+   pullCommonPostResp2xx     Counter32,
+   pullCommonPostResp3xx     Counter32,
+   pullCommonPostResp4xx     Counter32,
+   pullCommonPostResp5xx     Counter32,
+   pullCommonFailedPostResp  Counter32,
+   pullCommonOtherResp2xx    Counter32,
+   pullCommonOtherResp3xx    Counter32,
+   pullCommonOtherResp4xx    Counter32,
+   pullCommonOtherResp5xx    Counter32,
+   pullCommonFailedOtherResp Counter32,
+   pullCommonRetrieveTime    Gauge32,
+   pullCommonMaxRetrTime     Gauge32,
+   pullCommonRespTime        Gauge32,
+   pullCommonMaxRespTime     Gauge32,
+   pullCommonProcTime        Gauge32,
+   pullCommonMaxProcTime     Gauge32,
+   pullCommonProxyLatency    Gauge32,
+   pullCommonMaxProxyLatency Gauge32
+}
+
+pullCommonHttpReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of HTTP requests that have been sent to the 
+                    HTTP Client.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pullCommonEntry 2 }
+
+pullCommonHttpResp  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of HTTP responses that have been received.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pullCommonEntry 3 }
+
+pullCommonGetResp2xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of responses to GET requests that have any 2xx 
+                    status code.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pullCommonEntry 4 }
+
+pullCommonGetResp3xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of responses to GET requests that have any 3xx 
+                    status code.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pullCommonEntry 5 }
+
+pullCommonGetResp4xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of responses to GET requests that have any 4xx 
+                    status code.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pullCommonEntry 6 }
+
+pullCommonGetResp5xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of responses to GET requests that have any 5xx 
+                    status code.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pullCommonEntry 7 }
+
+pullCommonFailedGetResp  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of failed deliveries of responses to GET 
+                    requests. Transport layer error.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pullCommonEntry 8 }
+
+pullCommonPostResp2xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of responses to POST requests that have any 
+                    2xx status code.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pullCommonEntry 9 }
+
+pullCommonPostResp3xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of responses to POST requests that have any 
+                    3xx status code.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pullCommonEntry 10 }
+
+pullCommonPostResp4xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of responses to POST requests that have any 
+                    4xx status code.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pullCommonEntry 11 }
+
+pullCommonPostResp5xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of responses to POST requests that have any 
+                    5xx status code.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pullCommonEntry 12 }
+
+pullCommonFailedPostResp  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of failed deliveries of responses to POST 
+                    requests. Transport layer error.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pullCommonEntry 13 }
+
+pullCommonOtherResp2xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of responses to Other requests than GET or 
+                    POST that have any 2xx status code.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pullCommonEntry 14 }
+
+pullCommonOtherResp3xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of responses to Other requests than GET or 
+                    POST that have any 3xx status code.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pullCommonEntry 15 }
+
+pullCommonOtherResp4xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of responses to Other requests than GET or 
+                    POST that have any 4xx status code.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pullCommonEntry 16 }
+
+pullCommonOtherResp5xx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of responses to Other requests than GET or 
+                    POST that have any 5xx status code.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pullCommonEntry 17 }
+
+pullCommonFailedOtherResp  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of failed deliveries of responses to other 
+                    requests than GET or POST. Transport layer error.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { pullCommonEntry 18 }
+
+pullCommonRetrieveTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Average time (milliseconds) between the time when a 
+                    request is received from a terminal, and the time when 
+                    a response is sent back to the terminal, during the 
+                    last 10 seconds."
+::= { pullCommonEntry 19 }
+
+pullCommonMaxRetrTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Maximum time (milliseconds) between the time when a 
+                    request was received from a terminal, and the time when 
+                    the response was sent back, during the last 5 
+                    minutes."
+::= { pullCommonEntry 20 }
+
+pullCommonRespTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Average response time (milliseconds) between the time 
+                    when a request is sent to an origin server, and the 
+                    time when a response is received (DNS lookup and TCP/IP 
+                    connect times are included), during the last 10 
+                    seconds."
+::= { pullCommonEntry 21 }
+
+pullCommonMaxRespTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Maximum response time (milliseconds) between the time 
+                    when a request is sent to an origin server, and the 
+                    time when the response was received (DNS lookup and 
+                    TCP/IP connect times are included), during the last 5 
+                    minutes."
+::= { pullCommonEntry 22 }
+
+pullCommonProcTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Average time (milliseconds) to handle a request in 
+                    MIEP. Retrieval time minus response time. The time 
+                    periods of calling external nodes (LDAP search, Online 
+                    charging, ...) are included."
+::= { pullCommonEntry 23 }
+
+pullCommonMaxProcTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Maximum processing time (milliseconds) during the 
+                    last 5 minutes."
+::= { pullCommonEntry 24 }
+
+pullCommonProxyLatency  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Average time that is added to the round trip time by 
+                    MIEP (milliseconds). Retrieval time minus response 
+                    time. The time periods of calling external nodes (ICAP 
+                    transcoding, etc) are excluded."
+::= { pullCommonEntry 25 }
+
+pullCommonMaxProxyLatency  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Maximum latency time (milliseconds) during last 5 
+                    minutes."
+::= { pullCommonEntry 26 }
+
+pullSupervisionTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF PullSupervisionEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module 
+                    ( 5=W-HTTP)."
+::= { pullSupervision 1 } 
+
+pullSupervisionEntry OBJECT-TYPE
+   SYNTAX          PullSupervisionEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The warnings and alarms used by the Application 
+                    Supervisor."
+   INDEX { applIndex }
+::= { pullSupervisionTable  1 }
+
+PullSupervisionEntry  ::= SEQUENCE
+{
+   pullSupervisionConfigError     ItuPerceivedSeverity,
+   pullSupervisionAccConfigError  ItuPerceivedSeverity,
+   pullSupervisionNodeConfigError ItuPerceivedSeverity,
+   pullSupervisionProcessDefunct  ItuPerceivedSeverity
+}
+
+pullSupervisionConfigError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Error when reading configuration data. The cause of 
+                    the error is given in the dynamic text."
+::= { pullSupervisionEntry 1 }
+
+pullSupervisionAccConfigError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Error when reading configuration data. The cause of 
+                    the error is given in the dynamic text."
+::= { pullSupervisionEntry 2 }
+
+pullSupervisionNodeConfigError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Possibly a mismatch in the configuration of the 
+                    Application Supervisor and the supervised process. The 
+                    cause of the error is given in the dynamic text."
+::= { pullSupervisionEntry 3 }
+
+pullSupervisionProcessDefunct  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The supervised process appears to be non-functioning."
+::= { pullSupervisionEntry 4 }
+
+multipartTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF MultipartEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the pull proxy module 
+                    (5=W-HTTP)."
+::= { multipart 1 } 
+
+multipartEntry OBJECT-TYPE
+   SYNTAX          MultipartEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Traffic processed by multipart module and number of 
+                    time outs due to late sub-requests."
+   INDEX { applIndex }
+::= { multipartTable  1 }
+
+MultipartEntry  ::= SEQUENCE
+{
+   multipartResponses Counter32,
+   multipartRefs      Counter32,
+   multipartTimeout   Counter32
+}
+
+multipartResponses  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of responses processed as multipart 
+                    (rootpages).
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { multipartEntry 1 }
+
+multipartRefs  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of referenced objects in multipart responses.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { multipartEntry 2 }
+
+multipartTimeout  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of times sub-requests has timed out due to 
+                    late response.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { multipartEntry 3 }
+
+tProxyTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF TProxyEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One instance is created for W-HTTP stack type."
+::= { tProxy 1 } 
+
+tProxyEntry OBJECT-TYPE
+   SYNTAX          TProxyEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "All counters used by the Transparent Proxy 
+                    functionality."
+   INDEX { applIndex }
+::= { tProxyTable  1 }
+
+TProxyEntry  ::= SEQUENCE
+{
+   tProxyReq Counter32
+}
+
+tProxyReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Transparent Proxy requests that have been 
+                    sent to the HTTP Client.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { tProxyEntry 1 }
+
+enumDnsTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF EnumDnsEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One instance is created for each stack type 
+                    (5=W-HTTP)."
+::= { enumDns 1 } 
+
+enumDnsEntry OBJECT-TYPE
+   SYNTAX          EnumDnsEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters used by the ENUM DNS functionality."
+   INDEX { applIndex }
+::= { enumDnsTable  1 }
+
+EnumDnsEntry  ::= SEQUENCE
+{
+   enumDnsLookup   Counter32,
+   enumDnsRespTime Gauge32
+}
+
+enumDnsLookup  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of ENUM DNS lookups.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { enumDnsEntry 1 }
+
+enumDnsRespTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Avarage response time for ENUM DNS lookups in 
+                    milliseconds."
+::= { enumDnsEntry 2 }
+
+icapTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF IcapEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each ICAP server that is 
+                    used."
+::= { icap 1 } 
+
+icapEntry OBJECT-TYPE
+   SYNTAX          IcapEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Requests processed by icap client and number of 
+                    failures. Failures include responses with error status and 
+                    time outs."
+   INDEX { applIndex }
+::= { icapTable  1 }
+
+IcapEntry  ::= SEQUENCE
+{
+   icapRequestModifications         Counter32,
+   icapResponseModifications        Counter32,
+   icapRequestModificationFailures  Counter32,
+   icapResponseModificationFailures Counter32,
+   icapAverageReqModTime            Gauge32,
+   icapAverageRespModTime           Gauge32,
+   icapServerDown                   ItuPerceivedSeverity,
+   icapHighResponseTime             ItuPerceivedSeverity,
+   icapRespModChangedResp           Counter32,
+   icapRespModUnChangedResp         Counter32
+}
+
+icapRequestModifications  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of request modifications sent to the ICAP 
+                    server.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { icapEntry 1 }
+
+icapResponseModifications  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of response modifications sent to the ICAP 
+                    server.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { icapEntry 2 }
+
+icapRequestModificationFailures  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of failed request modifications sent to the 
+                    ICAP server.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { icapEntry 3 }
+
+icapResponseModificationFailures  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of failed response modifications sent to the 
+                    ICAP server.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { icapEntry 4 }
+
+icapAverageReqModTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Avarage response time for ICAP server request 
+                    modification requests in milliseconds."
+::= { icapEntry 5 }
+
+icapAverageRespModTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Avarage response time for ICAP server response 
+                    modification requests in milliseconds."
+::= { icapEntry 6 }
+
+icapServerDown  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Error when communicating with the Icap server. The 
+                    cause of the error is specified in the dynamic text."
+::= { icapEntry 7 }
+
+icapHighResponseTime  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "High Response times detected when communicating with 
+                    the ICAP server."
+::= { icapEntry 8 }
+
+icapRespModChangedResp  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of RESPMOD that alters the HTTP response.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { icapEntry 9 }
+
+icapRespModUnChangedResp  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of RESPMOD that do not alter the HTTP 
+                    response.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { icapEntry 10 }
+
+vPacingTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF VPacingEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One instance is created for W-HTTP stack type."
+::= { vPacing 1 } 
+
+vPacingEntry OBJECT-TYPE
+   SYNTAX          VPacingEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "All counters used by the Video Pacing functionality."
+   INDEX { applIndex }
+::= { vPacingTable  1 }
+
+VPacingEntry  ::= SEQUENCE
+{
+   vPacingNofTrans       Counter32,
+   vPacingNofMiSucceeded Counter32,
+   vPacingNofCacheHit    Counter32,
+   vPacingNofMiFailed    Counter32,
+   vPacingKBytesIn       Counter32,
+   vPacingKBytesOut      Counter32
+}
+
+vPacingNofTrans  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of paced transactions.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { vPacingEntry 1 }
+
+vPacingNofMiSucceeded  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of successful MIs (Mediarate Identification).
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { vPacingEntry 2 }
+
+vPacingNofCacheHit  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of hits in the MI (Mediarate Identification) 
+                    cache.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { vPacingEntry 3 }
+
+vPacingNofMiFailed  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of failed MIs (Mediarate Identification).
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { vPacingEntry 4 }
+
+vPacingKBytesIn  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of incoming kilobytes processes for 
+                    pacing.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { vPacingEntry 5 }
+
+vPacingKBytesOut  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of outgoing kilobytes processes for 
+                    pacing.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { vPacingEntry 6 }
+
+certificatesTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF CertificatesEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One instance is created for TCP PROXY stack."
+::= { certificates 1 } 
+
+certificatesEntry OBJECT-TYPE
+   SYNTAX          CertificatesEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "All counters used by the Certificate functionality."
+   INDEX { applIndex }
+::= { certificatesTable  1 }
+
+CertificatesEntry  ::= SEQUENCE
+{
+   certificatesTunneledRequests Counter32,
+   certificatesHostedCertReqs   Counter32,
+   certificatesOperatorCertReqs Counter32,
+   certificatesReqsToKeyServer  Counter32
+}
+
+certificatesTunneledRequests  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of tunneled requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { certificatesEntry 1 }
+
+certificatesHostedCertReqs  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of requests made with a hosted certificate.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { certificatesEntry 2 }
+
+certificatesOperatorCertReqs  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of requests made with an operator certificate.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { certificatesEntry 3 }
+
+certificatesReqsToKeyServer  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of requests sent to Key Server
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { certificatesEntry 4 }
+
+-- Compliance Statements
+
+pullProxyCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for pull proxy."
+   MODULE          -- this module
+   MANDATORY-GROUPS {pullProxyConfGroup}
+::= { pullProxyPmCompliances 1 }
+
+-- Units of Conformance
+
+pullProxyConfGroup OBJECT-GROUP
+   OBJECTS { identAuthentSubscriberDbAccess,
+             identAuthentIpAddressMissing,
+             identAuthentMsisdnMissing,
+             identAuthentPppUserNameMissing,
+             identAuthentSubscriberPlan,
+             garbageCollectionProxySessions,
+             pullCommonHttpReq,
+             pullCommonHttpResp,
+             pullCommonGetResp2xx,
+             pullCommonGetResp3xx,
+             pullCommonGetResp4xx,
+             pullCommonGetResp5xx,
+             pullCommonFailedGetResp,
+             pullCommonPostResp2xx,
+             pullCommonPostResp3xx,
+             pullCommonPostResp4xx,
+             pullCommonPostResp5xx,
+             pullCommonFailedPostResp,
+             pullCommonOtherResp2xx,
+             pullCommonOtherResp3xx,
+             pullCommonOtherResp4xx,
+             pullCommonOtherResp5xx,
+             pullCommonFailedOtherResp,
+             pullCommonRetrieveTime,
+             pullCommonMaxRetrTime,
+             pullCommonRespTime,
+             pullCommonMaxRespTime,
+             pullCommonProcTime,
+             pullCommonMaxProcTime,
+             pullCommonProxyLatency,
+             pullCommonMaxProxyLatency,
+             pullSupervisionConfigError,
+             pullSupervisionAccConfigError,
+             pullSupervisionNodeConfigError,
+             pullSupervisionProcessDefunct,
+             multipartResponses,
+             multipartRefs,
+             multipartTimeout,
+             tProxyReq,
+             enumDnsLookup,
+             enumDnsRespTime,
+             icapRequestModifications,
+             icapResponseModifications,
+             icapRequestModificationFailures,
+             icapResponseModificationFailures,
+             icapAverageReqModTime,
+             icapAverageRespModTime,
+             icapServerDown,
+             icapHighResponseTime,
+             icapRespModChangedResp,
+             icapRespModUnChangedResp,
+             vPacingNofTrans,
+             vPacingNofMiSucceeded,
+             vPacingNofCacheHit,
+             vPacingNofMiFailed,
+             vPacingKBytesIn,
+             vPacingKBytesOut,
+             certificatesTunneledRequests,
+             certificatesHostedCertReqs,
+             certificatesOperatorCertReqs,
+             certificatesReqsToKeyServer}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a pull proxy."
+::= { pullProxyPmGroups 1 }
+END

@@ -1,0 +1,438 @@
+ERICSSON-MPE-UNIVERSAL-CACHE-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Counter32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeUniversalCachePmModule MODULE-IDENTITY
+   LAST-UPDATED    "201804151612Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "Counters and thorughtput measures of the universal 
+                    cache (proxy)"
+::= { mpeModules 42 }
+
+universalCachePmObjects  OBJECT IDENTIFIER ::= { mpeUniversalCachePmModule 1 }
+
+ucCounters  OBJECT IDENTIFIER ::= { universalCachePmObjects 1 }
+
+ucVideoCounters  OBJECT IDENTIFIER ::= { universalCachePmObjects 2 }
+
+ucVOpCounters  OBJECT IDENTIFIER ::= { universalCachePmObjects 3 }
+
+universalCachePmConformance  OBJECT IDENTIFIER ::= { mpeUniversalCachePmModule 3 }
+
+universalCachePmGroups  OBJECT IDENTIFIER ::= { universalCachePmConformance 1 }
+
+universalCachePmCompliances  OBJECT IDENTIFIER ::= { universalCachePmConformance 2 }
+
+ucCountersReqToCache  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of HTTP requests to the cache. 
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucCounters 11 }
+
+ucCountersReqBeforeVal  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of HTTP request cache hits before validation. 
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucCounters 12 }
+
+ucCountersReqServdFromOrigin  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of HTTP requests served from the origin 
+                    server. 
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucCounters 13 }
+
+ucCountersTotalKiBServd  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of KiB sent to the end user client.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucCounters 14 }
+
+ucCountersKiBOrigin  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of KiB sent to the end user client 
+                    fetched from the origin server.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucCounters 15 }
+
+ucCountersReqServdFromCache  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of HTTP requests served from the cache. 
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucCounters 16 }
+
+ucCountersKiBCache  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of KiB sent to the end user client 
+                    fetched from the cache.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucCounters 17 }
+
+ucCountersReqServdFromCluster  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of HTTP requests served from another traffic 
+                    server in the cluster
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucCounters 18 }
+
+ucCountersKiBCluster  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total amount of KiB served from another traffic 
+                    server in the cluster.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucCounters 19 }
+
+ucCountersTotalKiBServdLSB  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "For INTERNAL use only. Remaining bytes (non-multiple 
+                    of 1k) not counted in ucCountersTotalKiBServd.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucCounters 24 }
+
+ucCountersKiBOriginLSB  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "For INTERNAL use only. Remaining bytes (non-multiple 
+                    of 1k) not counted in ucCountersKiBOrigin.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucCounters 25 }
+
+ucCountersKiBClusterLSB  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "For INTERNAL use only. Remaining bytes (non-multiple 
+                    of 1k) not counted in ucCountersKiBCluster.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucCounters 26 }
+
+ucCountersKiBCacheLSB  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "For INTERNAL use only. Remaining bytes (non-multiple 
+                    of 1k) not counted in ucCountersKiBCache.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucCounters 27 }
+
+ucVideoCountersReqToCache  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of video requests to the cache. 
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucVideoCounters 11 }
+
+ucVideoCountersReqBeforeVal  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of video request cache hits before validation. 
+                    
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucVideoCounters 12 }
+
+ucVideoCountersReqFromOrigin  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of video requests served from the origin 
+                    server. 
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucVideoCounters 13 }
+
+ucVideoCountersTotalKiBServd  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of video KiB served.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucVideoCounters 14 }
+
+ucVideoCountersKiBOrigin  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of video KiB served from the origin server.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucVideoCounters 15 }
+
+ucVideoCountersReqFromCache  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of video requests served from the cache. 
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucVideoCounters 16 }
+
+ucVideoCountersKiBCache  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of video KiB served from the cache.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucVideoCounters 17 }
+
+ucVideoCountersTotalKiBServdLSB  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "This counter is only for INTERNAL use. Remaining 
+                    bytes (non-multiple of 1k) not counted in 
+                    ucVideoCountersTotalKiBServd.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucVideoCounters 24 }
+
+ucVideoCountersKiBOriginLSB  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "This counter is only for INTERNAL use. Remaining 
+                    bytes (non-multiple of 1k) not counted in 
+                    ucVideoCountersKiBServd.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucVideoCounters 25 }
+
+ucVideoCountersKiBCacheLSB  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "This counter is only for INTERNAL use. Remaining 
+                    bytes (non-multiple of 1k) not counted in 
+                    ucVideoCountersKiBCache.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucVideoCounters 26 }
+
+ucVOpCountersReqToCache  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of requests to the cache for optimized video. 
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucVOpCounters 11 }
+
+ucVOpCountersReqBeforeVal  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of request cache hits before validation, for 
+                    optimized video. 
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucVOpCounters 12 }
+
+ucVOpCountersReqServdCache  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of requests for optimized video served from 
+                    cache. 
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucVOpCounters 13 }
+
+ucVOpCountersReqToCacheOrig  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of requests to the cache for original video.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucVOpCounters 14 }
+
+ucVOpCountersReqBeforeValOrig  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of requests hits on the cache for original 
+                    video, before validation. 
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucVOpCounters 15 }
+
+ucVOpCountersReqServdCacheOrig  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of requests for original video served from 
+                    cache.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucVOpCounters 16 }
+
+ucVOpCountersKiBServd  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of optimized video KiB sent to the end user 
+                    client, without adjusting for content compression.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucVOpCounters 17 }
+
+ucVOpCountersKiBServdLSB  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "This counter is only for INTERNAL use. Remaining 
+                    bytes (non-multiple of 1k) not counted in 
+                    ucVOpCountersKiBServd.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucVOpCounters 27 }
+
+ucVOpCountersKiBServdAdj  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of optimized video KiB sent to the end user 
+                    client, adjusting for content compression.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucVOpCounters 18 }
+
+ucVOpCountersKiBServdAdjLSB  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "For INTERNAL use only. Remaining bytes (non-multiple 
+                    of 1k) not counted in ucVOpCountersKiBServdAdj.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucVOpCounters 28 }
+
+ucVOpCountersKiBServdOrigLSB  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "For INTERNAL use only. Remaining bytes (non-multiple 
+                    of 1k) not counted in ucVOpCountersKiBServdOrig.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucVOpCounters 29 }
+
+ucVOpCountersKiBServdOrig  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of original video KiB served from the cache.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { ucVOpCounters 19 }
+
+-- Compliance Statements
+
+universalCacheCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for universal cache."
+   MODULE          -- this module
+   MANDATORY-GROUPS {universalCacheConfGroup}
+::= { universalCachePmCompliances 1 }
+
+-- Units of Conformance
+
+universalCacheConfGroup OBJECT-GROUP
+   OBJECTS { ucCountersReqToCache,
+             ucCountersReqBeforeVal,
+             ucCountersReqServdFromOrigin,
+             ucCountersTotalKiBServd,
+             ucCountersKiBOrigin,
+             ucCountersReqServdFromCache,
+             ucCountersKiBCache,
+             ucCountersReqServdFromCluster,
+             ucCountersKiBCluster,
+             ucCountersTotalKiBServdLSB,
+             ucCountersKiBOriginLSB,
+             ucCountersKiBClusterLSB,
+             ucCountersKiBCacheLSB,
+             ucVideoCountersReqToCache,
+             ucVideoCountersReqBeforeVal,
+             ucVideoCountersReqFromOrigin,
+             ucVideoCountersTotalKiBServd,
+             ucVideoCountersKiBOrigin,
+             ucVideoCountersReqFromCache,
+             ucVideoCountersKiBCache,
+             ucVideoCountersTotalKiBServdLSB,
+             ucVideoCountersKiBOriginLSB,
+             ucVideoCountersKiBCacheLSB,
+             ucVOpCountersReqToCache,
+             ucVOpCountersReqBeforeVal,
+             ucVOpCountersReqServdCache,
+             ucVOpCountersReqToCacheOrig,
+             ucVOpCountersReqBeforeValOrig,
+             ucVOpCountersReqServdCacheOrig,
+             ucVOpCountersKiBServd,
+             ucVOpCountersKiBServdLSB,
+             ucVOpCountersKiBServdAdj,
+             ucVOpCountersKiBServdAdjLSB,
+             ucVOpCountersKiBServdOrigLSB,
+             ucVOpCountersKiBServdOrig}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a universal cache."
+::= { universalCachePmGroups 1 }
+END

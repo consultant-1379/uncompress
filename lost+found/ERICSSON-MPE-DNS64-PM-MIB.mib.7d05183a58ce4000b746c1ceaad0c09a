@@ -1,0 +1,613 @@
+ERICSSON-MPE-DNS64-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Gauge32 , Counter32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeDns64PmModule MODULE-IDENTITY
+   LAST-UPDATED    "201804151612Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "Parameters for DNS 64."
+::= { mpeModules 28 }
+
+dns64PmObjects  OBJECT IDENTIFIER ::= { mpeDns64PmModule 1 }
+
+dns64C  OBJECT IDENTIFIER ::= { dns64PmObjects 1 }
+
+dns64RC  OBJECT IDENTIFIER ::= { dns64PmObjects 2 }
+
+dns64O  OBJECT IDENTIFIER ::= { dns64PmObjects 3 }
+
+dns64Q  OBJECT IDENTIFIER ::= { dns64PmObjects 4 }
+
+dns64M  OBJECT IDENTIFIER ::= { dns64PmObjects 5 }
+
+dns64PmConformance  OBJECT IDENTIFIER ::= { mpeDns64PmModule 3 }
+
+dns64PmGroups  OBJECT IDENTIFIER ::= { dns64PmConformance 1 }
+
+dns64PmCompliances  OBJECT IDENTIFIER ::= { dns64PmConformance 2 }
+
+dns64CMaxEntries  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Max number of cached entries
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64C 1 }
+
+dns64CNumCacheEntries  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of cached entries now"
+::= { dns64C 2 }
+
+dns64CNumCacheAdd  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of cached entries added
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64C 3 }
+
+dns64CNumCacheUpd  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of cached entries updated
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64C 4 }
+
+dn64CNumCacheDel  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of cached entries deleted
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64C 5 }
+
+dns64CNumSuccSearch  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of successful searches
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64C 6 }
+
+dns64CNumFailSearch  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of failed searches
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64C 7 }
+
+dns64NoResp  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "DNS64 do not respond to test traffic."
+::= { dns64C 8 }
+
+dns64RCMaxNum  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Max number of cached entries
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64RC 1 }
+
+dns64RCNumEntries  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of cached entries now"
+::= { dns64RC 2 }
+
+dns64RCNumEntrAdd  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of cached entries added
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64RC 3 }
+
+dns64RCNumCacheUpd  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of cached entries updated
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64RC 4 }
+
+dns64RCNumCacheDel  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of cached entries deleted
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64RC 5 }
+
+dns64RCNumSuccSearch  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of successful searches
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64RC 6 }
+
+dns64RCNumbFailSearch  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of failed searches
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64RC 7 }
+
+dns64ONumSess  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of ongoing sessions now"
+::= { dns64O 1 }
+
+dns64ONumSessAdd  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of ongoing sessions added
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64O 2 }
+
+dns64ONumSessDel  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of ongoing sessions deleted
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64O 3 }
+
+dns64ONumSkippSess  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of skipped ongoing sessions
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64O 4 }
+
+dns64QNumIncAQ  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of incoming A queries
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64Q 1 }
+
+dns64QNumCacheAQ  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of cached A queries
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64Q 2 }
+
+dns64QNumOutAQ  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of outgoing A queries
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64Q 3 }
+
+dns64QNumbTransAQ  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of translated A queries
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64Q 4 }
+
+dns64QNumIncAAAAQ  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of incoming AAAA queries
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64Q 5 }
+
+dns64QNumCacheAAAAQ  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of cached AAAA queries
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64Q 6 }
+
+dns64QNumOutAAAAQ  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of outgoing AAAA queries
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64Q 7 }
+
+dns64QNumTransAAAAQ  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of translated AAAA queries
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64Q 8 }
+
+dns64QNumIncPTRQ  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of incoming PTR queries
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64Q 9 }
+
+dns64QNumCachePTRQ  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of cached PTR queries
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64Q 10 }
+
+dns64QNumOutPTRQ  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of outgoing PTR queries
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64Q 11 }
+
+dns64QNumInCNAMEQ  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of incoming CNAME queries
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64Q 12 }
+
+dns64QNumOutCNAMEQ  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of outgoing CNAME queries
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64Q 13 }
+
+dns64QNumIncDNAMEQ  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of incoming DNAME queries
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64Q 14 }
+
+dns64QNumOutDNAMEQ  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of outgoing DNAME queries
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64Q 15 }
+
+dns64QNumIncMXQ  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of incoming MX queries
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64Q 16 }
+
+dns64QNumOutMXQ  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of outgoing MX queries
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64Q 17 }
+
+dns64QNumInNSQ  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of incoming NS queries
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64Q 18 }
+
+dns64QNumOutNSQ  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of outgoing NS queries
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64Q 19 }
+
+dns64QNumInSOAQ  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of incoming SOA queries
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64Q 20 }
+
+dns64QNumOutSOAQ  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of outgoing SOA queries
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64Q 21 }
+
+dns64QNumInTXTQ  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of incoming TXT queries
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64Q 22 }
+
+dns64QNumOutTXTQ  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of outgoing TXT queries
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64Q 23 }
+
+dns64QNumInOtherQ  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of incoming other queries
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64Q 24 }
+
+dns64QNumOutOtherQ  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of outgoing other queries
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { dns64Q 25 }
+
+dns64MMemoryUse  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Current memory usage level (percent) of Instance."
+::= { dns64M 1 }
+
+dns64MPeakMemUse  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Peak memory usage level (percent) of Instance."
+::= { dns64M 2 }
+
+dns64MMemUseIP  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Current memory usage level (percent) of IP Address."
+::= { dns64M 3 }
+
+dns64MPeakMemUseIP  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Peak memory usage level (percent) of IP Address."
+::= { dns64M 4 }
+
+dns64MMemUseReqData  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Current memory usage level (percent) of request 
+                    data."
+::= { dns64M 5 }
+
+dns64MPeakMemUseReqData  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Peak memory usage level (percent) of request data."
+::= { dns64M 6 }
+
+dns64MMemUseResData  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Current memory usage level (percent) of result data."
+::= { dns64M 7 }
+
+dns64MPeakMemUseResData  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Peak memory usage level (percent) of result data."
+::= { dns64M 8 }
+
+dns64MCurrMemRevLookData  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Current memory usage level (percent) rev. lookup 
+                    data."
+::= { dns64M 9 }
+
+dns64MPeakMemRevLookData  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Peak memory usage level (percent) rev. lookup data."
+::= { dns64M 10 }
+
+dns64MCurrMemUseIntData  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Current memory usage level (percent) internal data."
+::= { dns64M 11 }
+
+dns64MPeakMemUseIntData  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Peak memory usage level (percent) internal data."
+::= { dns64M 12 }
+
+dns64MCurrMemUseThrData  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Current memory usage level (percent) thread data."
+::= { dns64M 13 }
+
+dns64MPeakMemUseThrData  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Peak memory usage level (percent) thread data."
+::= { dns64M 14 }
+
+-- Compliance Statements
+
+dns64Compliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for dns64."
+   MODULE          -- this module
+   MANDATORY-GROUPS {dns64ConfGroup}
+::= { dns64PmCompliances 1 }
+
+-- Units of Conformance
+
+dns64ConfGroup OBJECT-GROUP
+   OBJECTS { dns64CMaxEntries,
+             dns64CNumCacheEntries,
+             dns64CNumCacheAdd,
+             dns64CNumCacheUpd,
+             dn64CNumCacheDel,
+             dns64CNumSuccSearch,
+             dns64CNumFailSearch,
+             dns64NoResp,
+             dns64RCMaxNum,
+             dns64RCNumEntries,
+             dns64RCNumEntrAdd,
+             dns64RCNumCacheUpd,
+             dns64RCNumCacheDel,
+             dns64RCNumSuccSearch,
+             dns64RCNumbFailSearch,
+             dns64ONumSess,
+             dns64ONumSessAdd,
+             dns64ONumSessDel,
+             dns64ONumSkippSess,
+             dns64QNumIncAQ,
+             dns64QNumCacheAQ,
+             dns64QNumOutAQ,
+             dns64QNumbTransAQ,
+             dns64QNumIncAAAAQ,
+             dns64QNumCacheAAAAQ,
+             dns64QNumOutAAAAQ,
+             dns64QNumTransAAAAQ,
+             dns64QNumIncPTRQ,
+             dns64QNumCachePTRQ,
+             dns64QNumOutPTRQ,
+             dns64QNumInCNAMEQ,
+             dns64QNumOutCNAMEQ,
+             dns64QNumIncDNAMEQ,
+             dns64QNumOutDNAMEQ,
+             dns64QNumIncMXQ,
+             dns64QNumOutMXQ,
+             dns64QNumInNSQ,
+             dns64QNumOutNSQ,
+             dns64QNumInSOAQ,
+             dns64QNumOutSOAQ,
+             dns64QNumInTXTQ,
+             dns64QNumOutTXTQ,
+             dns64QNumInOtherQ,
+             dns64QNumOutOtherQ,
+             dns64MMemoryUse,
+             dns64MPeakMemUse,
+             dns64MMemUseIP,
+             dns64MPeakMemUseIP,
+             dns64MMemUseReqData,
+             dns64MPeakMemUseReqData,
+             dns64MMemUseResData,
+             dns64MPeakMemUseResData,
+             dns64MCurrMemRevLookData,
+             dns64MPeakMemRevLookData,
+             dns64MCurrMemUseIntData,
+             dns64MPeakMemUseIntData,
+             dns64MCurrMemUseThrData,
+             dns64MPeakMemUseThrData}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a dns64."
+::= { dns64PmGroups 1 }
+END

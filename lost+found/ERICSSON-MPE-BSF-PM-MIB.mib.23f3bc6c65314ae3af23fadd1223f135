@@ -1,0 +1,369 @@
+ERICSSON-MPE-BSF-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Gauge32 , Counter32 , Unsigned32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     applIndex
+          FROM NETWORK-SERVICES-MIB
+
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeBsfPmModule MODULE-IDENTITY
+   LAST-UPDATED    "201804151612Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "Counters and Alarms for Boot Strapping Server 
+                    functions."
+::= { mpeModules 33 }
+
+bsfPmObjects  OBJECT IDENTIFIER ::= { mpeBsfPmModule 1 }
+
+bootAuth  OBJECT IDENTIFIER ::= { bsfPmObjects 1 }
+
+bootUse  OBJECT IDENTIFIER ::= { bsfPmObjects 2 }
+
+bsfGbaAkaSubCnt  OBJECT IDENTIFIER ::= { bsfPmObjects 3 }
+
+bootEvt  OBJECT IDENTIFIER ::= { bsfPmObjects 4 }
+
+bsfPmConformance  OBJECT IDENTIFIER ::= { mpeBsfPmModule 3 }
+
+bsfPmGroups  OBJECT IDENTIFIER ::= { bsfPmConformance 1 }
+
+bsfPmCompliances  OBJECT IDENTIFIER ::= { bsfPmConformance 2 }
+
+bootAuthTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF BootAuthEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One instance for each stack type ( 5=W-HTTP)."
+::= { bootAuth 1 } 
+
+bootAuthEntry OBJECT-TYPE
+   SYNTAX          BootAuthEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for the BootStrap server authentication 
+                    function."
+   INDEX { applIndex }
+::= { bootAuthTable  1 }
+
+BootAuthEntry  ::= SEQUENCE
+{
+   bootAuthReqTot        Counter32,
+   bootAuthSucc          Counter32,
+   bootAuthFail          Counter32,
+   bootAuthGBAUSucc      Counter32,
+   bootAuthGBAUFail      Counter32,
+   bootAuthGBAMESucc     Counter32,
+   bootAuthGBAMEFail     Counter32,
+   bootAuthGBADIGESTSucc Counter32,
+   bootAuthGBADIGESTFail Counter32
+}
+
+bootAuthReqTot  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of valid requests for bootstrapping 
+                    authentication.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { bootAuthEntry 1 }
+
+bootAuthSucc  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of successful bootstrapping 
+                    authentication procedures.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { bootAuthEntry 2 }
+
+bootAuthFail  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of failed bootstrapping authentication 
+                    procedures.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { bootAuthEntry 3 }
+
+bootAuthGBAUSucc  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Count of the number of successful GBA_U 
+                    authentication bootstrapping procedures.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { bootAuthEntry 4 }
+
+bootAuthGBAUFail  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Count of the number of failed GBA_U authentication 
+                    bootstrapping procedures.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { bootAuthEntry 5 }
+
+bootAuthGBAMESucc  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Count of the number of successful GBA_ME 
+                    authentication bootstrapping procedures.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { bootAuthEntry 6 }
+
+bootAuthGBAMEFail  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Count of the number of failed GBA_ME authentication 
+                    bootstrapping procedures.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { bootAuthEntry 7 }
+
+bootAuthGBADIGESTSucc  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Count of the number of successful GBA Digest 
+                    authentication bootstrapping procedures.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { bootAuthEntry 8 }
+
+bootAuthGBADIGESTFail  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Count of the number of failed GBA Digest 
+                    authentication bootstrapping procedures.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { bootAuthEntry 9 }
+
+bootUseTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF BootUseEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One instance for each stack type ( 5=W-HTTP)."
+::= { bootUse 1 } 
+
+bootUseEntry OBJECT-TYPE
+   SYNTAX          BootUseEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for Zn SOAP BootStrap usage."
+   INDEX { applIndex }
+::= { bootUseTable  1 }
+
+BootUseEntry  ::= SEQUENCE
+{
+   bootUseTotReq  Counter32,
+   bootUseSucReq  Counter32,
+   bootUseFailReq Counter32
+}
+
+bootUseTotReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of Zn SOAP BootStrap usage requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { bootUseEntry 1 }
+
+bootUseSucReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of successful Zn SOAP BootStrap usage 
+                    requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { bootUseEntry 2 }
+
+bootUseFailReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of failed Zn SOAP BootStrap usage requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { bootUseEntry 3 }
+
+bsfGbaAkaSubCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF BsfGbaAkaSubCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the Subscriber Counting (1=Secure Connection 
+                    Oriented, 2=Secure Connectionless, 3=Connection-Oriented, 
+                    4=Connectionless, 5=W-HTTP, 30=RTSP)."
+::= { bsfGbaAkaSubCnt 1 } 
+
+bsfGbaAkaSubCntEntry OBJECT-TYPE
+   SYNTAX          BsfGbaAkaSubCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Subscriber Counting counters for BSF-GBA VP."
+   INDEX { applIndex }
+::= { bsfGbaAkaSubCntTable  1 }
+
+BsfGbaAkaSubCntEntry  ::= SEQUENCE
+{
+   bsfGbaAkaSubCntMaxSubCount Counter32,
+   bsfGbaAkaSubCntActSubCount Gauge32,
+   bsfGbaAkaSubCntMaxNafCount Counter32
+}
+
+bsfGbaAkaSubCntMaxSubCount  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Maximum number of active subscribers allowed to use 
+                    the BSF-GBA VP according to the license available 
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { bsfGbaAkaSubCntEntry 1 }
+
+bsfGbaAkaSubCntActSubCount  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of active subscribers currently using the 
+                    BSF-GBA VP"
+::= { bsfGbaAkaSubCntEntry 2 }
+
+bsfGbaAkaSubCntMaxNafCount  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Maximum number of active subscribers allowed to use 
+                    the GBA IoT E-Server SDK VP according to the license 
+                    available 
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { bsfGbaAkaSubCntEntry 3 }
+
+bootEvtTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF BootEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One instance for each stack type (1=Secure Connection 
+                    Oriented, 2=Secure Connectionless, 
+                    3=Connection-Oriented, 4=Connectionless, 5=W-HTTP)."
+::= { bootEvt 1 } 
+
+bootEvtEntry OBJECT-TYPE
+   SYNTAX          BootEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The alarms used for the Bootstrapping Server 
+                    Function."
+   INDEX { bootEvtIndex }
+::= { bootEvtTable  1 }
+
+BootEvtEntry  ::= SEQUENCE
+{
+   bootEvtIndex       Unsigned32,
+   bootEvtBootLicHigh ItuPerceivedSeverity,
+   bootEvtBootLicMax  ItuPerceivedSeverity,
+   bootEvtNafMax      ItuPerceivedSeverity
+}
+
+bootEvtIndex  OBJECT-TYPE
+   SYNTAX          Unsigned32
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "An integer used to uniquely identify a boot evt table 
+                    entry."
+::= { bootEvtEntry 1 }
+
+bootEvtBootLicHigh  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "BSF-GBA AKA VP license usage has reached the high 
+                    level line."
+::= { bootEvtEntry 2 }
+
+bootEvtBootLicMax  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "BSF-GBA AKA VP license usage has reached the maximum 
+                    level."
+::= { bootEvtEntry 3 }
+
+bootEvtNafMax  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The limit for the number of NAFs licensed has been 
+                    reached."
+::= { bootEvtEntry 4 }
+
+-- Compliance Statements
+
+bsfCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for boot strapping function."
+   MODULE          -- this module
+   MANDATORY-GROUPS {bsfConfGroup}
+::= { bsfPmCompliances 1 }
+
+-- Units of Conformance
+
+bsfConfGroup OBJECT-GROUP
+   OBJECTS { bootAuthReqTot,
+             bootAuthSucc,
+             bootAuthFail,
+             bootAuthGBAUSucc,
+             bootAuthGBAUFail,
+             bootAuthGBAMESucc,
+             bootAuthGBAMEFail,
+             bootAuthGBADIGESTSucc,
+             bootAuthGBADIGESTFail,
+             bootUseTotReq,
+             bootUseSucReq,
+             bootUseFailReq,
+             bsfGbaAkaSubCntMaxSubCount,
+             bsfGbaAkaSubCntActSubCount,
+             bsfGbaAkaSubCntMaxNafCount,
+             bootEvtBootLicHigh,
+             bootEvtBootLicMax,
+             bootEvtNafMax}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a boot strapping 
+                    function."
+::= { bsfPmGroups 1 }
+END

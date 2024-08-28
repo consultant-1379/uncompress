@@ -1,0 +1,311 @@
+ERICSSON-MPE-VIRTUAL-GATEWAY-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Gauge32 , Counter32 , Unsigned32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeVirtualGatewayPmModule MODULE-IDENTITY
+   LAST-UPDATED    "201804151612Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "The counters and events of the Virtual Gateways."
+::= { mpeModules 19 }
+
+virtualGatewayPmObjects  OBJECT IDENTIFIER ::= { mpeVirtualGatewayPmModule 1 }
+
+vg  OBJECT IDENTIFIER ::= { virtualGatewayPmObjects 1 }
+
+virtualGatewayPmConformance  OBJECT IDENTIFIER ::= { mpeVirtualGatewayPmModule 3 }
+
+virtualGatewayPmGroups  OBJECT IDENTIFIER ::= { virtualGatewayPmConformance 1 }
+
+virtualGatewayPmCompliances  OBJECT IDENTIFIER ::= { virtualGatewayPmConformance 2 }
+
+vgTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF VgEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each virtual gateway. Note 
+                    that these counters are only valid for pull traffic."
+::= { vg 1 } 
+
+vgEntry OBJECT-TYPE
+   SYNTAX          VgEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The states, counters, and gauges for the virtual 
+                    gateways."
+   INDEX { vgIndex }
+::= { vgTable  1 }
+
+VgEntry  ::= SEQUENCE
+{
+   vgIndex                         Unsigned32,
+   vgConfigError                   ItuPerceivedSeverity,
+   vgAcceptedReq                   Counter32,
+   vgRejectedReq                   Counter32,
+   vgCapacityUsage                 Gauge32,
+   vgPeakTransTransPerTimeInterval Gauge32,
+   vgPeakTransTimeIntervalLength   Gauge32,
+   vgMSPEnvAlarm                   ItuPerceivedSeverity,
+   vgMSPProcAlarm                  ItuPerceivedSeverity,
+   vgMSPComAlarm                   ItuPerceivedSeverity,
+   vgMSPEqpAlarm                   ItuPerceivedSeverity,
+   vgMSPQosAlarm                   ItuPerceivedSeverity,
+   vgMSPPegCounter1                Counter32,
+   vgMSPPegCounter2                Counter32,
+   vgMSPPegCounter3                Counter32,
+   vgMSPPegCounter4                Counter32,
+   vgMSPPegCounter5                Counter32,
+   vgMSPGaugeCounter1              Gauge32,
+   vgMSPGaugeCounter2              Gauge32,
+   vgMSPGaugeCounter3              Gauge32,
+   vgMSPGaugeCounter4              Gauge32,
+   vgMSPGaugeCounter5              Gauge32
+}
+
+vgIndex  OBJECT-TYPE
+   SYNTAX          Unsigned32
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "An integer used to uniquely identify a vg table 
+                    entry."
+::= { vgEntry 1 }
+
+vgConfigError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The configuration data for the virtual gateway is 
+                    incorrect."
+::= { vgEntry 2 }
+
+vgAcceptedReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of accepted requests during the period 
+                    specified by the configuration parameter 
+                    'apsCheckCapacityUsageInterval'. 
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { vgEntry 3 }
+
+vgRejectedReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of rejected requests during the period 
+                    specified by the configuration parameter 
+                    'apsCheckCapacityUsageInterval'. 
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { vgEntry 4 }
+
+vgCapacityUsage  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Peak capacity usage(%). Expressed as a percentage of 
+                    the license limit."
+::= { vgEntry 5 }
+
+vgPeakTransTransPerTimeInterval  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Peak value of the number of processed transactions 
+                    per usage capacity time interval during the sampling 
+                    interval. This value is an absolute value."
+::= { vgEntry 6 }
+
+vgPeakTransTimeIntervalLength  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Length of the current usage capacity time interval in 
+                    seconds."
+::= { vgEntry 7 }
+
+vgMSPEnvAlarm  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "A configuration error alarm was raised in a 
+                    customized script related to a Virtual Gateway."
+::= { vgEntry 8 }
+
+vgMSPProcAlarm  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "A processing error alarm was raised in a customized 
+                    script related to a Virtual Gateway."
+::= { vgEntry 9 }
+
+vgMSPComAlarm  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "A processing error alarm was raised in a customized 
+                    script related to a Virtual Gateway."
+::= { vgEntry 10 }
+
+vgMSPEqpAlarm  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "An equipment error alarm was raised in a customized 
+                    script related to a Virtual Gateway."
+::= { vgEntry 11 }
+
+vgMSPQosAlarm  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "A quality of service error alarm was raised in a 
+                    customized script related to a Virtual Gateway."
+::= { vgEntry 12 }
+
+vgMSPPegCounter1  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter1 of Number of increment calls from customized 
+                    script. 
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { vgEntry 13 }
+
+vgMSPPegCounter2  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter2 of Number of increment calls from customized 
+                    script. 
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { vgEntry 14 }
+
+vgMSPPegCounter3  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter3 of Number of increment calls from customized 
+                    script. 
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { vgEntry 15 }
+
+vgMSPPegCounter4  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter4 of Number of increment calls from customized 
+                    script. 
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { vgEntry 16 }
+
+vgMSPPegCounter5  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter5 of Number of increment calls from customized 
+                    script. 
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { vgEntry 17 }
+
+vgMSPGaugeCounter1  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter1 of type gauge used from customized script."
+::= { vgEntry 18 }
+
+vgMSPGaugeCounter2  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter2 of type gauge used from customized script."
+::= { vgEntry 19 }
+
+vgMSPGaugeCounter3  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter3 of type gauge used from customized script."
+::= { vgEntry 20 }
+
+vgMSPGaugeCounter4  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter4 of type gauge used from customized script."
+::= { vgEntry 21 }
+
+vgMSPGaugeCounter5  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counter5 of type gauge used from customized script."
+::= { vgEntry 22 }
+
+-- Compliance Statements
+
+virtualGatewayCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for virtual gateway."
+   MODULE          -- this module
+   MANDATORY-GROUPS {virtualGatewayConfGroup}
+::= { virtualGatewayPmCompliances 1 }
+
+-- Units of Conformance
+
+virtualGatewayConfGroup OBJECT-GROUP
+   OBJECTS { vgConfigError,
+             vgAcceptedReq,
+             vgRejectedReq,
+             vgCapacityUsage,
+             vgPeakTransTransPerTimeInterval,
+             vgPeakTransTimeIntervalLength,
+             vgMSPEnvAlarm,
+             vgMSPProcAlarm,
+             vgMSPComAlarm,
+             vgMSPEqpAlarm,
+             vgMSPQosAlarm,
+             vgMSPPegCounter1,
+             vgMSPPegCounter2,
+             vgMSPPegCounter3,
+             vgMSPPegCounter4,
+             vgMSPPegCounter5,
+             vgMSPGaugeCounter1,
+             vgMSPGaugeCounter2,
+             vgMSPGaugeCounter3,
+             vgMSPGaugeCounter4,
+             vgMSPGaugeCounter5}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a virtual gateway."
+::= { virtualGatewayPmGroups 1 }
+END

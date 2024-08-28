@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="var" path="VIEW_PATH/eniq_3pp/icetar/icetar/v2-3/prod/tar.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/engine"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/repository"/>
+	<classpathentry kind="output" path="classes"/>
+</classpath>

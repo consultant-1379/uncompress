@@ -1,0 +1,915 @@
+ERICSSON-MPE-HTTP-SERVER-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Gauge32 , Counter32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     applIndex
+          FROM NETWORK-SERVICES-MIB
+
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeHttpServerPmModule MODULE-IDENTITY
+   LAST-UPDATED    "201804151612Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "The counters and events related to the W-HTTP server 
+                    module."
+::= { mpeModules 6 }
+
+httpServerPmObjects  OBJECT IDENTIFIER ::= { mpeHttpServerPmModule 1 }
+
+httpServer  OBJECT IDENTIFIER ::= { httpServerPmObjects 1 }
+
+httpServerWSocks  OBJECT IDENTIFIER ::= { httpServerPmObjects 2 }
+
+http2Server  OBJECT IDENTIFIER ::= { httpServerPmObjects 3 }
+
+httpServerPmConformance  OBJECT IDENTIFIER ::= { mpeHttpServerPmModule 3 }
+
+httpServerPmGroups  OBJECT IDENTIFIER ::= { httpServerPmConformance 1 }
+
+httpServerPmCompliances  OBJECT IDENTIFIER ::= { httpServerPmConformance 2 }
+
+httpServerTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF HttpServerEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the HTTP server module 
+                    (5=W-HTTP)."
+::= { httpServer 1 } 
+
+httpServerEntry OBJECT-TYPE
+   SYNTAX          HttpServerEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "These counters and events are related to the W-HTTP 
+                    server module."
+   INDEX { applIndex }
+::= { httpServerTable  1 }
+
+HttpServerEntry  ::= SEQUENCE
+{
+   httpServerPortBindFailed        ItuPerceivedSeverity,
+   httpServerTotalConnectAttempts  Counter32,
+   httpServerFailedConnectAttempts Counter32,
+   httpServerConnections           Gauge32,
+   httpServerReceivedBytes         Counter32,
+   httpServerSentBytes             Counter32,
+   httpServerReq                   Counter32,
+   httpServerResp                  Counter32,
+   httpServerOptionsReq            Counter32,
+   httpServerGetReq                Counter32,
+   httpServerHeadReq               Counter32,
+   httpServerPostReq               Counter32,
+   httpServerPutReq                Counter32,
+   httpServerDeleteReq             Counter32,
+   httpServerTraceReq              Counter32,
+   httpServerConnectReq            Counter32,
+   httpServerOtherReq              Counter32,
+   httpServerCurrentReq            Gauge32,
+   httpServerIPv4HttpRequests      Counter32,
+   httpServerIPv6HttpRequests      Counter32,
+   httpServerNonHttpReq            Counter32
+}
+
+httpServerPortBindFailed  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The bind of the listening port with the W-HTTP 
+                    server, failed."
+::= { httpServerEntry 1 }
+
+httpServerTotalConnectAttempts  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number number of TCP/IP connects received over 
+                    W-HTTP.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpServerEntry 2 }
+
+httpServerFailedConnectAttempts  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of failed TCP/IP connection attempts 
+                    made after the limit has been reached. (The limit is 
+                    defined by the 'Max. no. of simultaneous connections' 
+                    parameter).
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpServerEntry 3 }
+
+httpServerConnections  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of currently open connections."
+::= { httpServerEntry 4 }
+
+httpServerReceivedBytes  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of bytes received from client terminals.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpServerEntry 5 }
+
+httpServerSentBytes  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of bytes sent to client terminals.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpServerEntry 6 }
+
+httpServerReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of requests received.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpServerEntry 7 }
+
+httpServerResp  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of responses sent back to clients.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpServerEntry 8 }
+
+httpServerOptionsReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of OPTIONS requests handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpServerEntry 9 }
+
+httpServerGetReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of GET requests handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpServerEntry 10 }
+
+httpServerHeadReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of HEAD requests handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpServerEntry 11 }
+
+httpServerPostReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of POST requests handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpServerEntry 12 }
+
+httpServerPutReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of PUT requests handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpServerEntry 13 }
+
+httpServerDeleteReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of DELETE requests handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpServerEntry 14 }
+
+httpServerTraceReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of TRACE requests handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpServerEntry 15 }
+
+httpServerConnectReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of CONNECT requests handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpServerEntry 16 }
+
+httpServerOtherReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of other non-standard request methods 
+                    handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpServerEntry 17 }
+
+httpServerCurrentReq  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of current requests that have been 
+                    received but not answered."
+::= { httpServerEntry 18 }
+
+httpServerIPv4HttpRequests  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of incoming IPv4 requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpServerEntry 19 }
+
+httpServerIPv6HttpRequests  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of incoming IPv6 requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpServerEntry 20 }
+
+httpServerNonHttpReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of times a request has been detected as 
+                    Non-HTTP and then has fallen back to the Non-HTTP mode.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpServerEntry 21 }
+
+httpServerWSocksTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF HttpServerWSocksEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the HTTP client module 
+                    (5=W-HTTP, 6=Push Request Server, 7=Push Delivery, 
+                    8=Certificate Handler, 34=TCP Proxy, 51=VOC Server)."
+::= { httpServerWSocks 1 } 
+
+httpServerWSocksEntry OBJECT-TYPE
+   SYNTAX          HttpServerWSocksEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "These counters are related to Websockets traffic in 
+                    the W-HTTP server module."
+   INDEX { applIndex }
+::= { httpServerWSocksTable  1 }
+
+HttpServerWSocksEntry  ::= SEQUENCE
+{
+   httpServerWSocksSess             Gauge32,
+   httpServerWSocksPktsFromServer   Counter32,
+   httpServerWSocksPktsToServer     Counter32,
+   httpServerWSocksKBytesFromServer Counter32,
+   httpServerWSocksKBytesToServer   Counter32
+}
+
+httpServerWSocksSess  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of active Websockets Sessions."
+::= { httpServerWSocksEntry 1 }
+
+httpServerWSocksPktsFromServer  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of websockets packets received from the 
+                    origin server.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpServerWSocksEntry 2 }
+
+httpServerWSocksPktsToServer  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of websockets packets sent to the origin 
+                    server.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpServerWSocksEntry 3 }
+
+httpServerWSocksKBytesFromServer  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total amount of websockets data (in KB) received from 
+                    the origin server.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpServerWSocksEntry 4 }
+
+httpServerWSocksKBytesToServer  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total amount of websockets data (in KB) sent to the 
+                    origin server.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { httpServerWSocksEntry 5 }
+
+http2ServerTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF Http2ServerEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the HTTP client module
+                    (5=W-HTTP, 6=Push Request Server, 7=Push Delivery, 
+                    8=Certificate Handler, 34=TCP Proxy, 51=VOC Server)."
+::= { http2Server 1 } 
+
+http2ServerEntry OBJECT-TYPE
+   SYNTAX          Http2ServerEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "These counters are related to HTTP2 server module."
+   INDEX { applIndex }
+::= { http2ServerTable  1 }
+
+Http2ServerEntry  ::= SEQUENCE
+{
+   http2ServerCurrentReq           Gauge32,
+   http2ServerCurrentConn          Gauge32,
+   http2ServerUpgradeReq           Counter32,
+   http2ServerCleartextReq         Counter32,
+   http2ServerOverTlsReq           Counter32,
+   http2ServerConnections          Counter32,
+   http2ServerRequests             Counter32,
+   http2ServerGetRequests          Counter32,
+   http2ServerPostRequests         Counter32,
+   http2ServerHeadRequests         Counter32,
+   http2ServerConnectRequests      Counter32,
+   http2ServerPutRequests          Counter32,
+   http2ServerTraceRequests        Counter32,
+   http2ServerOptionsRequests      Counter32,
+   http2ServerDeleteRequests       Counter32,
+   http2ServerPatchRequests        Counter32,
+   http2ServerOtherRequests        Counter32,
+   http2ServerIpv4Requests         Counter32,
+   http2ServerIpv6Requests         Counter32,
+   http2ServerNonHttpRequests      Counter32,
+   http2ServerResponses            Counter32,
+   http2ServerInDataFrame          Counter32,
+   http2ServerOutDataFrame         Counter32,
+   http2ServerInHeaderFrame        Counter32,
+   http2ServerOutHeaderFrame       Counter32,
+   http2ServerInPriorityFrame      Counter32,
+   http2ServerOutPriorityFrame     Counter32,
+   http2ServerInRstStreamFrame     Counter32,
+   http2ServerOutRstStreamFrame    Counter32,
+   http2ServerInSettingFrame       Counter32,
+   http2ServerOutSettingFrame      Counter32,
+   http2ServerInPushPromiseFrame   Counter32,
+   http2ServerOutPushPromiseFrame  Counter32,
+   http2ServerInPingFrame          Counter32,
+   http2ServerOutPingFrame         Counter32,
+   http2ServerInGoawayFrame        Counter32,
+   http2ServerOutGoawayFrame       Counter32,
+   http2ServerInWindowUpdateFrame  Counter32,
+   http2ServerOutWindowUpdateFrame Counter32,
+   http2ServerInContinuationFrame  Counter32,
+   http2ServerOutContinuationFrame Counter32,
+   http2ServerReceivedBytes        Counter32,
+   http2ServerSentBytes            Counter32
+}
+
+http2ServerCurrentReq  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Current number of http2 requests handled."
+::= { http2ServerEntry 1 }
+
+http2ServerCurrentConn  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Current number of http2 connection handled."
+::= { http2ServerEntry 2 }
+
+http2ServerUpgradeReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 upgrade request handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 3 }
+
+http2ServerCleartextReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 cleartext request handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 4 }
+
+http2ServerOverTlsReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 over tls request handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 5 }
+
+http2ServerConnections  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 connections handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 6 }
+
+http2ServerRequests  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 requests handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 7 }
+
+http2ServerGetRequests  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 get requests handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 8 }
+
+http2ServerPostRequests  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 post requests handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 9 }
+
+http2ServerHeadRequests  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 head requests handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 10 }
+
+http2ServerConnectRequests  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 connect requests handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 11 }
+
+http2ServerPutRequests  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 put requests handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 12 }
+
+http2ServerTraceRequests  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 trace requests handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 13 }
+
+http2ServerOptionsRequests  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 options requests handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 14 }
+
+http2ServerDeleteRequests  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 delete requests handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 15 }
+
+http2ServerPatchRequests  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 patch requests handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 16 }
+
+http2ServerOtherRequests  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 other requests handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 17 }
+
+http2ServerIpv4Requests  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 ipv4 requests handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 18 }
+
+http2ServerIpv6Requests  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 ipv6 requests handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 19 }
+
+http2ServerNonHttpRequests  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 non http requests handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 20 }
+
+http2ServerResponses  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 responses handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 21 }
+
+http2ServerInDataFrame  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 data frame receive from client 
+                    handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 22 }
+
+http2ServerOutDataFrame  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 data frame send to client 
+                    handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 23 }
+
+http2ServerInHeaderFrame  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 header frame receive from 
+                    client handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 24 }
+
+http2ServerOutHeaderFrame  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 header frame send to client 
+                    handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 25 }
+
+http2ServerInPriorityFrame  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 priority frame receive from 
+                    client handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 26 }
+
+http2ServerOutPriorityFrame  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 priority frame send to client 
+                    handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 27 }
+
+http2ServerInRstStreamFrame  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 rst stream frame receive from 
+                    client handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 28 }
+
+http2ServerOutRstStreamFrame  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 rst stream frame send to client 
+                    handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 29 }
+
+http2ServerInSettingFrame  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 setting frame receive from 
+                    client handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 30 }
+
+http2ServerOutSettingFrame  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 setting frame send to client 
+                    handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 31 }
+
+http2ServerInPushPromiseFrame  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 push promise frame receive from 
+                    client handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 32 }
+
+http2ServerOutPushPromiseFrame  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 push promise frame send to 
+                    client handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 33 }
+
+http2ServerInPingFrame  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 ping frame receive from client 
+                    handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 34 }
+
+http2ServerOutPingFrame  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 ping frame send to client 
+                    handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 35 }
+
+http2ServerInGoawayFrame  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 goaway frame receive from 
+                    client handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 36 }
+
+http2ServerOutGoawayFrame  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 goaway frame send to client 
+                    handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 37 }
+
+http2ServerInWindowUpdateFrame  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 window update frame receive 
+                    from client handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 38 }
+
+http2ServerOutWindowUpdateFrame  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 window update frame send to 
+                    client handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 39 }
+
+http2ServerInContinuationFrame  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 continuation frame receive from 
+                    client handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 40 }
+
+http2ServerOutContinuationFrame  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of http2 continuation frame send to 
+                    client handled.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 41 }
+
+http2ServerReceivedBytes  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of bytes received from client terminals 
+                    by http2 server.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 42 }
+
+http2ServerSentBytes  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of bytes sent to client terminals by 
+                    http2 server.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { http2ServerEntry 43 }
+
+-- Compliance Statements
+
+httpServerCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for w- http server."
+   MODULE          -- this module
+   MANDATORY-GROUPS {httpServerConfGroup}
+::= { httpServerPmCompliances 1 }
+
+-- Units of Conformance
+
+httpServerConfGroup OBJECT-GROUP
+   OBJECTS { httpServerPortBindFailed,
+             httpServerTotalConnectAttempts,
+             httpServerFailedConnectAttempts,
+             httpServerConnections,
+             httpServerReceivedBytes,
+             httpServerSentBytes,
+             httpServerReq,
+             httpServerResp,
+             httpServerOptionsReq,
+             httpServerGetReq,
+             httpServerHeadReq,
+             httpServerPostReq,
+             httpServerPutReq,
+             httpServerDeleteReq,
+             httpServerTraceReq,
+             httpServerConnectReq,
+             httpServerOtherReq,
+             httpServerCurrentReq,
+             httpServerIPv4HttpRequests,
+             httpServerIPv6HttpRequests,
+             httpServerNonHttpReq,
+             httpServerWSocksSess,
+             httpServerWSocksPktsFromServer,
+             httpServerWSocksPktsToServer,
+             httpServerWSocksKBytesFromServer,
+             httpServerWSocksKBytesToServer,
+             http2ServerCurrentReq,
+             http2ServerCurrentConn,
+             http2ServerUpgradeReq,
+             http2ServerCleartextReq,
+             http2ServerOverTlsReq,
+             http2ServerConnections,
+             http2ServerRequests,
+             http2ServerGetRequests,
+             http2ServerPostRequests,
+             http2ServerHeadRequests,
+             http2ServerConnectRequests,
+             http2ServerPutRequests,
+             http2ServerTraceRequests,
+             http2ServerOptionsRequests,
+             http2ServerDeleteRequests,
+             http2ServerPatchRequests,
+             http2ServerOtherRequests,
+             http2ServerIpv4Requests,
+             http2ServerIpv6Requests,
+             http2ServerNonHttpRequests,
+             http2ServerResponses,
+             http2ServerInDataFrame,
+             http2ServerOutDataFrame,
+             http2ServerInHeaderFrame,
+             http2ServerOutHeaderFrame,
+             http2ServerInPriorityFrame,
+             http2ServerOutPriorityFrame,
+             http2ServerInRstStreamFrame,
+             http2ServerOutRstStreamFrame,
+             http2ServerInSettingFrame,
+             http2ServerOutSettingFrame,
+             http2ServerInPushPromiseFrame,
+             http2ServerOutPushPromiseFrame,
+             http2ServerInPingFrame,
+             http2ServerOutPingFrame,
+             http2ServerInGoawayFrame,
+             http2ServerOutGoawayFrame,
+             http2ServerInWindowUpdateFrame,
+             http2ServerOutWindowUpdateFrame,
+             http2ServerInContinuationFrame,
+             http2ServerOutContinuationFrame,
+             http2ServerReceivedBytes,
+             http2ServerSentBytes}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a w- http server."
+::= { httpServerPmGroups 1 }
+END

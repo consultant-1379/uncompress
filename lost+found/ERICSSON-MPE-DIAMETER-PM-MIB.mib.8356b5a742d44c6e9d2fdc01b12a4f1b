@@ -1,0 +1,966 @@
+ERICSSON-MPE-DIAMETER-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Gauge32 , Counter32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     applIndex
+          FROM NETWORK-SERVICES-MIB
+
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeDiameterPmModule MODULE-IDENTITY
+   LAST-UPDATED    "201804151612Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "Counters and states used by Diameter functionality."
+::= { mpeModules 29 }
+
+diameterPmObjects  OBJECT IDENTIFIER ::= { mpeDiameterPmModule 1 }
+
+dEvt  OBJECT IDENTIFIER ::= { diameterPmObjects 1 }
+
+dBaseCnt  OBJECT IDENTIFIER ::= { diameterPmObjects 10 }
+
+dZxEvt  OBJECT IDENTIFIER ::= { diameterPmObjects 4 }
+
+dShEvt  OBJECT IDENTIFIER ::= { diameterPmObjects 12 }
+
+dZhEvt  OBJECT IDENTIFIER ::= { diameterPmObjects 5 }
+
+dZhCnt  OBJECT IDENTIFIER ::= { diameterPmObjects 6 }
+
+diamAppHostCnt  OBJECT IDENTIFIER ::= { diameterPmObjects 7 }
+
+diamAgentCnt  OBJECT IDENTIFIER ::= { diameterPmObjects 8 }
+
+diamSdClientCnt  OBJECT IDENTIFIER ::= { diameterPmObjects 9 }
+
+diamSdEvt  OBJECT IDENTIFIER ::= { diameterPmObjects 11 }
+
+diamGxEvent  OBJECT IDENTIFIER ::= { diameterPmObjects 2 }
+
+diamGxClientCnt  OBJECT IDENTIFIER ::= { diameterPmObjects 3 }
+
+diameterPmConformance  OBJECT IDENTIFIER ::= { mpeDiameterPmModule 3 }
+
+diameterPmGroups  OBJECT IDENTIFIER ::= { diameterPmConformance 1 }
+
+diameterPmCompliances  OBJECT IDENTIFIER ::= { diameterPmConformance 2 }
+
+dEvtTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF DEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that uses 
+                    the Diameter stack 
+                    (5=W-HTTP, 34=TCP Proxy, 47=Diameter Application 
+                    Host, 48=Diameter Agent)."
+::= { dEvt 1 } 
+
+dEvtEntry OBJECT-TYPE
+   SYNTAX          DEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Events for Diameter Base."
+   INDEX { applIndex }
+::= { dEvtTable  1 }
+
+DEvtEntry  ::= SEQUENCE
+{
+   dEvtPeerCommErr ItuPerceivedSeverity
+}
+
+dEvtPeerCommErr  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "A Communication Error with the Diameter Peer has been 
+                    detected."
+::= { dEvtEntry 2 }
+
+dBaseCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF DBaseCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that uses 
+                    the Diameter stack 
+                    (5=W-HTTP, 34=TCP Proxy, 47=Diameter Application 
+                    Host, 48=Diameter Agent)."
+::= { dBaseCnt 1 } 
+
+dBaseCntEntry OBJECT-TYPE
+   SYNTAX          DBaseCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters For Diameter Base."
+   INDEX { applIndex }
+::= { dBaseCntTable  1 }
+
+DBaseCntEntry  ::= SEQUENCE
+{
+   dBaseCntMsgsReceived     Counter32,
+   dBaseCntMsgsSent         Counter32,
+   dBaseCntNumSessions      Gauge32,
+   dBaseCntReceiveQueueSize Gauge32,
+   dBaseCntSendQueueSize    Gauge32,
+   dBaseCntSockBusyMsgs     Counter32,
+   dBaseCntPeerBusyMsgs     Counter32
+}
+
+dBaseCntMsgsReceived  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Diameter Base messages received
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { dBaseCntEntry 2 }
+
+dBaseCntMsgsSent  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Diameter Base messages sent
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { dBaseCntEntry 3 }
+
+dBaseCntNumSessions  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Diameter Base sessions."
+::= { dBaseCntEntry 4 }
+
+dBaseCntReceiveQueueSize  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of messages in the receive queue as percentage 
+                    of the total queue size. 100% means that the queue is 
+                    full."
+::= { dBaseCntEntry 5 }
+
+dBaseCntSendQueueSize  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of messages in the send queue as percentage of 
+                    the total queue size. 100% means that the queue is 
+                    full."
+::= { dBaseCntEntry 6 }
+
+dBaseCntSockBusyMsgs  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The total number of queued messages since start of 
+                    process because of busy socket. Does not reflect the 
+                    current number of messages in the queue.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { dBaseCntEntry 7 }
+
+dBaseCntPeerBusyMsgs  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The total number of queued messages since start of 
+                    process because of busy peer. Does not reflect the 
+                    current number of messages in the queue.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { dBaseCntEntry 8 }
+
+dZxEvtTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF DZxEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the Diameter Module 
+                    (5=W-HTTP)."
+::= { dZxEvt 1 } 
+
+dZxEvtEntry OBJECT-TYPE
+   SYNTAX          DZxEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Events for Diameter Zx Interface."
+   INDEX { applIndex }
+::= { dZxEvtTable  1 }
+
+DZxEvtEntry  ::= SEQUENCE
+{
+   dZxEvtSlowZxPeerCom ItuPerceivedSeverity
+}
+
+dZxEvtSlowZxPeerCom  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Long Response Time from the HSS has been detected 
+                    over Zx interface."
+::= { dZxEvtEntry 2 }
+
+dShEvtTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF DShEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the Diameter Module
+                    (5=W-HTTP)."
+::= { dShEvt 1 } 
+
+dShEvtEntry OBJECT-TYPE
+   SYNTAX          DShEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Events for Diameter Sh Interface."
+   INDEX { applIndex }
+::= { dShEvtTable  1 }
+
+DShEvtEntry  ::= SEQUENCE
+{
+   dShEvtSlowShPeerCom ItuPerceivedSeverity
+}
+
+dShEvtSlowShPeerCom  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Long Response Time from the HSS has been detected 
+                    over Sh interface."
+::= { dShEvtEntry 2 }
+
+dZhEvtTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF DZhEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the Diameter Module 
+                    (5=W-HTTP)."
+::= { dZhEvt 1 } 
+
+dZhEvtEntry OBJECT-TYPE
+   SYNTAX          DZhEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Events for Diameter Zh Interface."
+   INDEX { applIndex }
+::= { dZhEvtTable  1 }
+
+DZhEvtEntry  ::= SEQUENCE
+{
+   dZhEvtSlowZhPeerCom ItuPerceivedSeverity
+}
+
+dZhEvtSlowZhPeerCom  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Long Response Time from the HSS has been detected 
+                    over Zh interface."
+::= { dZhEvtEntry 2 }
+
+dZhCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF DZhCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the Diameter module 
+                    (5=W-HTTP)."
+::= { dZhCnt 1 } 
+
+dZhCntEntry OBJECT-TYPE
+   SYNTAX          DZhCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters For Diameter Zh Interface."
+   INDEX { applIndex }
+::= { dZhCntTable  1 }
+
+DZhCntEntry  ::= SEQUENCE
+{
+   dZhCntAuthTotal      Counter32,
+   dZhCntAuthFailed     Counter32,
+   dZhCntAuthSuccessful Counter32,
+   dZhCntAuthAvgTime    Gauge32,
+   dZhCntAuthMaxTime    Gauge32
+}
+
+dZhCntAuthTotal  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of all HSS authentications
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { dZhCntEntry 2 }
+
+dZhCntAuthFailed  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of all failed HSS authentications.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { dZhCntEntry 3 }
+
+dZhCntAuthSuccessful  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of all successful HSS authentications.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { dZhCntEntry 4 }
+
+dZhCntAuthAvgTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Average time in milliseconds between sending a MAR 
+                    and receiving a successful MAA during the sampling 
+                    interval."
+::= { dZhCntEntry 5 }
+
+dZhCntAuthMaxTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Maximum time in milliseconds between sending a MAR 
+                    and receiving a successful MAA during the sampling 
+                    interval."
+::= { dZhCntEntry 6 }
+
+diamAppHostCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF DiamAppHostCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for the Diameter Application 
+                    Host process
+                    (47=Diameter Application Host)."
+::= { diamAppHostCnt 1 } 
+
+diamAppHostCntEntry OBJECT-TYPE
+   SYNTAX          DiamAppHostCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters For Diameter Application Host."
+   INDEX { applIndex }
+::= { diamAppHostCntTable  1 }
+
+DiamAppHostCntEntry  ::= SEQUENCE
+{
+   diamAppHostCntSdCcrMsgs       Counter32,
+   diamAppHostCntSdCcaMsgs       Counter32,
+   diamAppHostCntSdTsrMsgs       Counter32,
+   diamAppHostCntSdTsaMsgs       Counter32,
+   diamAppHostCntSdRarMsgs       Counter32,
+   diamAppHostCntSdRaaMsgs       Counter32,
+   diamAppHostCntSdAvgRespTime   Gauge32,
+   diamAppHostCntSdMaxRespTime   Gauge32,
+   diamAppHostCntSdSlowSdPeerCom ItuPerceivedSeverity
+}
+
+diamAppHostCntSdCcrMsgs  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Diameter Sd server CC-R messages that have 
+                    been received in MSP.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { diamAppHostCntEntry 2 }
+
+diamAppHostCntSdCcaMsgs  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Diameter Sd server CC-A messages that have 
+                    been sent from MSP back to PCRF.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { diamAppHostCntEntry 3 }
+
+diamAppHostCntSdTsrMsgs  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Diameter Sd server TS-R messages that have 
+                    been received in MSP.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { diamAppHostCntEntry 4 }
+
+diamAppHostCntSdTsaMsgs  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Diameter Sd server TS-A messages that have 
+                    been sent from MSP back to PCRF.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { diamAppHostCntEntry 5 }
+
+diamAppHostCntSdRarMsgs  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Diameter Sd server RA-R messages that have 
+                    been received in MSP.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { diamAppHostCntEntry 6 }
+
+diamAppHostCntSdRaaMsgs  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Diameter Sd server RA-A messages that have 
+                    been sent from MSP back to PCRF.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { diamAppHostCntEntry 7 }
+
+diamAppHostCntSdAvgRespTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The average response time."
+::= { diamAppHostCntEntry 8 }
+
+diamAppHostCntSdMaxRespTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Maximum response time."
+::= { diamAppHostCntEntry 9 }
+
+diamAppHostCntSdSlowSdPeerCom  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Long Response Time from Sd peer has been detected."
+::= { diamAppHostCntEntry 10 }
+
+diamAgentCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF DiamAgentCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for the Diameter Agent process 
+                    (48=Diameter Agent)."
+::= { diamAgentCnt 1 } 
+
+diamAgentCntEntry OBJECT-TYPE
+   SYNTAX          DiamAgentCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters For Diameter Agent Node."
+   INDEX { applIndex }
+::= { diamAgentCntTable  1 }
+
+DiamAgentCntEntry  ::= SEQUENCE
+{
+   diamAgentCntSdMsgsSent          Counter32,
+   diamAgentCntSdMsgsReceived      Counter32,
+   diamAgentCntSdAvgExternRespTime Gauge32,
+   diamAgentCntSdMaxExternRespTime Gauge32,
+   diamAgentCntSdAvgInternRespTime Gauge32,
+   diamAgentCntSdMaxInternRespTime Gauge32,
+   diamAgentCntSdReqFromIntern     Counter32,
+   diamAgentCntSdAnsFromIntern     Counter32,
+   diamAgentCntSdReqToIntern       Counter32,
+   diamAgentCntSdAnsToIntern       Counter32,
+   diamAgentCntSdReqFromExtern     Counter32,
+   diamAgentCntSdAnsFromExtern     Counter32,
+   diamAgentCntSdReqToExtern       Counter32,
+   diamAgentCntSdAnsToExtern       Counter32,
+   diamAgentCntSlowExtPeerCom      ItuPerceivedSeverity
+}
+
+diamAgentCntSdMsgsSent  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Diameter Sd messages that have been sent by 
+                    Diameter Agent.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { diamAgentCntEntry 2 }
+
+diamAgentCntSdMsgsReceived  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Diameter Sd messages that have been 
+                    received by Diameter Agent.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { diamAgentCntEntry 3 }
+
+diamAgentCntSdAvgExternRespTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Average external response time."
+::= { diamAgentCntEntry 4 }
+
+diamAgentCntSdMaxExternRespTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Maximum external response time."
+::= { diamAgentCntEntry 5 }
+
+diamAgentCntSdAvgInternRespTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Average internal response time."
+::= { diamAgentCntEntry 6 }
+
+diamAgentCntSdMaxInternRespTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Maximum internal response time."
+::= { diamAgentCntEntry 7 }
+
+diamAgentCntSdReqFromIntern  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Diameter Sd requests that are received from 
+                    MSP.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { diamAgentCntEntry 8 }
+
+diamAgentCntSdAnsFromIntern  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Diameter Sd answers that are received from 
+                    MSP.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { diamAgentCntEntry 9 }
+
+diamAgentCntSdReqToIntern  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Diameter Sd requests that are sent to MSP.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { diamAgentCntEntry 10 }
+
+diamAgentCntSdAnsToIntern  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Diameter Sd answers that are sent to MSP.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { diamAgentCntEntry 11 }
+
+diamAgentCntSdReqFromExtern  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Diameter Sd requests that are received from 
+                    PCRF.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { diamAgentCntEntry 12 }
+
+diamAgentCntSdAnsFromExtern  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Diameter Sd answers that are received from 
+                    PCRF.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { diamAgentCntEntry 13 }
+
+diamAgentCntSdReqToExtern  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Diameter Sd requests that are sent to PCRF.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { diamAgentCntEntry 14 }
+
+diamAgentCntSdAnsToExtern  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Diameter Sd answers that are sent to PCRF.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { diamAgentCntEntry 15 }
+
+diamAgentCntSlowExtPeerCom  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Long external response time has been detected in 
+                    Diameter Agent."
+::= { diamAgentCntEntry 16 }
+
+diamSdClientCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF DiamSdClientCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that uses 
+                    the Diameter Sd Client 
+                    (5=W-HTTP, 34=TCP Proxy)."
+::= { diamSdClientCnt 1 } 
+
+diamSdClientCntEntry OBJECT-TYPE
+   SYNTAX          DiamSdClientCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters For Sd Client."
+   INDEX { applIndex }
+::= { diamSdClientCntTable  1 }
+
+DiamSdClientCntEntry  ::= SEQUENCE
+{
+   diamSdClientCntCcrMsgs       Counter32,
+   diamSdClientCntCcaMsgs       Counter32,
+   diamSdClientCntAvgRespTime   Gauge32,
+   diamSdClientCntMaxRespTime   Gauge32,
+   diamSdClientCntSlowSdPeerCom ItuPerceivedSeverity
+}
+
+diamSdClientCntCcrMsgs  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Diameter Sd client CC-R messages that have 
+                    been sent from MSP.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { diamSdClientCntEntry 2 }
+
+diamSdClientCntCcaMsgs  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Diameter Sd client CC-A messages that have 
+                    been sent from PCRF back to MSP.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { diamSdClientCntEntry 3 }
+
+diamSdClientCntAvgRespTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Average response time on Sd client."
+::= { diamSdClientCntEntry 4 }
+
+diamSdClientCntMaxRespTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Maximum response time on sd client."
+::= { diamSdClientCntEntry 5 }
+
+diamSdClientCntSlowSdPeerCom  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Long Response Time from Sd peer has been detected."
+::= { diamSdClientCntEntry 6 }
+
+diamSdEvtTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF DiamSdEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the Diameter module
+                    (5=W-HTTP, 34=TCP Proxy, 47=Diameter Application 
+                    Host, 48=Diameter Agent)."
+::= { diamSdEvt 1 } 
+
+diamSdEvtEntry OBJECT-TYPE
+   SYNTAX          DiamSdEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Events For Diameter Sd Interface."
+   INDEX { applIndex }
+::= { diamSdEvtTable  1 }
+
+DiamSdEvtEntry  ::= SEQUENCE
+{
+   diamSdEvtPeerCommErr ItuPerceivedSeverity
+}
+
+diamSdEvtPeerCommErr  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of available Sd peers has reached a critical 
+                    level."
+::= { diamSdEvtEntry 2 }
+
+diamGxEventTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF DiamGxEventEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the Diameter module
+                    (5=W-HTTP, 34=TCP Proxy, 47=Diameter Application 
+                    Host, 48=Diameter Agent)."
+::= { diamGxEvent 1 } 
+
+diamGxEventEntry OBJECT-TYPE
+   SYNTAX          DiamGxEventEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Events For Diameter Gx Interface."
+   INDEX { applIndex }
+::= { diamGxEventTable  1 }
+
+DiamGxEventEntry  ::= SEQUENCE
+{
+   diamGxEventPeerCommErr ItuPerceivedSeverity
+}
+
+diamGxEventPeerCommErr  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of available Gx peers has reached a critical 
+                    level."
+::= { diamGxEventEntry 12 }
+
+diamGxClientCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF DiamGxClientCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that uses 
+                    the Diameter Gx Client 
+                    (5=W-HTTP, 34=TCP Proxy)."
+::= { diamGxClientCnt 1 } 
+
+diamGxClientCntEntry OBJECT-TYPE
+   SYNTAX          DiamGxClientCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters For Gx Client."
+   INDEX { applIndex }
+::= { diamGxClientCntTable  1 }
+
+DiamGxClientCntEntry  ::= SEQUENCE
+{
+   diamGxClientCntCcrSuccMsgs    Counter32,
+   diamGxClientCntCcrErrMsgs     Counter32,
+   diamGxClientCntCcaSuccMsgs    Counter32,
+   diamGxClientCntCcaErrMsgs     Counter32,
+   diamGxClientCntRarMsgs        Counter32,
+   diamGxClientCntRaaSuccMsgs    Counter32,
+   diamGxClientCntRaaErrMsgs     Counter32,
+   diamGxClientCntSessionNumbers Gauge32,
+   diamGxClientCntAvgRespTime    Gauge32,
+   diamGxClientCntMaxRespTime    Gauge32,
+   diamGxClientCntSlowGxPeerCom  ItuPerceivedSeverity
+}
+
+diamGxClientCntCcrSuccMsgs  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Diameter Gx client CC-R messages that have 
+                    been sent successfully from MSP.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { diamGxClientCntEntry 2 }
+
+diamGxClientCntCcrErrMsgs  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Diameter Gx client CC-R messages that have 
+                    not been sent successfully from MSP.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { diamGxClientCntEntry 3 }
+
+diamGxClientCntCcaSuccMsgs  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Diameter Gx client CC-A messages that have 
+                    been received by MSP with success result code.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { diamGxClientCntEntry 4 }
+
+diamGxClientCntCcaErrMsgs  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Diameter Gx client CC-A messages that have 
+                    been received by MSP with non-success result code.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { diamGxClientCntEntry 5 }
+
+diamGxClientCntRarMsgs  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Diameter Gx client RA-R messages that have 
+                    been received by MSP.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { diamGxClientCntEntry 6 }
+
+diamGxClientCntRaaSuccMsgs  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Diameter Gx client RA-A messages that have 
+                    been sent from MSP back to PCRF successfully.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { diamGxClientCntEntry 7 }
+
+diamGxClientCntRaaErrMsgs  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Diameter Gx client RA-A messages that have 
+                    not been sent from MSP back to PCRF successfully.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { diamGxClientCntEntry 8 }
+
+diamGxClientCntSessionNumbers  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of Gx Control Sessions in use."
+::= { diamGxClientCntEntry 9 }
+
+diamGxClientCntAvgRespTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Average credit control response time on Gx client."
+::= { diamGxClientCntEntry 10 }
+
+diamGxClientCntMaxRespTime  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Maximum credit control response time on Gx client."
+::= { diamGxClientCntEntry 11 }
+
+diamGxClientCntSlowGxPeerCom  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Long credit control Response Time from Gx peer has 
+                    been detected."
+::= { diamGxClientCntEntry 12 }
+
+-- Compliance Statements
+
+diameterCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for diameter."
+   MODULE          -- this module
+   MANDATORY-GROUPS {diameterConfGroup}
+::= { diameterPmCompliances 1 }
+
+-- Units of Conformance
+
+diameterConfGroup OBJECT-GROUP
+   OBJECTS { dEvtPeerCommErr,
+             dBaseCntMsgsReceived,
+             dBaseCntMsgsSent,
+             dBaseCntNumSessions,
+             dBaseCntReceiveQueueSize,
+             dBaseCntSendQueueSize,
+             dBaseCntSockBusyMsgs,
+             dBaseCntPeerBusyMsgs,
+             dZxEvtSlowZxPeerCom,
+             dShEvtSlowShPeerCom,
+             dZhEvtSlowZhPeerCom,
+             dZhCntAuthTotal,
+             dZhCntAuthFailed,
+             dZhCntAuthSuccessful,
+             dZhCntAuthAvgTime,
+             dZhCntAuthMaxTime,
+             diamAppHostCntSdCcrMsgs,
+             diamAppHostCntSdCcaMsgs,
+             diamAppHostCntSdTsrMsgs,
+             diamAppHostCntSdTsaMsgs,
+             diamAppHostCntSdRarMsgs,
+             diamAppHostCntSdRaaMsgs,
+             diamAppHostCntSdAvgRespTime,
+             diamAppHostCntSdMaxRespTime,
+             diamAppHostCntSdSlowSdPeerCom,
+             diamAgentCntSdMsgsSent,
+             diamAgentCntSdMsgsReceived,
+             diamAgentCntSdAvgExternRespTime,
+             diamAgentCntSdMaxExternRespTime,
+             diamAgentCntSdAvgInternRespTime,
+             diamAgentCntSdMaxInternRespTime,
+             diamAgentCntSdReqFromIntern,
+             diamAgentCntSdAnsFromIntern,
+             diamAgentCntSdReqToIntern,
+             diamAgentCntSdAnsToIntern,
+             diamAgentCntSdReqFromExtern,
+             diamAgentCntSdAnsFromExtern,
+             diamAgentCntSdReqToExtern,
+             diamAgentCntSdAnsToExtern,
+             diamAgentCntSlowExtPeerCom,
+             diamSdClientCntCcrMsgs,
+             diamSdClientCntCcaMsgs,
+             diamSdClientCntAvgRespTime,
+             diamSdClientCntMaxRespTime,
+             diamSdClientCntSlowSdPeerCom,
+             diamSdEvtPeerCommErr,
+             diamGxEventPeerCommErr,
+             diamGxClientCntCcrSuccMsgs,
+             diamGxClientCntCcrErrMsgs,
+             diamGxClientCntCcaSuccMsgs,
+             diamGxClientCntCcaErrMsgs,
+             diamGxClientCntRarMsgs,
+             diamGxClientCntRaaSuccMsgs,
+             diamGxClientCntRaaErrMsgs,
+             diamGxClientCntSessionNumbers,
+             diamGxClientCntAvgRespTime,
+             diamGxClientCntMaxRespTime,
+             diamGxClientCntSlowGxPeerCom}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a diameter."
+::= { diameterPmGroups 1 }
+END

@@ -1,0 +1,621 @@
+ERICSSON-MPE-TRUSTED-PROXY-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Gauge32 , Counter32 , Unsigned32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     applIndex
+          FROM NETWORK-SERVICES-MIB
+
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeTrustedProxyPmModule MODULE-IDENTITY
+   LAST-UPDATED    "201804151612Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "Counters and Alarms for Trusted Proxy"
+::= { mpeModules 47 }
+
+trustedProxyPmObjects  OBJECT IDENTIFIER ::= { mpeTrustedProxyPmModule 1 }
+
+tpCnt  OBJECT IDENTIFIER ::= { trustedProxyPmObjects 1 }
+
+tpAuthCnt  OBJECT IDENTIFIER ::= { trustedProxyPmObjects 2 }
+
+tpEvt  OBJECT IDENTIFIER ::= { trustedProxyPmObjects 3 }
+
+tpSubCnt  OBJECT IDENTIFIER ::= { trustedProxyPmObjects 4 }
+
+tpLicSubCntEvt  OBJECT IDENTIFIER ::= { trustedProxyPmObjects 5 }
+
+tpTcCnt  OBJECT IDENTIFIER ::= { trustedProxyPmObjects 6 }
+
+tpTcEvt  OBJECT IDENTIFIER ::= { trustedProxyPmObjects 7 }
+
+trustedProxyPmConformance  OBJECT IDENTIFIER ::= { mpeTrustedProxyPmModule 3 }
+
+trustedProxyPmGroups  OBJECT IDENTIFIER ::= { trustedProxyPmConformance 1 }
+
+trustedProxyPmCompliances  OBJECT IDENTIFIER ::= { trustedProxyPmConformance 2 }
+
+tpCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF TpCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One instance for each stack type (1=Secure Connection 
+                    Oriented, 2=Secure Connectionless, 
+                    3=Connection-Oriented, 4=Connectionless, 5=W-HTTP)."
+::= { tpCnt 1 } 
+
+tpCntEntry OBJECT-TYPE
+   SYNTAX          TpCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for the Trusted Proxy function."
+   INDEX { applIndex }
+::= { tpCntTable  1 }
+
+TpCntEntry  ::= SEQUENCE
+{
+   tpCntHttpTotalReq     Counter32,
+   tpCntHttpFailedResp   Counter32,
+   tpCntHttpGetReq       Counter32,
+   tpCntHttpPutReq       Counter32,
+   tpCntHttpDeleteReq    Counter32,
+   tpCntHttpPostReq      Counter32,
+   tpCntHttpOtherReq     Counter32,
+   tpCntHttpFwdReq       Counter32,
+   tpCntHttpDsFailedResp Counter32
+}
+
+tpCntHttpTotalReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the total number of Trusted Proxy HTTTP 
+                    requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { tpCntEntry 1 }
+
+tpCntHttpFailedResp  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of all Trusted Proxy requests not 
+                    receiving a 2xx response.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { tpCntEntry 2 }
+
+tpCntHttpGetReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of Trusted Proxy HTTP GET requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { tpCntEntry 3 }
+
+tpCntHttpPutReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of Trusted Proxy HTTP PUT requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { tpCntEntry 4 }
+
+tpCntHttpDeleteReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of Trusted Proxy HTTP DELETE 
+                    requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { tpCntEntry 5 }
+
+tpCntHttpPostReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of Trusted Proxy HTTP POST 
+                    requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { tpCntEntry 6 }
+
+tpCntHttpOtherReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of Trusted Proxy requests with 
+                    other HTTP methods.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { tpCntEntry 7 }
+
+tpCntHttpFwdReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of Trusted Proxy requests forwarded 
+                    to the destination servers.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { tpCntEntry 8 }
+
+tpCntHttpDsFailedResp  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of Trusted Proxy requests not 
+                    receiving a 2xx response from the destination servers.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { tpCntEntry 9 }
+
+tpAuthCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF TpAuthCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One instance for each stack type (1=Secure Connection 
+                    Oriented, 2=Secure Connectionless, 
+                    3=Connection-Oriented, 4=Connectionless, 5=W-HTTP)."
+::= { tpAuthCnt 1 } 
+
+tpAuthCntEntry OBJECT-TYPE
+   SYNTAX          TpAuthCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for the Trusted Proxy Authentication 
+                    function."
+   INDEX { applIndex }
+::= { tpAuthCntTable  1 }
+
+TpAuthCntEntry  ::= SEQUENCE
+{
+   tpAuthCntAuthReq           Counter32,
+   tpAuthCntAuthResp          Counter32,
+   tpAuthCntAuthFailed        Counter32,
+   tpAuthCntAuthFailed403     Counter32,
+   tpAuthCntAuthGbaReq        Counter32,
+   tpAuthCntAuthGbaMeBasedReq Counter32,
+   tpAuthCntAuthGbaDigestReq  Counter32,
+   tpAuthCntAuthGibaReq       Counter32,
+   tpAuthCntAuthZxSsoReq      Counter32,
+   tpAuthCntAuthZxDigestReq   Counter32,
+   tpAuthCntZnReq             Counter32
+}
+
+tpAuthCntAuthReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the total number of Trusted Proxy 
+                    authentication requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { tpAuthCntEntry 1 }
+
+tpAuthCntAuthResp  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the total number of Trusted Proxy 
+                    authentication responses.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { tpAuthCntEntry 2 }
+
+tpAuthCntAuthFailed  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the total number of Trusted Proxy 
+                    authentication failures.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { tpAuthCntEntry 3 }
+
+tpAuthCntAuthFailed403  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of Trusted Proxy authentication 
+                    failures with error code 403.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { tpAuthCntEntry 4 }
+
+tpAuthCntAuthGbaReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the total number of Trusted Proxy GBA 
+                    authentication requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { tpAuthCntEntry 5 }
+
+tpAuthCntAuthGbaMeBasedReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of Trusted Proxy ME-based GBA 
+                    authentication requests, where the client application 
+                    resides in the ME.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { tpAuthCntEntry 6 }
+
+tpAuthCntAuthGbaDigestReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of Trusted Proxy GBA Digest 
+                    authentication requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { tpAuthCntEntry 7 }
+
+tpAuthCntAuthGibaReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of Trusted Proxy GIBA 
+                    authentication requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { tpAuthCntEntry 8 }
+
+tpAuthCntAuthZxSsoReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of Trusted Proxy Zx SSO 
+                    authentication requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { tpAuthCntEntry 9 }
+
+tpAuthCntAuthZxDigestReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of Trusted Proxy Zx Digest 
+                    authentication requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { tpAuthCntEntry 10 }
+
+tpAuthCntZnReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of Trusted Proxy Zn requests to the 
+                    BSF.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { tpAuthCntEntry 11 }
+
+tpEvtTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF TpEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each Trusted Proxy remote 
+                    peer, such as DS, DNS, etc."
+::= { tpEvt 1 } 
+
+tpEvtEntry OBJECT-TYPE
+   SYNTAX          TpEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The alarms and events for Trusted Proxy function."
+   INDEX { tpEvtIndex }
+::= { tpEvtTable  1 }
+
+TpEvtEntry  ::= SEQUENCE
+{
+   tpEvtIndex              Unsigned32,
+   tpEvtDsConnectionError  ItuPerceivedSeverity,
+   tpEvtDsLongResponseTime ItuPerceivedSeverity
+}
+
+tpEvtIndex  OBJECT-TYPE
+   SYNTAX          Unsigned32
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "An integer used to uniquely identify a tp evt table 
+                    entry."
+::= { tpEvtEntry 1 }
+
+tpEvtDsConnectionError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "A Communication Error with the Trusted Proxy has been 
+                    detected."
+::= { tpEvtEntry 2 }
+
+tpEvtDsLongResponseTime  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Long Response Time from the destination server has 
+                    been detected."
+::= { tpEvtEntry 3 }
+
+tpSubCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF TpSubCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the Subscriber Counting (1=Secure Connection 
+                    Oriented, 2=Secure Connectionless, 3=Connection-Oriented, 
+                    4=Connectionless, 5=W-HTTP,
+                    30=RTSP)."
+::= { tpSubCnt 1 } 
+
+tpSubCntEntry OBJECT-TYPE
+   SYNTAX          TpSubCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Subscriber Counting counters for Trusted Proxy."
+   INDEX { applIndex }
+::= { tpSubCntTable  1 }
+
+TpSubCntEntry  ::= SEQUENCE
+{
+   tpSubCntImpuVpMaxSubCount Counter32,
+   tpSubCntImpuVpActSubCount Gauge32,
+   tpSubCntImpiVpMaxSubCount Counter32,
+   tpSubCntImpiVpActSubCount Gauge32
+}
+
+tpSubCntImpuVpMaxSubCount  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Maximum number of active IMPU subscribers allowed to 
+                    use the Trusted Proxy VP according to the license 
+                    available
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { tpSubCntEntry 1 }
+
+tpSubCntImpuVpActSubCount  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of active IMPU subscribers using the Trusted 
+                    Proxy VP"
+::= { tpSubCntEntry 2 }
+
+tpSubCntImpiVpMaxSubCount  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Maximum number of active IMPI subscribers allowed to 
+                    use the Trusted Proxy VP according to the license 
+                    available
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { tpSubCntEntry 3 }
+
+tpSubCntImpiVpActSubCount  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of active IMPI subscribers using the Trusted 
+                    Proxy VP"
+::= { tpSubCntEntry 4 }
+
+tpLicSubCntEvtTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF TpLicSubCntEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One instance for each stack type (1=Secure Connection 
+                    Oriented, 2=Secure Connectionless, 
+                    3=Connection-Oriented, 4=Connectionless, 5=W-HTTP)."
+::= { tpLicSubCntEvt 1 } 
+
+tpLicSubCntEvtEntry OBJECT-TYPE
+   SYNTAX          TpLicSubCntEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The alarms used for the Trusted Proxy VP Subscriber 
+                    Counting."
+   INDEX { tpLicSubCntEvtIndex }
+::= { tpLicSubCntEvtTable  1 }
+
+TpLicSubCntEvtEntry  ::= SEQUENCE
+{
+   tpLicSubCntEvtIndex     Unsigned32,
+   tpLicSubCntEvtHighUsage ItuPerceivedSeverity,
+   tpLicSubCntEvtMaxUsage  ItuPerceivedSeverity
+}
+
+tpLicSubCntEvtIndex  OBJECT-TYPE
+   SYNTAX          Unsigned32
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "An integer used to uniquely identify a tp lic sub cnt 
+                    evt table entry."
+::= { tpLicSubCntEvtEntry 1 }
+
+tpLicSubCntEvtHighUsage  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Trusted Proxy VP License has reached high level 
+                    usage."
+::= { tpLicSubCntEvtEntry 2 }
+
+tpLicSubCntEvtMaxUsage  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Trusted Proxy VP License has reached the maximum 
+                    level usage."
+::= { tpLicSubCntEvtEntry 3 }
+
+tpTcCntTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF TpTcCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One instance for each stack type (1=Secure Connection 
+                    Oriented, 2=Secure Connectionless, 
+                    3=Connection-Oriented, 4=Connectionless, 5=W-HTTP)."
+::= { tpTcCnt 1 } 
+
+tpTcCntEntry OBJECT-TYPE
+   SYNTAX          TpTcCntEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for the Trusted Proxy Trusted Client 
+                    function."
+   INDEX { applIndex }
+::= { tpTcCntTable  1 }
+
+TpTcCntEntry  ::= SEQUENCE
+{
+   tpTcCntTcReq        Counter32,
+   tpTcCntTcReqFailed  Counter32,
+   tpTcCntTcReqSuccess Counter32
+}
+
+tpTcCntTcReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of Trusted Client requests 
+                    received.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { tpTcCntEntry 1 }
+
+tpTcCntTcReqFailed  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of failed Trusted Client requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { tpTcCntEntry 2 }
+
+tpTcCntTcReqSuccess  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Counts the number of successful Trusted Client 
+                    requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { tpTcCntEntry 3 }
+
+tpTcEvtTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF TpTcEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each Trusted Proxy remote 
+                    peer, such as DS, DNS, etc."
+::= { tpTcEvt 1 } 
+
+tpTcEvtEntry OBJECT-TYPE
+   SYNTAX          TpTcEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The alarms and events for Trusted Proxy Trusted 
+                    Client function."
+   INDEX { tpTcEvtIndex }
+::= { tpTcEvtTable  1 }
+
+TpTcEvtEntry  ::= SEQUENCE
+{
+   tpTcEvtIndex                  Unsigned32,
+   tpTcEvtTrustedClientWhiteList ItuPerceivedSeverity
+}
+
+tpTcEvtIndex  OBJECT-TYPE
+   SYNTAX          Unsigned32
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "An integer used to uniquely identify a tp tc evt 
+                    table entry."
+::= { tpTcEvtEntry 1 }
+
+tpTcEvtTrustedClientWhiteList  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "HTTP message ignored."
+::= { tpTcEvtEntry 2 }
+
+-- Compliance Statements
+
+trustedProxyCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for trusted proxy."
+   MODULE          -- this module
+   MANDATORY-GROUPS {trustedProxyConfGroup}
+::= { trustedProxyPmCompliances 1 }
+
+-- Units of Conformance
+
+trustedProxyConfGroup OBJECT-GROUP
+   OBJECTS { tpCntHttpTotalReq,
+             tpCntHttpFailedResp,
+             tpCntHttpGetReq,
+             tpCntHttpPutReq,
+             tpCntHttpDeleteReq,
+             tpCntHttpPostReq,
+             tpCntHttpOtherReq,
+             tpCntHttpFwdReq,
+             tpCntHttpDsFailedResp,
+             tpAuthCntAuthReq,
+             tpAuthCntAuthResp,
+             tpAuthCntAuthFailed,
+             tpAuthCntAuthFailed403,
+             tpAuthCntAuthGbaReq,
+             tpAuthCntAuthGbaMeBasedReq,
+             tpAuthCntAuthGbaDigestReq,
+             tpAuthCntAuthGibaReq,
+             tpAuthCntAuthZxSsoReq,
+             tpAuthCntAuthZxDigestReq,
+             tpAuthCntZnReq,
+             tpEvtDsConnectionError,
+             tpEvtDsLongResponseTime,
+             tpSubCntImpuVpMaxSubCount,
+             tpSubCntImpuVpActSubCount,
+             tpSubCntImpiVpMaxSubCount,
+             tpSubCntImpiVpActSubCount,
+             tpLicSubCntEvtHighUsage,
+             tpLicSubCntEvtMaxUsage,
+             tpTcCntTcReq,
+             tpTcCntTcReqFailed,
+             tpTcCntTcReqSuccess,
+             tpTcEvtTrustedClientWhiteList}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a trusted proxy."
+::= { trustedProxyPmGroups 1 }
+END

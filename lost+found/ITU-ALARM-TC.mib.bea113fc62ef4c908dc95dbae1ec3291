@@ -1,0 +1,77 @@
+ITU-ALARM-TC DEFINITIONS ::= BEGIN
+
+IMPORTS
+	snfGeneric					FROM ERICSSON-SNF-TOP-MIB
+   MODULE-IDENTITY, mib-2      FROM SNMPv2-SMI
+   TEXTUAL-CONVENTION          FROM SNMPv2-TC; 	
+  alarmItuTc MODULE-IDENTITY
+      LAST-UPDATED "200202040000Z"
+      ORGANIZATION "IETF Distributed Management Working Group"
+      CONTACT-INFO
+         " WG EMail:  disman@dorothy.bmc.com
+
+           Subscribe: disman-request@dorothy.bmc.com
+
+           Chair:     Randy Presuhn
+                      BMC Software, Inc.
+                      Office 1-3141
+                      2141 North First Street
+                      San Jose,  California 95131
+                      USA
+                      rpresuhn@bmc.com
+                      +1 408 546-1006
+
+
+           Editors:   Sharon Chisholm
+                      Nortel Networks
+                      PO Box 3511 Station C
+                      Ottawa, Ont.  K1Y 4H7
+                      Canada
+                      schishol@nortelnetworks.com
+
+                      Dan Romascanu
+                      Avaya Inc.
+                      Atidim Technology Park, Bldg. #3
+                      Tel Aviv, 61131
+                      Israel
+                      Tel: +972-3-645-8414
+                      Email: dromasca@avaya.com"
+      DESCRIPTION
+         "The MIB module defines the ITU Alarm
+         textual convention for objects not expected to require
+         regular extension."
+      REVISION    "200202040000Z"
+      DESCRIPTION
+          "Initial version, published as RFC XXXX."
+     ::= { snfGeneric 669 }
+
+
+ItuPerceivedSeverity ::= TEXTUAL-CONVENTION
+    STATUS current
+    DESCRIPTION
+            "ITU perceived severity values as per M.3100
+            and X.733"
+    SYNTAX         INTEGER 			{
+           cleared (1),
+           indeterminate (2),
+           critical (3),
+           major (4),
+           minor (5),
+           warning (6)
+           } 	
+
+ItuTrendIndication ::= TEXTUAL-CONVENTION
+    STATUS current
+
+    DESCRIPTION
+            "ITU trend indication values for alarms
+            as per [M.3100] and [X.733]."
+    SYNTAX         INTEGER
+      {
+      moreSevere (1),
+      noChange (2),
+      lessSevere (3)
+      }
+
+
+END

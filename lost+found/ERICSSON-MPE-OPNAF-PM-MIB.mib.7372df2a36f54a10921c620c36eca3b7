@@ -1,0 +1,279 @@
+ERICSSON-MPE-OPNAF-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Counter32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     applIndex
+          FROM NETWORK-SERVICES-MIB
+
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeOpnafPmModule MODULE-IDENTITY
+   LAST-UPDATED    "201804151612Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "Counters and Alarms for OpenID Connect functions."
+::= { mpeModules 46 }
+
+opnafPmObjects  OBJECT IDENTIFIER ::= { mpeOpnafPmModule 1 }
+
+oidcAuth  OBJECT IDENTIFIER ::= { opnafPmObjects 1 }
+
+oidcToken  OBJECT IDENTIFIER ::= { opnafPmObjects 2 }
+
+oidcUserInfo  OBJECT IDENTIFIER ::= { opnafPmObjects 3 }
+
+oidcEvt  OBJECT IDENTIFIER ::= { opnafPmObjects 4 }
+
+opnafPmConformance  OBJECT IDENTIFIER ::= { mpeOpnafPmModule 3 }
+
+opnafPmGroups  OBJECT IDENTIFIER ::= { opnafPmConformance 1 }
+
+opnafPmCompliances  OBJECT IDENTIFIER ::= { opnafPmConformance 2 }
+
+oidcAuthTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF OidcAuthEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One instance for each stack type ( 5=W-HTTP)."
+::= { oidcAuth 1 } 
+
+oidcAuthEntry OBJECT-TYPE
+   SYNTAX          OidcAuthEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for OpenID Connect Authentication endpoint."
+   INDEX { applIndex }
+::= { oidcAuthTable  1 }
+
+OidcAuthEntry  ::= SEQUENCE
+{
+   oidcAuthReq     Counter32,
+   oidcAuthSucc    Counter32,
+   oidcAuthFail    Counter32,
+   oidcAuthFail401 Counter32
+}
+
+oidcAuthReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of OpenID Connect authentication 
+                    requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { oidcAuthEntry 1 }
+
+oidcAuthSucc  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of successful OpenID Connect authentication 
+                    responses.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { oidcAuthEntry 2 }
+
+oidcAuthFail  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of failed OpenID Connect authentication 
+                    requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { oidcAuthEntry 3 }
+
+oidcAuthFail401  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of OpenID Connect authentication requests that 
+                    resulted in a 401.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { oidcAuthEntry 4 }
+
+oidcTokenTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF OidcTokenEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One instance for each stack type ( 5=W-HTTP)."
+::= { oidcToken 1 } 
+
+oidcTokenEntry OBJECT-TYPE
+   SYNTAX          OidcTokenEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for OpenID Connect Token endpoint."
+   INDEX { applIndex }
+::= { oidcTokenTable  1 }
+
+OidcTokenEntry  ::= SEQUENCE
+{
+   oidcTokenReq  Counter32,
+   oidcTokenSucc Counter32,
+   oidcTokenFail Counter32
+}
+
+oidcTokenReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of OpenID Connect token requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { oidcTokenEntry 1 }
+
+oidcTokenSucc  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of successful OpenID Connect token responses.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { oidcTokenEntry 2 }
+
+oidcTokenFail  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of failed OpenID Connect token requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { oidcTokenEntry 3 }
+
+oidcUserInfoTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF OidcUserInfoEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One instance for each stack type ( 5=W-HTTP)."
+::= { oidcUserInfo 1 } 
+
+oidcUserInfoEntry OBJECT-TYPE
+   SYNTAX          OidcUserInfoEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for OpenID Connect UserInfo endpoint."
+   INDEX { applIndex }
+::= { oidcUserInfoTable  1 }
+
+OidcUserInfoEntry  ::= SEQUENCE
+{
+   oidcUserInfoReq  Counter32,
+   oidcUserInfoSucc Counter32,
+   oidcUserInfoFail Counter32
+}
+
+oidcUserInfoReq  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of OpenID Connect userinfo requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { oidcUserInfoEntry 1 }
+
+oidcUserInfoSucc  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of successful OpenID Connect userinfo 
+                    responses.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { oidcUserInfoEntry 2 }
+
+oidcUserInfoFail  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of failed OpenID Connect userinfo requests.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { oidcUserInfoEntry 3 }
+
+oidcEvtTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF OidcEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One instance for each stack type ( 5=W-HTTP)."
+::= { oidcEvt 1 } 
+
+oidcEvtEntry OBJECT-TYPE
+   SYNTAX          OidcEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The alarms used for OpenID Connect."
+   INDEX { applIndex }
+::= { oidcEvtTable  1 }
+
+OidcEvtEntry  ::= SEQUENCE
+{
+   oidcEvtLdapLongResponseTime ItuPerceivedSeverity,
+   oidcEvtRPWhiteList          ItuPerceivedSeverity
+}
+
+oidcEvtLdapLongResponseTime  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Long Response Time from LDAP server has been 
+                    detected."
+::= { oidcEvtEntry 2 }
+
+oidcEvtRPWhiteList  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Client ID or Redirect Uri in request is not found in 
+                    RP White List."
+::= { oidcEvtEntry 3 }
+
+-- Compliance Statements
+
+opnafCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for open id connect naf."
+   MODULE          -- this module
+   MANDATORY-GROUPS {opnafConfGroup}
+::= { opnafPmCompliances 1 }
+
+-- Units of Conformance
+
+opnafConfGroup OBJECT-GROUP
+   OBJECTS { oidcAuthReq,
+             oidcAuthSucc,
+             oidcAuthFail,
+             oidcAuthFail401,
+             oidcTokenReq,
+             oidcTokenSucc,
+             oidcTokenFail,
+             oidcUserInfoReq,
+             oidcUserInfoSucc,
+             oidcUserInfoFail,
+             oidcEvtLdapLongResponseTime,
+             oidcEvtRPWhiteList}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a open id connect naf."
+::= { opnafPmGroups 1 }
+END

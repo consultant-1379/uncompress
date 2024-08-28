@@ -1,0 +1,255 @@
+ERICSSON-MPE-CONTENT-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Counter32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     applIndex
+          FROM NETWORK-SERVICES-MIB
+
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeContentPmModule MODULE-IDENTITY
+   LAST-UPDATED    "201804151612Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "Counters and events used by the Content Handler 
+                    functionality."
+::= { mpeModules 3 }
+
+contentPmObjects  OBJECT IDENTIFIER ::= { mpeContentPmModule 1 }
+
+content  OBJECT IDENTIFIER ::= { contentPmObjects 1 }
+
+contentPmConformance  OBJECT IDENTIFIER ::= { mpeContentPmModule 3 }
+
+contentPmGroups  OBJECT IDENTIFIER ::= { contentPmConformance 1 }
+
+contentPmCompliances  OBJECT IDENTIFIER ::= { contentPmConformance 2 }
+
+contentTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF ContentEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each application that 
+                    contains the content handler module 
+                    (5=W-HTTP, 6=Push Request Server)."
+::= { content 1 } 
+
+contentEntry OBJECT-TYPE
+   SYNTAX          ContentEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The common counters and events for the Content 
+                    Handler."
+   INDEX { applIndex }
+::= { contentTable  1 }
+
+ContentEntry  ::= SEQUENCE
+{
+   contentConfigError              ItuPerceivedSeverity,
+   contentDefaultCharsetMissing    ItuPerceivedSeverity,
+   contentErrStringConfigFileError ItuPerceivedSeverity,
+   contentCharsetTransError        ItuPerceivedSeverity,
+   contentTooBigError              ItuPerceivedSeverity,
+   contentTypeMultipart            Counter32,
+   contentTypeImage                Counter32,
+   contentTypeTextWml              Counter32,
+   contentTypeTextWmlScript        Counter32,
+   contentTypeTextOther            Counter32,
+   contentTypeApplWmlc             Counter32,
+   contentTypeApplWmlScript        Counter32,
+   contentTypeApplMultipart        Counter32,
+   contentTypeApplOther            Counter32,
+   contentTooBig                   Counter32
+}
+
+contentConfigError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "An error occured when accessing a configuration 
+                    parameter or its value."
+::= { contentEntry 1 }
+
+contentDefaultCharsetMissing  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The configuration parameter that defines the default 
+                    character set is missing or its value could not be 
+                    recognized. Check the configuration parameter 'Content' - 
+                    'Character Sets' - 'Default input character set'. 
+                    Define a valid value."
+::= { contentEntry 2 }
+
+contentErrStringConfigFileError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Could not find an important element in the error 
+                    string configuration file."
+::= { contentEntry 3 }
+
+contentCharsetTransError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "A page bound for the client contained a character 
+                    that did not conform to the specified character set. An 
+                    error message containing details of the error was sent 
+                    to the client in place of the requested page."
+::= { contentEntry 4 }
+
+contentTooBigError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Content was received that required conversion to 
+                    match the client's capabilities. The content size was 
+                    greater than permitted and the message has been discarded."
+::= { contentEntry 5 }
+
+contentTypeMultipart  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of messages of the type multipart/... 
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { contentEntry 10 }
+
+contentTypeImage  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of messages of the type image/... 
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { contentEntry 11 }
+
+contentTypeTextWml  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of messages of the type text/vnd.wap.wml 
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { contentEntry 12 }
+
+contentTypeTextWmlScript  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of messages of the type text/vnd.wap.wmlscript 
+                    
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { contentEntry 13 }
+
+contentTypeTextOther  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of messages of the type text/... 
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { contentEntry 14 }
+
+contentTypeApplWmlc  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of messages of the type 
+                    application/vnd.wap.wmlc 
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { contentEntry 15 }
+
+contentTypeApplWmlScript  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of messages of the type 
+                    application/vnd.wap.wmlscriptc 
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { contentEntry 16 }
+
+contentTypeApplMultipart  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of messages of the type multipart/... 
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { contentEntry 17 }
+
+contentTypeApplOther  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of messages of the type application/... 
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { contentEntry 18 }
+
+contentTooBig  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of messages which content exceeds the maximum 
+                    permitted size.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { contentEntry 19 }
+
+-- Compliance Statements
+
+contentCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for content handler."
+   MODULE          -- this module
+   MANDATORY-GROUPS {contentConfGroup}
+::= { contentPmCompliances 1 }
+
+-- Units of Conformance
+
+contentConfGroup OBJECT-GROUP
+   OBJECTS { contentConfigError,
+             contentDefaultCharsetMissing,
+             contentErrStringConfigFileError,
+             contentCharsetTransError,
+             contentTooBigError,
+             contentTypeMultipart,
+             contentTypeImage,
+             contentTypeTextWml,
+             contentTypeTextWmlScript,
+             contentTypeTextOther,
+             contentTypeApplWmlc,
+             contentTypeApplWmlScript,
+             contentTypeApplMultipart,
+             contentTypeApplOther,
+             contentTooBig}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a content handler."
+::= { contentPmGroups 1 }
+END

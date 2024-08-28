@@ -1,0 +1,2070 @@
+ERICSSON-MPE-SLB-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Gauge32 , Counter32 , Unsigned32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     applIndex
+          FROM NETWORK-SERVICES-MIB
+
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeSlbPmModule MODULE-IDENTITY
+   LAST-UPDATED    "201804151612Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "Counters and states used by Software Load Balancer."
+::= { mpeModules 38 }
+
+slbPmObjects  OBJECT IDENTIFIER ::= { mpeSlbPmModule 1 }
+
+slbHcEvt  OBJECT IDENTIFIER ::= { slbPmObjects 2 }
+
+slbMsEvt  OBJECT IDENTIFIER ::= { slbPmObjects 3 }
+
+slbSysCount  OBJECT IDENTIFIER ::= { slbPmObjects 4 }
+
+slbSysStat  OBJECT IDENTIFIER ::= { slbPmObjects 5 }
+
+slbRadioPacketsCount  OBJECT IDENTIFIER ::= { slbPmObjects 6 }
+
+slbWwwPacketsCount  OBJECT IDENTIFIER ::= { slbPmObjects 7 }
+
+slbRadioDroppedCount  OBJECT IDENTIFIER ::= { slbPmObjects 8 }
+
+slbWwwDroppedCount  OBJECT IDENTIFIER ::= { slbPmObjects 9 }
+
+slbRadioPacketsStat  OBJECT IDENTIFIER ::= { slbPmObjects 10 }
+
+slbWwwPacketsStat  OBJECT IDENTIFIER ::= { slbPmObjects 11 }
+
+slbRadioDroppedStat  OBJECT IDENTIFIER ::= { slbPmObjects 12 }
+
+slbWwwDroppedStat  OBJECT IDENTIFIER ::= { slbPmObjects 13 }
+
+slbhaAlarm  OBJECT IDENTIFIER ::= { slbPmObjects 14 }
+
+slbSpvAlarm  OBJECT IDENTIFIER ::= { slbPmObjects 15 }
+
+slbSpvSwAlarm  OBJECT IDENTIFIER ::= { slbPmObjects 16 }
+
+slbPmConformance  OBJECT IDENTIFIER ::= { mpeSlbPmModule 3 }
+
+slbPmGroups  OBJECT IDENTIFIER ::= { slbPmConformance 1 }
+
+slbPmCompliances  OBJECT IDENTIFIER ::= { slbPmConformance 2 }
+
+slbHcEvtLowPacketError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB health check detected the packet numbers go 
+                    through SLB is too small."
+::= { slbHcEvt 2 }
+
+slbHcEvtEvenDistributionError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB health check detected IPv4 traffic distribution 
+                    to TS is not even."
+::= { slbHcEvt 3 }
+
+slbHcEvtEvenDistributionErrorV6  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB health check detected IPv6 traffic distribution 
+                    to TS is not even."
+::= { slbHcEvt 4 }
+
+slbHcEvtBypassMspError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB routes traffic to bypass MSP due to the number of 
+                    fault MSP traffic servers reaches threshold. Note 
+                    that this alarm will not be cleared after SLB routes 
+                    traffic back to normal path."
+::= { slbHcEvt 5 }
+
+slbMsEvtTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF SlbMsEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each traffic server."
+::= { slbMsEvt 1 } 
+
+slbMsEvtEntry OBJECT-TYPE
+   SYNTAX          SlbMsEvtEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The alarms for SLB Monitored Service."
+   INDEX { slbMsEvtIndex }
+::= { slbMsEvtTable  1 }
+
+SlbMsEvtEntry  ::= SEQUENCE
+{
+   slbMsEvtIndex              Unsigned32,
+   slbMsEvtService1DownError  ItuPerceivedSeverity,
+   slbMsEvtService2DownError  ItuPerceivedSeverity,
+   slbMsEvtService3DownError  ItuPerceivedSeverity,
+   slbMsEvtService4DownError  ItuPerceivedSeverity,
+   slbMsEvtService5DownError  ItuPerceivedSeverity,
+   slbMsEvtService6DownError  ItuPerceivedSeverity,
+   slbMsEvtService7DownError  ItuPerceivedSeverity,
+   slbMsEvtService8DownError  ItuPerceivedSeverity,
+   slbMsEvtService9DownError  ItuPerceivedSeverity,
+   slbMsEvtService10DownError ItuPerceivedSeverity,
+   slbMsEvtService11DownError ItuPerceivedSeverity,
+   slbMsEvtService12DownError ItuPerceivedSeverity,
+   slbMsEvtService13DownError ItuPerceivedSeverity,
+   slbMsEvtService14DownError ItuPerceivedSeverity,
+   slbMsEvtService15DownError ItuPerceivedSeverity,
+   slbMsEvtService16DownError ItuPerceivedSeverity,
+   slbMsEvtService17DownError ItuPerceivedSeverity,
+   slbMsEvtService18DownError ItuPerceivedSeverity,
+   slbMsEvtService19DownError ItuPerceivedSeverity,
+   slbMsEvtService20DownError ItuPerceivedSeverity,
+   slbMsEvtService21DownError ItuPerceivedSeverity,
+   slbMsEvtService22DownError ItuPerceivedSeverity,
+   slbMsEvtService23DownError ItuPerceivedSeverity,
+   slbMsEvtService24DownError ItuPerceivedSeverity,
+   slbMsEvtService25DownError ItuPerceivedSeverity,
+   slbMsEvtService26DownError ItuPerceivedSeverity,
+   slbMsEvtService27DownError ItuPerceivedSeverity,
+   slbMsEvtService28DownError ItuPerceivedSeverity,
+   slbMsEvtService29DownError ItuPerceivedSeverity,
+   slbMsEvtService30DownError ItuPerceivedSeverity
+}
+
+slbMsEvtIndex  OBJECT-TYPE
+   SYNTAX          Unsigned32
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "An integer used to uniquely identify a slb ms evt 
+                    table entry."
+::= { slbMsEvtEntry 1 }
+
+slbMsEvtService1DownError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB detected service1 on traffic server is down."
+::= { slbMsEvtEntry 2 }
+
+slbMsEvtService2DownError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB detected service2 on traffic server is down."
+::= { slbMsEvtEntry 3 }
+
+slbMsEvtService3DownError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB detected service3 on traffic server is down."
+::= { slbMsEvtEntry 4 }
+
+slbMsEvtService4DownError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB detected service4 on traffic server is down."
+::= { slbMsEvtEntry 5 }
+
+slbMsEvtService5DownError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB detected service5 on traffic server is down."
+::= { slbMsEvtEntry 6 }
+
+slbMsEvtService6DownError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB detected service6 on traffic server is down."
+::= { slbMsEvtEntry 7 }
+
+slbMsEvtService7DownError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB detected service7 on traffic server is down."
+::= { slbMsEvtEntry 8 }
+
+slbMsEvtService8DownError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB detected service8 on traffic server is down."
+::= { slbMsEvtEntry 9 }
+
+slbMsEvtService9DownError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB detected service9 on traffic server is down."
+::= { slbMsEvtEntry 10 }
+
+slbMsEvtService10DownError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB detected service10 on traffic server is down."
+::= { slbMsEvtEntry 11 }
+
+slbMsEvtService11DownError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB detected service11 on traffic server is down."
+::= { slbMsEvtEntry 12 }
+
+slbMsEvtService12DownError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB detected service12 on traffic server is down."
+::= { slbMsEvtEntry 13 }
+
+slbMsEvtService13DownError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB detected service13 on traffic server is down."
+::= { slbMsEvtEntry 14 }
+
+slbMsEvtService14DownError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB detected service14 on traffic server is down."
+::= { slbMsEvtEntry 15 }
+
+slbMsEvtService15DownError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB detected service15 on traffic server is down."
+::= { slbMsEvtEntry 16 }
+
+slbMsEvtService16DownError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB detected service16 on traffic server is down."
+::= { slbMsEvtEntry 17 }
+
+slbMsEvtService17DownError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB detected service17 on traffic server is down."
+::= { slbMsEvtEntry 18 }
+
+slbMsEvtService18DownError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB detected service18 on traffic server is down."
+::= { slbMsEvtEntry 19 }
+
+slbMsEvtService19DownError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB detected service19 on traffic server is down."
+::= { slbMsEvtEntry 20 }
+
+slbMsEvtService20DownError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB detected service20 on traffic server is down."
+::= { slbMsEvtEntry 21 }
+
+slbMsEvtService21DownError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB detected service21 on traffic server is down."
+::= { slbMsEvtEntry 22 }
+
+slbMsEvtService22DownError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB detected service22 on traffic server is down."
+::= { slbMsEvtEntry 23 }
+
+slbMsEvtService23DownError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB detected service23 on traffic server is down."
+::= { slbMsEvtEntry 24 }
+
+slbMsEvtService24DownError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB detected service24 on traffic server is down."
+::= { slbMsEvtEntry 25 }
+
+slbMsEvtService25DownError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB detected service25 on traffic server is down."
+::= { slbMsEvtEntry 26 }
+
+slbMsEvtService26DownError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB detected service26 on traffic server is down."
+::= { slbMsEvtEntry 27 }
+
+slbMsEvtService27DownError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB detected service27 on traffic server is down."
+::= { slbMsEvtEntry 28 }
+
+slbMsEvtService28DownError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB detected service28 on traffic server is down."
+::= { slbMsEvtEntry 29 }
+
+slbMsEvtService29DownError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB detected service29 on traffic server is down."
+::= { slbMsEvtEntry 30 }
+
+slbMsEvtService30DownError  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB detected service30 on traffic server is down."
+::= { slbMsEvtEntry 31 }
+
+slbSysCountRadioPacketsHigh  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet on access ingress 
+                    interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { slbSysCount 1 }
+
+slbSysCountRadioPacketsLow  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet on access ingress 
+                    interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { slbSysCount 2 }
+
+slbSysCountWwwPacketsHigh  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet on internet ingress 
+                    interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { slbSysCount 3 }
+
+slbSysCountWwwPacketsLow  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet on internet ingress 
+                    interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { slbSysCount 4 }
+
+slbSysCountRadioDroppedHigh  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet on access ingress 
+                    interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { slbSysCount 5 }
+
+slbSysCountRadioDroppedLow  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet on access ingress 
+                    interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { slbSysCount 6 }
+
+slbSysCountWwwDroppedHigh  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet on internet ingress 
+                    interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { slbSysCount 7 }
+
+slbSysCountWwwDroppedLow  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet on internet ingress 
+                    interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { slbSysCount 8 }
+
+slbSysCountRadioPacketsV6High  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPv6 packet on access 
+                    ingress interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { slbSysCount 9 }
+
+slbSysCountRadioPacketsV6Low  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPv6 packet on access 
+                    ingress interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { slbSysCount 10 }
+
+slbSysCountWwwPacketsV6High  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPv6 packet on internet 
+                    ingress interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { slbSysCount 11 }
+
+slbSysCountWwwPacketsV6Low  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPv6 packet on internet 
+                    ingress interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { slbSysCount 12 }
+
+slbSysCountRadioDroppedV6High  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet on access ingress 
+                    interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { slbSysCount 13 }
+
+slbSysCountRadioDroppedV6Low  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet on access ingress 
+                    interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { slbSysCount 14 }
+
+slbSysCountWwwDroppedV6High  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet on internet ingress 
+                    interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { slbSysCount 15 }
+
+slbSysCountWwwDroppedV6Low  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet on internet ingress 
+                    interface.
+                    The applUptime epoch of the application should be 
+                    used as reference point for this counter."
+::= { slbSysCount 16 }
+
+slbSysStatRadioPacketsHigh  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet on access ingress 
+                    interface."
+::= { slbSysStat 1 }
+
+slbSysStatRadioPacketsLow  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet on access ingress 
+                    interface."
+::= { slbSysStat 2 }
+
+slbSysStatWwwPacketsHigh  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet on internet ingress 
+                    interface."
+::= { slbSysStat 3 }
+
+slbSysStatWwwPacketsLow  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet on internet ingress 
+                    interface."
+::= { slbSysStat 4 }
+
+slbSysStatRadioDroppedHigh  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet on access ingress 
+                    interface."
+::= { slbSysStat 5 }
+
+slbSysStatRadioDroppedLow  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet on access ingress 
+                    interface."
+::= { slbSysStat 6 }
+
+slbSysStatWwwDroppedHigh  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet on internet ingress 
+                    interface."
+::= { slbSysStat 7 }
+
+slbSysStatWwwDroppedLow  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet on internet ingress 
+                    interface."
+::= { slbSysStat 8 }
+
+slbSysStatRadioPacketsV6High  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "onof SLB distributed IPv6 packet on access ingress 
+                    interface."
+::= { slbSysStat 9 }
+
+slbSysStatRadioPacketsV6Low  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPv6 packet on access 
+                    ingress interface."
+::= { slbSysStat 10 }
+
+slbSysStatWwwPacketsV6High  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPv6 packet on internet 
+                    ingress interface."
+::= { slbSysStat 11 }
+
+slbSysStatWwwPacketsV6Low  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPv6 packet on internet 
+                    ingress interface."
+::= { slbSysStat 12 }
+
+slbSysStatRadioDroppedV6High  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet on access ingress 
+                    interface."
+::= { slbSysStat 13 }
+
+slbSysStatRadioDroppedV6Low  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet on access ingress 
+                    interface."
+::= { slbSysStat 14 }
+
+slbSysStatWwwDroppedV6High  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet on internet ingress 
+                    interface."
+::= { slbSysStat 15 }
+
+slbSysStatWwwDroppedV6Low  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet on internet ingress 
+                    interface."
+::= { slbSysStat 16 }
+
+slbRadioPacketsCountTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF SlbRadioPacketsCountEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each traffic server and DDC."
+::= { slbRadioPacketsCount 1 } 
+
+slbRadioPacketsCountEntry OBJECT-TYPE
+   SYNTAX          SlbRadioPacketsCountEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for SLB."
+   INDEX { applIndex }
+::= { slbRadioPacketsCountTable  1 }
+
+SlbRadioPacketsCountEntry  ::= SEQUENCE
+{
+   slbRadioPacketsCountHigh         Counter32,
+   slbRadioPacketsCountLow          Counter32,
+   slbRadioPacketsCountDdcHigh      Counter32,
+   slbRadioPacketsCountDdcLow       Counter32,
+   slbRadioPacketsCountReservedHigh Counter32,
+   slbRadioPacketsCountReservedLow  Counter32,
+   slbRadioPacketsCountV6High       Counter32,
+   slbRadioPacketsCountV6Low        Counter32,
+   slbRadioPacketsCountDdcV6High    Counter32,
+   slbRadioPacketsCountDdcV6Low     Counter32,
+   slbRadioPacketsCountResvV6High   Counter32,
+   slbRadioPacketsCountResvV6Low    Counter32
+}
+
+slbRadioPacketsCountHigh  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet to TS on access 
+                    ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbRadioPacketsCountEntry 1 }
+
+slbRadioPacketsCountLow  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet to TS on access 
+                    ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbRadioPacketsCountEntry 2 }
+
+slbRadioPacketsCountDdcHigh  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet to DDC on access 
+                    ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbRadioPacketsCountEntry 3 }
+
+slbRadioPacketsCountDdcLow  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet to DDC on access 
+                    ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbRadioPacketsCountEntry 4 }
+
+slbRadioPacketsCountReservedHigh  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet to Reserved pool on 
+                    access ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbRadioPacketsCountEntry 5 }
+
+slbRadioPacketsCountReservedLow  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet to Reserved pool on 
+                    access ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbRadioPacketsCountEntry 6 }
+
+slbRadioPacketsCountV6High  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPv6 packet to TS on access 
+                    ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbRadioPacketsCountEntry 7 }
+
+slbRadioPacketsCountV6Low  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPv6 packet to TS on access 
+                    ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbRadioPacketsCountEntry 8 }
+
+slbRadioPacketsCountDdcV6High  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPv6 packet to DDC on 
+                    access ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbRadioPacketsCountEntry 9 }
+
+slbRadioPacketsCountDdcV6Low  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPv6 packet to DDC on 
+                    access ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbRadioPacketsCountEntry 10 }
+
+slbRadioPacketsCountResvV6High  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPv6 packet to Reserved 
+                    pool on access ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbRadioPacketsCountEntry 11 }
+
+slbRadioPacketsCountResvV6Low  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPv6 packet to Reserved 
+                    pool on access ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbRadioPacketsCountEntry 12 }
+
+slbWwwPacketsCountTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF SlbWwwPacketsCountEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each traffic server and DDC."
+::= { slbWwwPacketsCount 1 } 
+
+slbWwwPacketsCountEntry OBJECT-TYPE
+   SYNTAX          SlbWwwPacketsCountEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for SLB."
+   INDEX { applIndex }
+::= { slbWwwPacketsCountTable  1 }
+
+SlbWwwPacketsCountEntry  ::= SEQUENCE
+{
+   slbWwwPacketsCountHigh           Counter32,
+   slbWwwPacketsCountLow            Counter32,
+   slbWwwPacketsCountDdcHigh        Counter32,
+   slbWwwPacketsCountDdcLow         Counter32,
+   slbWwwPacketsCountReservedHigh   Counter32,
+   slbWwwPacketsCountReservedLow    Counter32,
+   slbWwwPacketsCountV6High         Counter32,
+   slbWwwPacketsCountV6Low          Counter32,
+   slbWwwPacketsCountDdcV6High      Counter32,
+   slbWwwPacketsCountDdcV6Low       Counter32,
+   slbWwwPacketsCountReservedV6High Counter32,
+   slbWwwPacketsCountReservedV6Low  Counter32
+}
+
+slbWwwPacketsCountHigh  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet to TS on internet 
+                    ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbWwwPacketsCountEntry 1 }
+
+slbWwwPacketsCountLow  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet to TS on internet 
+                    ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbWwwPacketsCountEntry 2 }
+
+slbWwwPacketsCountDdcHigh  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet to DDC on internet 
+                    ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbWwwPacketsCountEntry 3 }
+
+slbWwwPacketsCountDdcLow  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet to DDC on internet 
+                    ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbWwwPacketsCountEntry 4 }
+
+slbWwwPacketsCountReservedHigh  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet to Reserved pool on 
+                    internet ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbWwwPacketsCountEntry 5 }
+
+slbWwwPacketsCountReservedLow  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet to Reserved pool on 
+                    internet ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbWwwPacketsCountEntry 6 }
+
+slbWwwPacketsCountV6High  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPV6 packet to TS on 
+                    internet ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbWwwPacketsCountEntry 7 }
+
+slbWwwPacketsCountV6Low  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPV6 packet to TS on 
+                    internet ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbWwwPacketsCountEntry 8 }
+
+slbWwwPacketsCountDdcV6High  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPV6 packet to DDC on 
+                    internet ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbWwwPacketsCountEntry 9 }
+
+slbWwwPacketsCountDdcV6Low  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPV6 packet to DDC on 
+                    internet ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbWwwPacketsCountEntry 10 }
+
+slbWwwPacketsCountReservedV6High  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPV6 packet to Reserved 
+                    pool on internet ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbWwwPacketsCountEntry 11 }
+
+slbWwwPacketsCountReservedV6Low  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPV6 packet to Reserved 
+                    pool on internet ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbWwwPacketsCountEntry 12 }
+
+slbRadioDroppedCountTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF SlbRadioDroppedCountEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each traffic server and DDC."
+::= { slbRadioDroppedCount 1 } 
+
+slbRadioDroppedCountEntry OBJECT-TYPE
+   SYNTAX          SlbRadioDroppedCountEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for SLB."
+   INDEX { applIndex }
+::= { slbRadioDroppedCountTable  1 }
+
+SlbRadioDroppedCountEntry  ::= SEQUENCE
+{
+   slbRadioDroppedCountHigh         Counter32,
+   slbRadioDroppedCountLow          Counter32,
+   slbRadioDroppedCountDdcHigh      Counter32,
+   slbRadioDroppedCountDdcLow       Counter32,
+   slbRadioDroppedCountReservedHigh Counter32,
+   slbRadioDroppedCountReservedLow  Counter32,
+   slbRadioDroppedCountV6High       Counter32,
+   slbRadioDroppedCountV6Low        Counter32,
+   slbRadioDroppedCountDdcV6High    Counter32,
+   slbRadioDroppedCountDdcV6Low     Counter32,
+   slbRadioDroppedCountResvV6High   Counter32,
+   slbRadioDroppedCountResvV6Low    Counter32
+}
+
+slbRadioDroppedCountHigh  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet to TS on access ingress 
+                    interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbRadioDroppedCountEntry 1 }
+
+slbRadioDroppedCountLow  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet to TS on access ingress 
+                    interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbRadioDroppedCountEntry 2 }
+
+slbRadioDroppedCountDdcHigh  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet to DDC on access ingress 
+                    interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbRadioDroppedCountEntry 3 }
+
+slbRadioDroppedCountDdcLow  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet to DDC on access ingress 
+                    interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbRadioDroppedCountEntry 4 }
+
+slbRadioDroppedCountReservedHigh  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet to Reserved pool on 
+                    access ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbRadioDroppedCountEntry 5 }
+
+slbRadioDroppedCountReservedLow  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet to Reserved pool on 
+                    access ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbRadioDroppedCountEntry 6 }
+
+slbRadioDroppedCountV6High  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet to TS on access 
+                    ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbRadioDroppedCountEntry 7 }
+
+slbRadioDroppedCountV6Low  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet to TS on access 
+                    ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbRadioDroppedCountEntry 8 }
+
+slbRadioDroppedCountDdcV6High  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet to DDC on access 
+                    ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbRadioDroppedCountEntry 9 }
+
+slbRadioDroppedCountDdcV6Low  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet to DDC on access 
+                    ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbRadioDroppedCountEntry 10 }
+
+slbRadioDroppedCountResvV6High  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet to Reserved pool on 
+                    access ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbRadioDroppedCountEntry 11 }
+
+slbRadioDroppedCountResvV6Low  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet to Reserved pool on 
+                    access ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbRadioDroppedCountEntry 12 }
+
+slbWwwDroppedCountTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF SlbWwwDroppedCountEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each traffic server and DDC."
+::= { slbWwwDroppedCount 1 } 
+
+slbWwwDroppedCountEntry OBJECT-TYPE
+   SYNTAX          SlbWwwDroppedCountEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for SLB."
+   INDEX { applIndex }
+::= { slbWwwDroppedCountTable  1 }
+
+SlbWwwDroppedCountEntry  ::= SEQUENCE
+{
+   slbWwwDroppedCountHigh           Counter32,
+   slbWwwDroppedCountLow            Counter32,
+   slbWwwDroppedCountDdcHigh        Counter32,
+   slbWwwDroppedCountDdcLow         Counter32,
+   slbWwwDroppedCountReservedHigh   Counter32,
+   slbWwwDroppedCountReservedLow    Counter32,
+   slbWwwDroppedCountV6High         Counter32,
+   slbWwwDroppedCountV6Low          Counter32,
+   slbWwwDroppedCountDdcV6High      Counter32,
+   slbWwwDroppedCountDdcV6Low       Counter32,
+   slbWwwDroppedCountReservedV6High Counter32,
+   slbWwwDroppedCountReservedV6Low  Counter32
+}
+
+slbWwwDroppedCountHigh  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet to TS on internet 
+                    ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbWwwDroppedCountEntry 1 }
+
+slbWwwDroppedCountLow  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet to TS on internet 
+                    ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbWwwDroppedCountEntry 2 }
+
+slbWwwDroppedCountDdcHigh  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet number to DDC on 
+                    internet ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbWwwDroppedCountEntry 3 }
+
+slbWwwDroppedCountDdcLow  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet to DDC on internet 
+                    ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbWwwDroppedCountEntry 4 }
+
+slbWwwDroppedCountReservedHigh  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet to Reserved pool on 
+                    internet ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbWwwDroppedCountEntry 5 }
+
+slbWwwDroppedCountReservedLow  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet to Reserved pool on 
+                    internet ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbWwwDroppedCountEntry 6 }
+
+slbWwwDroppedCountV6High  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet to TS on internet 
+                    ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbWwwDroppedCountEntry 7 }
+
+slbWwwDroppedCountV6Low  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet to TS on internet 
+                    ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbWwwDroppedCountEntry 8 }
+
+slbWwwDroppedCountDdcV6High  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet to DDC on internet 
+                    ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbWwwDroppedCountEntry 9 }
+
+slbWwwDroppedCountDdcV6Low  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet to DDC on internet 
+                    ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbWwwDroppedCountEntry 10 }
+
+slbWwwDroppedCountReservedV6High  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet to Reserved pool on 
+                    internet ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbWwwDroppedCountEntry 11 }
+
+slbWwwDroppedCountReservedV6Low  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet to Reserved pool on 
+                    internet ingress interface.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { slbWwwDroppedCountEntry 12 }
+
+slbRadioPacketsStatTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF SlbRadioPacketsStatEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each traffic server and DDC."
+::= { slbRadioPacketsStat 1 } 
+
+slbRadioPacketsStatEntry OBJECT-TYPE
+   SYNTAX          SlbRadioPacketsStatEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for SLB during the specified period."
+   INDEX { applIndex }
+::= { slbRadioPacketsStatTable  1 }
+
+SlbRadioPacketsStatEntry  ::= SEQUENCE
+{
+   slbRadioPacketsStatHigh         Gauge32,
+   slbRadioPacketsStatLow          Gauge32,
+   slbRadioPacketsStatDdcHigh      Gauge32,
+   slbRadioPacketsStatDdcLow       Gauge32,
+   slbRadioPacketsStatReservedHigh Gauge32,
+   slbRadioPacketsStatReservedLow  Gauge32,
+   slbRadioPacketsStatV6High       Gauge32,
+   slbRadioPacketsStatV6Low        Gauge32,
+   slbRadioPacketsStatDdcV6High    Gauge32,
+   slbRadioPacketsStatDdcV6Low     Gauge32,
+   slbRadioPacketsStatResvV6High   Gauge32,
+   slbRadioPacketsStatResvV6Low    Gauge32
+}
+
+slbRadioPacketsStatHigh  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet to TS on access 
+                    ingress interface."
+::= { slbRadioPacketsStatEntry 1 }
+
+slbRadioPacketsStatLow  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet to TS on access 
+                    ingress interface."
+::= { slbRadioPacketsStatEntry 2 }
+
+slbRadioPacketsStatDdcHigh  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet to DDC on access 
+                    ingress interface."
+::= { slbRadioPacketsStatEntry 3 }
+
+slbRadioPacketsStatDdcLow  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet to DDC on access 
+                    ingress interface."
+::= { slbRadioPacketsStatEntry 4 }
+
+slbRadioPacketsStatReservedHigh  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet to Reserved pool on 
+                    access ingress interface."
+::= { slbRadioPacketsStatEntry 5 }
+
+slbRadioPacketsStatReservedLow  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet to Reserved pool on 
+                    access ingress interface."
+::= { slbRadioPacketsStatEntry 6 }
+
+slbRadioPacketsStatV6High  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPv6 packet to TS on access 
+                    ingress interface."
+::= { slbRadioPacketsStatEntry 7 }
+
+slbRadioPacketsStatV6Low  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPv6 packet to TS on access 
+                    ingress interface."
+::= { slbRadioPacketsStatEntry 8 }
+
+slbRadioPacketsStatDdcV6High  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPv6 packet to DDC on 
+                    access ingress interface."
+::= { slbRadioPacketsStatEntry 9 }
+
+slbRadioPacketsStatDdcV6Low  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPv6 packet to DDC on 
+                    access ingress interface."
+::= { slbRadioPacketsStatEntry 10 }
+
+slbRadioPacketsStatResvV6High  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPv6 packet to Reserved 
+                    pool on access ingress interface."
+::= { slbRadioPacketsStatEntry 11 }
+
+slbRadioPacketsStatResvV6Low  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPv6 packet to Reserved 
+                    pool on access ingress interface."
+::= { slbRadioPacketsStatEntry 12 }
+
+slbWwwPacketsStatTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF SlbWwwPacketsStatEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each traffic server and DDC."
+::= { slbWwwPacketsStat 1 } 
+
+slbWwwPacketsStatEntry OBJECT-TYPE
+   SYNTAX          SlbWwwPacketsStatEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for SLB during the specified period."
+   INDEX { applIndex }
+::= { slbWwwPacketsStatTable  1 }
+
+SlbWwwPacketsStatEntry  ::= SEQUENCE
+{
+   slbWwwPacketsStatHigh           Gauge32,
+   slbWwwPacketsStatLow            Gauge32,
+   slbWwwPacketsStatDdcHigh        Gauge32,
+   slbWwwPacketsStatDdcLow         Gauge32,
+   slbWwwPacketsStatReservedHigh   Gauge32,
+   slbWwwPacketsStatReservedLow    Gauge32,
+   slbWwwPacketsStatV6High         Gauge32,
+   slbWwwPacketsStatV6Low          Gauge32,
+   slbWwwPacketsStatDdcV6High      Gauge32,
+   slbWwwPacketsStatDdcV6Low       Gauge32,
+   slbWwwPacketsStatReservedV6High Gauge32,
+   slbWwwPacketsStatReservedV6Low  Gauge32
+}
+
+slbWwwPacketsStatHigh  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet to TS on internet 
+                    ingress interface."
+::= { slbWwwPacketsStatEntry 1 }
+
+slbWwwPacketsStatLow  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet to TS on internet 
+                    ingress interface."
+::= { slbWwwPacketsStatEntry 2 }
+
+slbWwwPacketsStatDdcHigh  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet to DDC on internet 
+                    ingress interface."
+::= { slbWwwPacketsStatEntry 3 }
+
+slbWwwPacketsStatDdcLow  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet to DDC on internet 
+                    ingress interface."
+::= { slbWwwPacketsStatEntry 4 }
+
+slbWwwPacketsStatReservedHigh  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet to Reserved pool on 
+                    internet ingress interface."
+::= { slbWwwPacketsStatEntry 5 }
+
+slbWwwPacketsStatReservedLow  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed packet to Reserved pool on 
+                    internet ingress interface."
+::= { slbWwwPacketsStatEntry 6 }
+
+slbWwwPacketsStatV6High  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPv6 packet to TS on 
+                    internet ingress interface."
+::= { slbWwwPacketsStatEntry 7 }
+
+slbWwwPacketsStatV6Low  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPv6 packet to TS on 
+                    internet ingress interface."
+::= { slbWwwPacketsStatEntry 8 }
+
+slbWwwPacketsStatDdcV6High  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPv6 packet to DDC on 
+                    internet ingress interface."
+::= { slbWwwPacketsStatEntry 9 }
+
+slbWwwPacketsStatDdcV6Low  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPv6 packet to DDC on 
+                    internet ingress interface."
+::= { slbWwwPacketsStatEntry 10 }
+
+slbWwwPacketsStatReservedV6High  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPv6 packet to Reserved 
+                    pool on internet ingress interface."
+::= { slbWwwPacketsStatEntry 11 }
+
+slbWwwPacketsStatReservedV6Low  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB distributed IPv6 packet to Reserved 
+                    pool on internet ingress interface."
+::= { slbWwwPacketsStatEntry 12 }
+
+slbRadioDroppedStatTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF SlbRadioDroppedStatEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each traffic server and DDC."
+::= { slbRadioDroppedStat 1 } 
+
+slbRadioDroppedStatEntry OBJECT-TYPE
+   SYNTAX          SlbRadioDroppedStatEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for SLB during the specified period."
+   INDEX { applIndex }
+::= { slbRadioDroppedStatTable  1 }
+
+SlbRadioDroppedStatEntry  ::= SEQUENCE
+{
+   slbRadioDroppedStatHigh         Gauge32,
+   slbRadioDroppedStatLow          Gauge32,
+   slbRadioDroppedStatDdcHigh      Gauge32,
+   slbRadioDroppedStatDdcLow       Gauge32,
+   slbRadioDroppedStatReservedHigh Gauge32,
+   slbRadioDroppedStatReservedLow  Gauge32,
+   slbRadioDroppedStatV6High       Gauge32,
+   slbRadioDroppedStatV6Low        Gauge32,
+   slbRadioDroppedStatDdcV6High    Gauge32,
+   slbRadioDroppedStatDdcV6Low     Gauge32,
+   slbRadioDroppedStatResvV6High   Gauge32,
+   slbRadioDroppedStatResvV6Low    Gauge32
+}
+
+slbRadioDroppedStatHigh  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet to TS on access ingress 
+                    interface."
+::= { slbRadioDroppedStatEntry 1 }
+
+slbRadioDroppedStatLow  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet to TS on access ingress 
+                    interface."
+::= { slbRadioDroppedStatEntry 2 }
+
+slbRadioDroppedStatDdcHigh  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet to DDC on access ingress 
+                    interface."
+::= { slbRadioDroppedStatEntry 3 }
+
+slbRadioDroppedStatDdcLow  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet to DDC on access ingress 
+                    interface."
+::= { slbRadioDroppedStatEntry 4 }
+
+slbRadioDroppedStatReservedHigh  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet to Reserved pool on 
+                    access ingress interface."
+::= { slbRadioDroppedStatEntry 5 }
+
+slbRadioDroppedStatReservedLow  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet to Reserved pool on 
+                    access ingress interface."
+::= { slbRadioDroppedStatEntry 6 }
+
+slbRadioDroppedStatV6High  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet to TS on access 
+                    ingress interface."
+::= { slbRadioDroppedStatEntry 7 }
+
+slbRadioDroppedStatV6Low  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet to TS on access 
+                    ingress interface."
+::= { slbRadioDroppedStatEntry 8 }
+
+slbRadioDroppedStatDdcV6High  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet to DDC on access 
+                    ingress interface."
+::= { slbRadioDroppedStatEntry 9 }
+
+slbRadioDroppedStatDdcV6Low  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet to DDC on access 
+                    ingress interface."
+::= { slbRadioDroppedStatEntry 10 }
+
+slbRadioDroppedStatResvV6High  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet to Reserved pool on 
+                    access ingress interface."
+::= { slbRadioDroppedStatEntry 11 }
+
+slbRadioDroppedStatResvV6Low  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet to Reserved pool on 
+                    access ingress interface."
+::= { slbRadioDroppedStatEntry 12 }
+
+slbWwwDroppedStatTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF SlbWwwDroppedStatEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each traffic server and DDC."
+::= { slbWwwDroppedStat 1 } 
+
+slbWwwDroppedStatEntry OBJECT-TYPE
+   SYNTAX          SlbWwwDroppedStatEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "Counters for SLB during the specified period."
+   INDEX { applIndex }
+::= { slbWwwDroppedStatTable  1 }
+
+SlbWwwDroppedStatEntry  ::= SEQUENCE
+{
+   slbWwwDroppedStatHigh           Gauge32,
+   slbWwwDroppedStatLow            Gauge32,
+   slbWwwDroppedStatDdcHigh        Gauge32,
+   slbWwwDroppedStatDdcLow         Gauge32,
+   slbWwwDroppedStatReservedHigh   Gauge32,
+   slbWwwDroppedStatReservedLow    Gauge32,
+   slbWwwDroppedStatV6High         Gauge32,
+   slbWwwDroppedStatV6Low          Gauge32,
+   slbWwwDroppedStatDdcV6High      Gauge32,
+   slbWwwDroppedStatDdcV6Low       Gauge32,
+   slbWwwDroppedStatReservedV6High Gauge32,
+   slbWwwDroppedStatReservedV6Low  Gauge32
+}
+
+slbWwwDroppedStatHigh  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet to TS on internet 
+                    ingress interface."
+::= { slbWwwDroppedStatEntry 1 }
+
+slbWwwDroppedStatLow  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet to TS on internet 
+                    ingress interface."
+::= { slbWwwDroppedStatEntry 2 }
+
+slbWwwDroppedStatDdcHigh  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet to DDC on internet 
+                    ingress interface."
+::= { slbWwwDroppedStatEntry 3 }
+
+slbWwwDroppedStatDdcLow  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet to DDC on internet 
+                    ingress interface."
+::= { slbWwwDroppedStatEntry 4 }
+
+slbWwwDroppedStatReservedHigh  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet to Reserved pool on 
+                    internet ingress interface."
+::= { slbWwwDroppedStatEntry 5 }
+
+slbWwwDroppedStatReservedLow  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped packet to Reserved pool on 
+                    internet ingress interface."
+::= { slbWwwDroppedStatEntry 6 }
+
+slbWwwDroppedStatV6High  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet to TS on internet 
+                    ingress interface."
+::= { slbWwwDroppedStatEntry 7 }
+
+slbWwwDroppedStatV6Low  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet to TS on internet 
+                    ingress interface."
+::= { slbWwwDroppedStatEntry 8 }
+
+slbWwwDroppedStatDdcV6High  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet to DDC on internet 
+                    ingress interface."
+::= { slbWwwDroppedStatEntry 9 }
+
+slbWwwDroppedStatDdcV6Low  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet to DDC on internet 
+                    ingress interface."
+::= { slbWwwDroppedStatEntry 10 }
+
+slbWwwDroppedStatReservedV6High  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet to Reserved pool on 
+                    internet ingress interface."
+::= { slbWwwDroppedStatEntry 11 }
+
+slbWwwDroppedStatReservedV6Low  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of SLB dropped IPv6 packet to Reserved pool on 
+                    internet ingress interface."
+::= { slbWwwDroppedStatEntry 12 }
+
+slbReboot  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB server is reboot, probable cause: resource out of 
+                    service."
+::= { slbhaAlarm 2 }
+
+slbRebootBlocked  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB server can NOT solve issue by reboot"
+::= { slbhaAlarm 3 }
+
+slbIsolated  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB server is isolated. It is out of service.'"
+::= { slbhaAlarm 4 }
+
+slbSpvAlarmAllSlbDown  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB supervisor detects all SLBs are down. Possible 
+                    cause: network of supervisor network is abnormal, or all 
+                    SLBs are down."
+::= { slbSpvAlarm 2 }
+
+slbSpvAlarmSlbDown  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "SLB supervisor detects one SLB is down. Possible 
+                    cause: slb resource out of service."
+::= { slbSpvAlarm 4 }
+
+slbSpvAlarmMonNotWorking  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The SLB Monitor process is not working."
+::= { slbSpvAlarm 5 }
+
+slbSpvAlarmBadCIPv4Range  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Client IPv4 range contains default CIDRs."
+::= { slbSpvAlarm 7 }
+
+slbSpvAlarmBadCIPv6Range  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Client IPv6 range contains default CIDRs."
+::= { slbSpvAlarm 8 }
+
+slbSpvSwAlarmTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF SlbSpvSwAlarmEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each switch."
+::= { slbSpvSwAlarm 1 } 
+
+slbSpvSwAlarmEntry OBJECT-TYPE
+   SYNTAX          SlbSpvSwAlarmEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The alarms for swtiches"
+   INDEX { slbSpvSwAlarmIndex }
+::= { slbSpvSwAlarmTable  1 }
+
+SlbSpvSwAlarmEntry  ::= SEQUENCE
+{
+   slbSpvSwAlarmIndex    Unsigned32,
+   slbSpvSwAlarmConnFail ItuPerceivedSeverity,
+   slbSpvSwAlarmUpdFail  ItuPerceivedSeverity
+}
+
+slbSpvSwAlarmIndex  OBJECT-TYPE
+   SYNTAX          Unsigned32
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "An integer used to uniquely identify a slb spv sw 
+                    alarm table entry."
+::= { slbSpvSwAlarmEntry 1 }
+
+slbSpvSwAlarmConnFail  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Supervisor can not connect switch."
+::= { slbSpvSwAlarmEntry 3 }
+
+slbSpvSwAlarmUpdFail  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Failed to update the routing information of the 
+                    switch."
+::= { slbSpvSwAlarmEntry 6 }
+
+-- Compliance Statements
+
+slbCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for software load balancer."
+   MODULE          -- this module
+   MANDATORY-GROUPS {slbConfGroup}
+::= { slbPmCompliances 1 }
+
+-- Units of Conformance
+
+slbConfGroup OBJECT-GROUP
+   OBJECTS { slbHcEvtLowPacketError,
+             slbHcEvtEvenDistributionError,
+             slbHcEvtEvenDistributionErrorV6,
+             slbHcEvtBypassMspError,
+             slbMsEvtService1DownError,
+             slbMsEvtService2DownError,
+             slbMsEvtService3DownError,
+             slbMsEvtService4DownError,
+             slbMsEvtService5DownError,
+             slbMsEvtService6DownError,
+             slbMsEvtService7DownError,
+             slbMsEvtService8DownError,
+             slbMsEvtService9DownError,
+             slbMsEvtService10DownError,
+             slbMsEvtService11DownError,
+             slbMsEvtService12DownError,
+             slbMsEvtService13DownError,
+             slbMsEvtService14DownError,
+             slbMsEvtService15DownError,
+             slbMsEvtService16DownError,
+             slbMsEvtService17DownError,
+             slbMsEvtService18DownError,
+             slbMsEvtService19DownError,
+             slbMsEvtService20DownError,
+             slbMsEvtService21DownError,
+             slbMsEvtService22DownError,
+             slbMsEvtService23DownError,
+             slbMsEvtService24DownError,
+             slbMsEvtService25DownError,
+             slbMsEvtService26DownError,
+             slbMsEvtService27DownError,
+             slbMsEvtService28DownError,
+             slbMsEvtService29DownError,
+             slbMsEvtService30DownError,
+             slbSysCountRadioPacketsHigh,
+             slbSysCountRadioPacketsLow,
+             slbSysCountWwwPacketsHigh,
+             slbSysCountWwwPacketsLow,
+             slbSysCountRadioDroppedHigh,
+             slbSysCountRadioDroppedLow,
+             slbSysCountWwwDroppedHigh,
+             slbSysCountWwwDroppedLow,
+             slbSysCountRadioPacketsV6High,
+             slbSysCountRadioPacketsV6Low,
+             slbSysCountWwwPacketsV6High,
+             slbSysCountWwwPacketsV6Low,
+             slbSysCountRadioDroppedV6High,
+             slbSysCountRadioDroppedV6Low,
+             slbSysCountWwwDroppedV6High,
+             slbSysCountWwwDroppedV6Low,
+             slbSysStatRadioPacketsHigh,
+             slbSysStatRadioPacketsLow,
+             slbSysStatWwwPacketsHigh,
+             slbSysStatWwwPacketsLow,
+             slbSysStatRadioDroppedHigh,
+             slbSysStatRadioDroppedLow,
+             slbSysStatWwwDroppedHigh,
+             slbSysStatWwwDroppedLow,
+             slbSysStatRadioPacketsV6High,
+             slbSysStatRadioPacketsV6Low,
+             slbSysStatWwwPacketsV6High,
+             slbSysStatWwwPacketsV6Low,
+             slbSysStatRadioDroppedV6High,
+             slbSysStatRadioDroppedV6Low,
+             slbSysStatWwwDroppedV6High,
+             slbSysStatWwwDroppedV6Low,
+             slbRadioPacketsCountHigh,
+             slbRadioPacketsCountLow,
+             slbRadioPacketsCountDdcHigh,
+             slbRadioPacketsCountDdcLow,
+             slbRadioPacketsCountReservedHigh,
+             slbRadioPacketsCountReservedLow,
+             slbRadioPacketsCountV6High,
+             slbRadioPacketsCountV6Low,
+             slbRadioPacketsCountDdcV6High,
+             slbRadioPacketsCountDdcV6Low,
+             slbRadioPacketsCountResvV6High,
+             slbRadioPacketsCountResvV6Low,
+             slbWwwPacketsCountHigh,
+             slbWwwPacketsCountLow,
+             slbWwwPacketsCountDdcHigh,
+             slbWwwPacketsCountDdcLow,
+             slbWwwPacketsCountReservedHigh,
+             slbWwwPacketsCountReservedLow,
+             slbWwwPacketsCountV6High,
+             slbWwwPacketsCountV6Low,
+             slbWwwPacketsCountDdcV6High,
+             slbWwwPacketsCountDdcV6Low,
+             slbWwwPacketsCountReservedV6High,
+             slbWwwPacketsCountReservedV6Low,
+             slbRadioDroppedCountHigh,
+             slbRadioDroppedCountLow,
+             slbRadioDroppedCountDdcHigh,
+             slbRadioDroppedCountDdcLow,
+             slbRadioDroppedCountReservedHigh,
+             slbRadioDroppedCountReservedLow,
+             slbRadioDroppedCountV6High,
+             slbRadioDroppedCountV6Low,
+             slbRadioDroppedCountDdcV6High,
+             slbRadioDroppedCountDdcV6Low,
+             slbRadioDroppedCountResvV6High,
+             slbRadioDroppedCountResvV6Low,
+             slbWwwDroppedCountHigh,
+             slbWwwDroppedCountLow,
+             slbWwwDroppedCountDdcHigh,
+             slbWwwDroppedCountDdcLow,
+             slbWwwDroppedCountReservedHigh,
+             slbWwwDroppedCountReservedLow,
+             slbWwwDroppedCountV6High,
+             slbWwwDroppedCountV6Low,
+             slbWwwDroppedCountDdcV6High,
+             slbWwwDroppedCountDdcV6Low,
+             slbWwwDroppedCountReservedV6High,
+             slbWwwDroppedCountReservedV6Low,
+             slbRadioPacketsStatHigh,
+             slbRadioPacketsStatLow,
+             slbRadioPacketsStatDdcHigh,
+             slbRadioPacketsStatDdcLow,
+             slbRadioPacketsStatReservedHigh,
+             slbRadioPacketsStatReservedLow,
+             slbRadioPacketsStatV6High,
+             slbRadioPacketsStatV6Low,
+             slbRadioPacketsStatDdcV6High,
+             slbRadioPacketsStatDdcV6Low,
+             slbRadioPacketsStatResvV6High,
+             slbRadioPacketsStatResvV6Low,
+             slbWwwPacketsStatHigh,
+             slbWwwPacketsStatLow,
+             slbWwwPacketsStatDdcHigh,
+             slbWwwPacketsStatDdcLow,
+             slbWwwPacketsStatReservedHigh,
+             slbWwwPacketsStatReservedLow,
+             slbWwwPacketsStatV6High,
+             slbWwwPacketsStatV6Low,
+             slbWwwPacketsStatDdcV6High,
+             slbWwwPacketsStatDdcV6Low,
+             slbWwwPacketsStatReservedV6High,
+             slbWwwPacketsStatReservedV6Low,
+             slbRadioDroppedStatHigh,
+             slbRadioDroppedStatLow,
+             slbRadioDroppedStatDdcHigh,
+             slbRadioDroppedStatDdcLow,
+             slbRadioDroppedStatReservedHigh,
+             slbRadioDroppedStatReservedLow,
+             slbRadioDroppedStatV6High,
+             slbRadioDroppedStatV6Low,
+             slbRadioDroppedStatDdcV6High,
+             slbRadioDroppedStatDdcV6Low,
+             slbRadioDroppedStatResvV6High,
+             slbRadioDroppedStatResvV6Low,
+             slbWwwDroppedStatHigh,
+             slbWwwDroppedStatLow,
+             slbWwwDroppedStatDdcHigh,
+             slbWwwDroppedStatDdcLow,
+             slbWwwDroppedStatReservedHigh,
+             slbWwwDroppedStatReservedLow,
+             slbWwwDroppedStatV6High,
+             slbWwwDroppedStatV6Low,
+             slbWwwDroppedStatDdcV6High,
+             slbWwwDroppedStatDdcV6Low,
+             slbWwwDroppedStatReservedV6High,
+             slbWwwDroppedStatReservedV6Low,
+             slbReboot,
+             slbRebootBlocked,
+             slbIsolated,
+             slbSpvAlarmAllSlbDown,
+             slbSpvAlarmSlbDown,
+             slbSpvAlarmMonNotWorking,
+             slbSpvAlarmBadCIPv4Range,
+             slbSpvAlarmBadCIPv6Range,
+             slbSpvSwAlarmConnFail,
+             slbSpvSwAlarmUpdFail}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a software load 
+                    balancer."
+::= { slbPmGroups 1 }
+END

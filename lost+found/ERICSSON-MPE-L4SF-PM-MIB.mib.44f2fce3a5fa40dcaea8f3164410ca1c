@@ -1,0 +1,520 @@
+ERICSSON-MPE-L4SF-PM-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+     MODULE-IDENTITY, OBJECT-TYPE, Gauge32 , Counter32 
+          FROM SNMPv2-SMI
+
+     MODULE-COMPLIANCE, OBJECT-GROUP
+          FROM SNMPv2-CONF
+
+     applIndex
+          FROM NETWORK-SERVICES-MIB
+
+     ItuPerceivedSeverity
+          FROM ITU-ALARM-TC
+
+     mpeModules
+          FROM ERICSSON-MPE-REGISTRY-MIB ;
+
+mpeL4sfPmModule MODULE-IDENTITY
+   LAST-UPDATED    "201709182005Z"
+   ORGANIZATION    "Ericsson AB"
+   CONTACT-INFO    "        Ericsson AB
+
+                    Postal: Ericsson AB
+                            Kistagangen 26
+                            SE - 164 80 Stockholm
+                            Sweden
+
+                       Tel: +46 8 7571500
+                       Fax:
+
+                    E-Mail: support@ericsson.com"
+   DESCRIPTION     "The L4SF counters and events."
+::= { mpeModules 150 }
+
+l4sfPmObjects  OBJECT IDENTIFIER ::= { mpeL4sfPmModule 1 }
+
+l4sfApp  OBJECT IDENTIFIER ::= { l4sfPmObjects 1 }
+
+l4sfPmConformance  OBJECT IDENTIFIER ::= { mpeL4sfPmModule 3 }
+
+l4sfPmGroups  OBJECT IDENTIFIER ::= { l4sfPmConformance 1 }
+
+l4sfPmCompliances  OBJECT IDENTIFIER ::= { l4sfPmConformance 2 }
+
+l4sfAppTable OBJECT-TYPE
+   SYNTAX          SEQUENCE OF L4sfAppEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "One entry is created for each MFM-L4SF instance 
+                    (129=FirstInstance)."
+::= { l4sfApp 1 } 
+
+l4sfAppEntry OBJECT-TYPE
+   SYNTAX          L4sfAppEntry
+   MAX-ACCESS      not-accessible
+   STATUS          current
+   DESCRIPTION     "The L4SF Application counters and events."
+   INDEX { applIndex }
+::= { l4sfAppTable  1 }
+
+L4sfAppEntry  ::= SEQUENCE
+{
+   l4sfAppInetSess               Gauge32,
+   l4sfAppAccSess                Gauge32,
+   l4sfAppAccRxConn              Counter32,
+   l4sfAppAccTxConn              Counter32,
+   l4sfAppInetRxConn             Counter32,
+   l4sfAppInetTxConn             Counter32,
+   l4sfAppAccConnFail            Counter32,
+   l4sfAppInetConnFail           Counter32,
+   l4sfAppAccRxKiloBytes         Counter32,
+   l4sfAppAccTxKiloBytes         Counter32,
+   l4sfAppInetRxKiloBytes        Counter32,
+   l4sfAppInetTxKiloBytes        Counter32,
+   l4sfAppAccCloseTimeout        Counter32,
+   l4sfAppAccConnTimeout         Counter32,
+   l4sfAppAccInactivityTimeout   Counter32,
+   l4sfAppIntCloseTimeout        Counter32,
+   l4sfAppIntConnTimeout         Counter32,
+   l4sfAppIntInactivityTimeout   Counter32,
+   l4sfAppCpuUsage               Gauge32,
+   l4sfAppTipAccRx               Counter32,
+   l4sfAppTipAccTx               Counter32,
+   l4sfAppTipInetRx              Counter32,
+   l4sfAppTipInetTx              Counter32,
+   l4sfAppCpuMemoryUsage         Gauge32,
+   l4sfAppTcpInSegment           Counter32,
+   l4sfAppTcpOutSegment          Counter32,
+   l4sfAppTcpConnCurrEstablish   Counter32,
+   l4sfAppTcpConnActiveOpens     Counter32,
+   l4sfAppTcpConnPassiveOpens    Counter32,
+   l4sfAppTcpRetransSegments     Counter32,
+   l4sfAppTcpAttemptFails        Counter32,
+   l4sfAppTipIpOutRequests       Counter32,
+   l4sfAppTipIpInOctets          Counter32,
+   l4sfAppTipIpOutOctets         Counter32,
+   l4sfAppTipIpSynBypasses       Counter32,
+   l4sfAppWrongAdminStateTimeout ItuPerceivedSeverity,
+   l4sfAppMemoryPressureHigh     ItuPerceivedSeverity,
+   l4sfAppCpuPressureHigh        ItuPerceivedSeverity,
+   l4sfAppQueuePressureHigh      ItuPerceivedSeverity
+}
+
+l4sfAppInetSess  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of proxy sessions created from internet 
+                    side."
+::= { l4sfAppEntry 1 }
+
+l4sfAppAccSess  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Total number of proxy sessions created from access 
+                    side."
+::= { l4sfAppEntry 2 }
+
+l4sfAppAccRxConn  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of incoming connections from access side
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 3 }
+
+l4sfAppAccTxConn  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of outgoing connections from access side
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 4 }
+
+l4sfAppInetRxConn  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of incoming connections from internet side
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 5 }
+
+l4sfAppInetTxConn  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of outgoing connections from access side
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 6 }
+
+l4sfAppAccConnFail  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of incoming failed connections from access 
+                    side
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 7 }
+
+l4sfAppInetConnFail  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of incoming failed connections from internet 
+                    side
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 8 }
+
+l4sfAppAccRxKiloBytes  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of recived kilo bytes from access side
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 9 }
+
+l4sfAppAccTxKiloBytes  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of sent kilo bytes from access side
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 10 }
+
+l4sfAppInetRxKiloBytes  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of recived kilo bytes from internet side
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 11 }
+
+l4sfAppInetTxKiloBytes  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of sent kilo bytes from internet side
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 12 }
+
+l4sfAppAccCloseTimeout  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Application access side closed by Timeout
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 13 }
+
+l4sfAppAccConnTimeout  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Application access side failed connection due to 
+                    connection timeout
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 14 }
+
+l4sfAppAccInactivityTimeout  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Application access side failed due to inactivity by 
+                    timeout
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 15 }
+
+l4sfAppIntCloseTimeout  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Application internet side closed by timeout
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 16 }
+
+l4sfAppIntConnTimeout  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Application internet side failed connection due to 
+                    connection timeout
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 17 }
+
+l4sfAppIntInactivityTimeout  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Application internet side failed due to inactivity by 
+                    timeout
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 18 }
+
+l4sfAppCpuUsage  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "percentage usage of the CPU, for the process"
+::= { l4sfAppEntry 19 }
+
+l4sfAppTipAccRx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of recived kilo bytes from Tip Stack network 
+                    interface access side
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 20 }
+
+l4sfAppTipAccTx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of sent kilo bytes from Tip Stack network 
+                    interface access side
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 21 }
+
+l4sfAppTipInetRx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of recived kilo bytes from Tip Stack network 
+                    interface internet side
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 22 }
+
+l4sfAppTipInetTx  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Number of sent kilo bytes from Tip Stack network 
+                    interface internet side
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 23 }
+
+l4sfAppCpuMemoryUsage  OBJECT-TYPE
+   SYNTAX          Gauge32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "percentage usage of the CPU Memory, for the process"
+::= { l4sfAppEntry 28 }
+
+l4sfAppTcpInSegment  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The total number of segments received, including 
+                    those received in error. This count includes segments 
+                    received on currently established connections.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 29 }
+
+l4sfAppTcpOutSegment  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The total number of segments sent, including those on 
+                    current connection but excluding those containing 
+                    only retransmitted octets.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 30 }
+
+l4sfAppTcpConnCurrEstablish  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The number of TCP Connections for which the current 
+                    state is either ESTABLISHED OR CLOSE-WAIT
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 31 }
+
+l4sfAppTcpConnActiveOpens  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The number of times TCP Connections have made a 
+                    direct transition to the SYN-SENT state from the CLOSED 
+                    state.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 32 }
+
+l4sfAppTcpConnPassiveOpens  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The number of times TCP Connections have made a 
+                    direct transition to the SYN-RCVD state from the LISTEN 
+                    state.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 33 }
+
+l4sfAppTcpRetransSegments  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The total number of segments retransmitted.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 34 }
+
+l4sfAppTcpAttemptFails  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The number of times that TCP connections have made a 
+                    direct transition to the CLOSED state from either the 
+                    SYN-SENT state or the SYN_RCVD state, plus the number 
+                    of times that TCP connection have made a direct 
+                    transition to the LISTEN state from the SYN-RCVD state.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 35 }
+
+l4sfAppTipIpOutRequests  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The number of outgoing requests from the IP layer.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 36 }
+
+l4sfAppTipIpInOctets  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The number of incomming octets in the IP layer.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 37 }
+
+l4sfAppTipIpOutOctets  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The number of outgoing octets in the IP layer.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 38 }
+
+l4sfAppTipIpSynBypasses  OBJECT-TYPE
+   SYNTAX          Counter32
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The number of Syn Bypasses.
+                    The applUptime epoch of the application instance 
+                    should be used as reference point for this counter."
+::= { l4sfAppEntry 39 }
+
+l4sfAppWrongAdminStateTimeout  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Adminstate is expected to match wanted adminstate."
+::= { l4sfAppEntry 24 }
+
+l4sfAppMemoryPressureHigh  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "Memory consumtion is higher then avalible."
+::= { l4sfAppEntry 25 }
+
+l4sfAppCpuPressureHigh  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "cpu consumtion is higher then avalible."
+::= { l4sfAppEntry 26 }
+
+l4sfAppQueuePressureHigh  OBJECT-TYPE
+   SYNTAX          ItuPerceivedSeverity
+   MAX-ACCESS      read-only
+   STATUS          current
+   DESCRIPTION     "The internal queue pressur is high."
+::= { l4sfAppEntry 27 }
+
+-- Compliance Statements
+
+l4sfCompliance MODULE-COMPLIANCE
+   STATUS          current
+   DESCRIPTION     "The compliance statement for l4 sf."
+   MODULE          -- this module
+   MANDATORY-GROUPS {l4sfConfGroup}
+::= { l4sfPmCompliances 1 }
+
+-- Units of Conformance
+
+l4sfConfGroup OBJECT-GROUP
+   OBJECTS { l4sfAppInetSess,
+             l4sfAppAccSess,
+             l4sfAppAccRxConn,
+             l4sfAppAccTxConn,
+             l4sfAppInetRxConn,
+             l4sfAppInetTxConn,
+             l4sfAppAccConnFail,
+             l4sfAppInetConnFail,
+             l4sfAppAccRxKiloBytes,
+             l4sfAppAccTxKiloBytes,
+             l4sfAppInetRxKiloBytes,
+             l4sfAppInetTxKiloBytes,
+             l4sfAppAccCloseTimeout,
+             l4sfAppAccConnTimeout,
+             l4sfAppAccInactivityTimeout,
+             l4sfAppIntCloseTimeout,
+             l4sfAppIntConnTimeout,
+             l4sfAppIntInactivityTimeout,
+             l4sfAppCpuUsage,
+             l4sfAppTipAccRx,
+             l4sfAppTipAccTx,
+             l4sfAppTipInetRx,
+             l4sfAppTipInetTx,
+             l4sfAppCpuMemoryUsage,
+             l4sfAppTcpInSegment,
+             l4sfAppTcpOutSegment,
+             l4sfAppTcpConnCurrEstablish,
+             l4sfAppTcpConnActiveOpens,
+             l4sfAppTcpConnPassiveOpens,
+             l4sfAppTcpRetransSegments,
+             l4sfAppTcpAttemptFails,
+             l4sfAppTipIpOutRequests,
+             l4sfAppTipIpInOctets,
+             l4sfAppTipIpOutOctets,
+             l4sfAppTipIpSynBypasses,
+             l4sfAppWrongAdminStateTimeout,
+             l4sfAppMemoryPressureHigh,
+             l4sfAppCpuPressureHigh,
+             l4sfAppQueuePressureHigh}
+   STATUS          current
+   DESCRIPTION     "A collection of objects providing performance and 
+                    fault management information about a l4 sf."
+::= { l4sfPmGroups 1 }
+END
